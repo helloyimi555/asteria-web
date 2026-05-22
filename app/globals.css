@@ -3,6 +3,11 @@
 @tailwind utilities;
 
 @layer base {
+  body {
+    background-color: #080C1E;
+    color: #E8E8F0;
+  }
+
   :root {
     --gold:       #C9A554;
     --gold-light: #F0D880;
@@ -115,3 +120,4 @@
 .animate-twinkle  { animation: twinkle var(--duration,3s) var(--delay,0s) infinite ease-in-out; }
 .animate-float    { animation: float   5s ease-in-out infinite; }
 .animate-spin-slow { animation: spin-slow 60s linear infinite; }
+
