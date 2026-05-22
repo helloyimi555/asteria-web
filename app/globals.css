@@ -1,0 +1,117 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --gold:       #C9A554;
+    --gold-light: #F0D880;
+    --gold-dark:  #9A7030;
+    --navy:       #080C1E;
+    --navy-card:  rgba(20,25,60,0.7);
+  }
+
+  * { box-sizing: border-box; }
+
+  ::-webkit-scrollbar       { width: 3px; }
+  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,.15); border-radius: 2px; }
+
+  select { appearance: none; -webkit-appearance: none; }
+  select option { background: #0D1427; color: #E8E8F0; }
+
+  input[type="time"]::-webkit-calendar-picker-indicator {
+    filter: invert(1) opacity(.4);
+    cursor: pointer;
+  }
+}
+
+@layer utilities {
+  .font-serif { font-family: var(--font-serif), "Noto Serif JP", serif; }
+  .font-sans  { font-family: var(--font-sans),  "Noto Sans JP",  sans-serif; }
+
+  .text-gold       { color: #C9A554; }
+  .border-gold-dim { border-color: rgba(201,165,84,0.25); }
+
+  .card {
+    background: rgba(20,25,60,0.7);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+  }
+
+  .btn-gold {
+    background: linear-gradient(135deg, #C9A554 0%, #8A5820 50%, #C9A554 100%);
+    background-size: 200% auto;
+    color: white;
+    border-radius: 12px;
+    font-family: var(--font-serif);
+    letter-spacing: 0.08em;
+    transition: all 0.2s;
+    box-shadow: 0 4px 28px rgba(201,165,84,0.35);
+  }
+  .btn-gold:hover { background-position: right center; }
+  .btn-gold:disabled {
+    background: rgba(255,255,255,0.06);
+    color: #505070;
+    box-shadow: none;
+  }
+
+  .btn-gold-outline {
+    border: 1px solid rgba(201,165,84,0.4);
+    color: #C9A554;
+    border-radius: 50px;
+    font-family: var(--font-serif);
+  }
+
+  .shimmer-gold {
+    background: linear-gradient(90deg,#C9A554 0%,#F0D880 40%,#C9A554 60%,#9A7030 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmer 3s linear infinite;
+  }
+
+  .input-field {
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 10px;
+    color: #E8E8F0;
+    padding: 10px 12px;
+    font-family: var(--font-sans);
+    font-size: 14px;
+    width: 100%;
+    transition: border-color 0.2s;
+  }
+  .input-field:focus {
+    outline: none;
+    border-color: rgba(201,165,84,0.4);
+  }
+  .input-field::placeholder { color: rgba(255,255,255,0.3); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes twinkle {
+  0%,100% { opacity: 0.1; transform: scale(1); }
+  50%     { opacity: 0.9; transform: scale(1.5); }
+}
+
+@keyframes float {
+  0%,100% { transform: translateY(0); }
+  50%     { transform: translateY(-10px); }
+}
+
+@keyframes spin-slow { to { transform: rotate(360deg); } }
+
+.animate-fade-up  { animation: fadeUp  0.5s ease forwards; }
+.animate-twinkle  { animation: twinkle var(--duration,3s) var(--delay,0s) infinite ease-in-out; }
+.animate-float    { animation: float   5s ease-in-out infinite; }
+.animate-spin-slow { animation: spin-slow 60s linear infinite; }
