@@ -18,7 +18,12 @@ const REL_TYPES = [
   { id:"work",    label:"仕事・同僚",       icon:"⬡" },
 ]
 
-function PersonPanel({ title, form, setForm, sign }) {
+const MBTI_TYPES = [
+  "INTJ","INTP","ENTJ","ENTP","INFJ","INFP","ENFJ","ENFP",
+  "ISTJ","ISFJ","ESTJ","ESFJ","ISTP","ISFP","ESTP","ESFP",
+]
+
+function PersonPanel({ title, form, setForm, sign, mbti, setMbti }) {
   const update = (k, v) => setForm({ ...form, [k]: v })
   return (
     <div className="card p-4" style={{ border:"1px solid rgba(201,165,84,.25)" }}>
@@ -50,17 +55,28 @@ function PersonPanel({ title, form, setForm, sign }) {
         <input type="text" value={form.place} placeholder={title.includes("あなた")?"東京都":"大阪府"}
           onChange={e=>update("place",e.target.value)} className="input-field" />
       </div>
+      <div className="mt-3">
+        <label className="text-[11px] text-white/50 tracking-widest uppercase block mb-2">MBTIタイプ（任意）</label>
+        <select value={mbti ?? ""} onChange={e => setMbti?.(e.target.value)} className="input-field">
+          <option value="">選択しない</option>
+          {MBTI_TYPES.map(type => (
+            <option key={type} value={type}>{type}</option>
+          ))}
+        </select>
+      </div>
     </div>
   )
 }
 
 export default function CompatInputPage() {
   const router = useRouter()
-  const [myForm,    setMyForm]    = useState({ year:"",month:"",day:"",time:"",place:"" })
-  const [theirForm, setTheirForm] = useState({ year:"",month:"",day:"",time:"",place:"" })
-  const [relType,   setRelType]   = useState("partner")
-  const [loading,   setLoading]   = useState(false)
-  const [error,     setError]     = useState(null)
+  const [myForm,      setMyForm]      = useState({ year:"",month:"",day:"",time:"",place:"" })
+  const [theirForm,   setTheirForm]   = useState({ year:"",month:"",day:"",time:"",place:"" })
+  const [myMbti,      setMyMbti]      = useState<string | undefined>(undefined)
+  const [theirMbti,   setTheirMbti]   = useState<string | undefined>(undefined)
+  const [relType,     setRelType]     = useState("partner")
+  const [loading,     setLoading]     = useState(false)
+  const [error,       setError]       = useState(null)
 
   const toDate = (f) => f.year && f.month && f.day
     ? `${f.year}-${String(f.month).padStart(2,"0")}-${String(f.day).padStart(2,"0")}` : ""
@@ -76,13 +92,15 @@ const handleSubmit = async () => {
     setLoading(true); setError(null)
     try {
       const result = await compatApi.create({
-        my_birth_date:       myDate,
-        my_birth_place_name: myForm.place,
-        my_birth_time:       myForm.time || undefined,
-        their_birth_date:       theirDate,
+        my_birth_date:         myDate,
+        my_birth_place_name:   myForm.place,
+        my_birth_time:         myForm.time || undefined,
+        my_mbti_type:          myMbti || undefined,
+        their_birth_date:      theirDate,
         their_birth_place_name: theirForm.place,
-        their_birth_time:       theirForm.time || undefined,
-        relationship_type:   relType,
+        their_birth_time:      theirForm.time || undefined,
+        their_mbti_type:       theirMbti || undefined,
+        relationship_type:     relType,
       })
       localStorage.setItem("asteria_compat_result", JSON.stringify(result))
       router.push(`/compat/result`)
@@ -106,14 +124,14 @@ const handleSubmit = async () => {
             <div className="flex-1 h-px bg-gradient-to-l from-transparent to-gold/40" />
           </div>
         </div>
-        <PersonPanel title="あなたの情報" form={myForm} setForm={setMyForm} sign={mySign} />
+        <PersonPanel title="あなたの情報" form={myForm} setForm={setMyForm} sign={mySign} mbti={myMbti} setMbti={setMyMbti} />
         <div className="flex items-center justify-center py-3 relative">
           <div className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2"
             style={{ background:"linear-gradient(to right,transparent,rgba(201,165,84,.25),transparent)" }} />
           <div className="w-14 h-14 rounded-full flex items-center justify-center text-2xl text-gold z-10"
             style={{ background:"rgba(201,165,84,.08)", border:"1px solid rgba(201,165,84,.35)", boxShadow:"0 0 20px rgba(201,165,84,.2)" }}>♡</div>
         </div>
-        <PersonPanel title="お相手の情報" form={theirForm} setForm={setTheirForm} sign={theirSign} />
+        <PersonPanel title="お相手の情報" form={theirForm} setForm={setTheirForm} sign={theirSign} mbti={theirMbti} setMbti={setTheirMbti} />
         <div className="card mt-3 p-4">
           <div className="text-[11px] text-white/50 tracking-widest uppercase mb-3">関係性選択（任意）</div>
           <div className="grid grid-cols-3 gap-2">

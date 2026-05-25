@@ -152,9 +152,11 @@ export const compatApi = {
     my_birth_date: string
     my_birth_place_name: string
     my_birth_time?: string
+    my_mbti_type?: string
     their_birth_date: string
     their_birth_place_name: string
     their_birth_time?: string
+    their_mbti_type?: string
     relationship_type: string
   }) =>
     api.post("/compat", input).then(r => r.data),
