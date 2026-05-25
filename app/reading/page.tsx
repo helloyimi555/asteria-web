@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation"
 import { Stars } from "@/components/ui/Stars"
 import { BottomNav } from "@/components/layout/BottomNav"
 import { getSunSign, READING_THEMES, READING_PERIODS } from "@/lib/zodiac"
-import { profileApi, readingApi } from "@/lib/api"
+import { profileApi, readingApi, isLoggedIn } from "@/lib/api"
 import clsx from "clsx"
 
 const YEARS  = Array.from({ length:75 }, (_, i) => 2008 - i)
@@ -12,10 +12,13 @@ const MONTHS = Array.from({ length:12 }, (_, i) => i + 1)
 const DAYS   = Array.from({ length:31 }, (_, i) => i + 1)
 
 const PROFILE_KEY = "asteria_profile"
+const GUEST_KEY   = "asteria_guest_used"
 
 export default function ReadingInputPage() {
   const router  = useRouter()
 
+  const [loggedIn, setLoggedIn] = useState(false)
+  const [guestUsed, setGuestUsed] = useState(false)
   const [existingProfileId, setExistingProfileId] = useState<string | null>(null)
   const [year,   setYear]   = useState("")
   const [month,  setMonth]  = useState("")
@@ -24,26 +27,30 @@ export default function ReadingInputPage() {
   const [noTime, setNoTime] = useState(false)
   const [place,  setPlace]  = useState("")
   const [theme,  setTheme]  = useState<string>("general")
-  const [period, setPeriod] = useState<string>("half2")
+  const [period, setPeriod] = useState<string>("week")
   const [loading,setLoading]= useState(false)
   const [error,  setError]  = useState<string | null>(null)
 
   useEffect(() => {
-    // localStorageから保存済みプロフィールを復元
-    try {
-      const saved = localStorage.getItem(PROFILE_KEY)
-      if (saved) {
-        const p = JSON.parse(saved)
-        setExistingProfileId(p.id)
-        const [y, m, d] = (p.birth_date || "").split("-")
-        if (y) setYear(y)
-        if (m) setMonth(String(parseInt(m)))
-        if (d) setDay(String(parseInt(d)))
-        if (p.birth_time) setTime(p.birth_time)
-        if (p.birth_time_unknown) setNoTime(p.birth_time_unknown)
-        if (p.birth_place_name) setPlace(p.birth_place_name)
-      }
-    } catch {}
+    const li = isLoggedIn()
+    setLoggedIn(li)
+    setGuestUsed(!!localStorage.getItem(GUEST_KEY))
+    if (li) {
+      try {
+        const saved = localStorage.getItem(PROFILE_KEY)
+        if (saved) {
+          const p = JSON.parse(saved)
+          setExistingProfileId(p.id)
+          const [y, m, d] = (p.birth_date || "").split("-")
+          if (y) setYear(y)
+          if (m) setMonth(String(parseInt(m)))
+          if (d) setDay(String(parseInt(d)))
+          if (p.birth_time) setTime(p.birth_time)
+          if (p.birth_time_unknown) setNoTime(p.birth_time_unknown)
+          if (p.birth_place_name) setPlace(p.birth_place_name)
+        }
+      } catch {}
+    }
   }, [])
 
   const dateStr = useMemo(() => {
@@ -69,14 +76,15 @@ export default function ReadingInputPage() {
           birth_place_name:   place,
         })
         profileId = profile.id
-        // localStorageに保存
-        localStorage.setItem(PROFILE_KEY, JSON.stringify({
-          id: profile.id,
-          birth_date: dateStr,
-          birth_time: time,
-          birth_time_unknown: noTime,
-          birth_place_name: place,
-        }))
+        if (loggedIn) {
+          localStorage.setItem(PROFILE_KEY, JSON.stringify({
+            id: profile.id,
+            birth_date: dateStr,
+            birth_time: time,
+            birth_time_unknown: noTime,
+            birth_place_name: place,
+          }))
+        }
       }
 
       const now  = new Date()
@@ -90,12 +98,47 @@ export default function ReadingInputPage() {
           period_end:   pe,
         })).reading_id
       )
-      router.push(`/reading/${result.reading_id}`)
+
+      // ゲストの場合は使用済みフラグを立てる
+      if (!loggedIn) {
+        localStorage.setItem(GUEST_KEY, "1")
+      }
+
+      router.push(`/reading/${result.reading_id}?guest=${!loggedIn}`)
     } catch (e: any) {
       setError(e?.response?.data?.detail ?? "エラーが発生しました。もう一度お試しください。")
       setLoading(false)
     }
   }
+
+  // ゲストが既に使用済みの場合
+  if (!loggedIn && guestUsed) {
+    return (
+      <div className="relative min-h-screen pb-24">
+        <Stars />
+        <div className="relative z-10 max-w-app mx-auto px-5 flex flex-col items-center justify-center min-h-screen text-center">
+          <div className="font-serif text-[15px] tracking-widest shimmer-gold mb-6">✦ ASTERIA ✦</div>
+          <h2 className="font-serif text-xl text-[#F0F0F8] mb-3">無料体験は1回までです</h2>
+          <p className="text-[13px] text-white/50 mb-8 leading-7">
+            続けて鑑定するには<br />会員登録（無料）が必要です
+          </p>
+          <button onClick={() => router.push("/auth/register")}
+            className="btn-gold w-full py-4 text-[15px] mb-3">
+            無料で会員登録する
+          </button>
+          <button onClick={() => router.push("/auth/login")}
+            className="text-[13px] text-white/40 hover:text-white/70">
+            ログインはこちら
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  const availableThemes = loggedIn ? READING_THEMES : READING_THEMES.filter(t => t.id === "general")
+  const availablePeriods = loggedIn
+    ? READING_PERIODS
+    : READING_PERIODS.filter(p => ["today", "tomorrow", "week"].includes(p.id))
 
   return (
     <div className="relative min-h-screen pb-24">
@@ -109,6 +152,11 @@ export default function ReadingInputPage() {
           <p className="text-[12px] text-white/45 mt-1">
             {existingProfileId ? "テーマと期間を選んでください" : "あなたの情報を入力してください"}
           </p>
+          {!loggedIn && (
+            <p className="text-[11px] text-gold/70 mt-1">
+              ✦ 無料体験：総合運1回のみ
+            </p>
+          )}
         </div>
 
         {sunSign && (
@@ -178,42 +226,69 @@ export default function ReadingInputPage() {
             </div>
           )}
 
+          {/* テーマ */}
           <div className="mb-4">
             <label className="text-[11px] text-white/50 tracking-widest uppercase block mb-2.5">
               占いたいテーマ
             </label>
             <div className="grid grid-cols-3 gap-2">
-              {READING_THEMES.map(t => (
-                <button key={t.id} onClick={() => setTheme(t.id)}
-                  className={clsx("p-2.5 rounded-xl text-center transition-all border",
-                    theme === t.id
-                      ? "border-gold/60 bg-gold/10"
-                      : "border-white/10 bg-white/[0.03]")}>
-                  <div className="text-[15px] mb-0.5">{t.icon}</div>
-                  <div className={clsx("text-[11px]", theme === t.id ? "text-gold font-bold" : "text-white/50")}>
-                    {t.label}
-                  </div>
-                </button>
-              ))}
+              {READING_THEMES.map(t => {
+                const available = loggedIn || t.id === "general"
+                return (
+                  <button key={t.id}
+                    onClick={() => available && setTheme(t.id)}
+                    className={clsx("p-2.5 rounded-xl text-center transition-all border relative",
+                      !available && "opacity-40 cursor-not-allowed",
+                      theme === t.id && available
+                        ? "border-gold/60 bg-gold/10"
+                        : "border-white/10 bg-white/[0.03]")}>
+                    <div className="text-[15px] mb-0.5">{t.icon}</div>
+                    <div className={clsx("text-[11px]", theme === t.id && available ? "text-gold font-bold" : "text-white/50")}>
+                      {t.label}
+                    </div>
+                    {!available && (
+                      <div className="absolute top-1 right-1 text-[8px] text-gold/60">🔒</div>
+                    )}
+                  </button>
+                )
+              })}
             </div>
+            {!loggedIn && (
+              <p className="text-[11px] text-white/30 mt-2 text-center">
+                他のテーマは
+                <button onClick={() => router.push("/auth/register")} className="text-gold/70 underline mx-1">
+                  会員登録
+                </button>
+                で利用可能
+              </p>
+            )}
           </div>
 
+          {/* 期間 */}
           <div>
             <label className="text-[11px] text-white/50 tracking-widest uppercase block mb-2.5">
               占いたい期間
             </label>
             <div className="grid grid-cols-3 gap-2">
-              {READING_PERIODS.map(p => (
-                <button key={p.id} onClick={() => setPeriod(p.id)}
-                  className={clsx("p-2.5 rounded-xl text-center transition-all border",
-                    period === p.id
-                      ? "border-white/50 bg-white/10"
-                      : "border-white/10 bg-white/[0.03]")}>
-                  <div className={clsx("text-[13px]", period === p.id ? "text-[#F0F0F8] font-bold" : "text-white/50")}>
-                    {p.label}
-                  </div>
-                </button>
-              ))}
+              {READING_PERIODS.map(p => {
+                const available = loggedIn || ["today", "tomorrow", "week"].includes(p.id)
+                return (
+                  <button key={p.id}
+                    onClick={() => available && setPeriod(p.id)}
+                    className={clsx("p-2.5 rounded-xl text-center transition-all border relative",
+                      !available && "opacity-40 cursor-not-allowed",
+                      period === p.id && available
+                        ? "border-white/50 bg-white/10"
+                        : "border-white/10 bg-white/[0.03]")}>
+                    <div className={clsx("text-[13px]", period === p.id && available ? "text-[#F0F0F8] font-bold" : "text-white/50")}>
+                      {p.label}
+                    </div>
+                    {!available && (
+                      <div className="absolute top-1 right-1 text-[8px] text-gold/60">🔒</div>
+                    )}
+                  </button>
+                )
+              })}
             </div>
           </div>
         </div>

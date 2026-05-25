@@ -4,8 +4,9 @@ import { useReading } from "@/hooks/useReading"
 import { Stars } from "@/components/ui/Stars"
 import { BottomNav } from "@/components/layout/BottomNav"
 import { TopNav } from "@/components/layout/TopNav"
+import { isLoggedIn } from "@/lib/api"
 import clsx from "clsx"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 const THEME_CARDS = [
   { key:"work",    label:"仕事運",  icon:"💼", c:"#70B4FF", bg:"rgba(112,180,255,.15)" },
@@ -28,6 +29,11 @@ export default function ReadingResultPage() {
   const router  = useRouter()
   const { data: reading, isLoading } = useReading(id)
   const [open,  setOpen] = useState(false)
+  const [isGuest, setIsGuest] = useState(false)
+
+  useEffect(() => {
+    setIsGuest(!isLoggedIn())
+  }, [])
 
   if (isLoading || reading?.status === "pending" || reading?.status === "processing") {
     return <LoadingView />
@@ -65,50 +71,53 @@ export default function ReadingResultPage() {
               <span className="text-gold text-sm">✦</span>
               <span className="font-sans text-[13px] font-bold text-[#F0F0F8]">{themeLabel}</span>
             </div>
-            <OverallText text={outputs.overall} />
+            <OverallText text={outputs.overall} isGuest={isGuest} />
           </div>
         )}
 
-
         {/* 根拠 toggle */}
-        <div className="mt-2.5">
-          <button onClick={() => setOpen(o => !o)}
-            className="w-full card flex items-center justify-center gap-2 py-3 cursor-pointer"
-            style={{ borderRadius: open ? "12px 12px 0 0" : 12 }}>
-            <span className="text-[12px] text-white/50">この鑑定の根拠を見る</span>
-            <span className={clsx("text-gold text-[12px] transition-transform duration-200",
-              open && "rotate-180")}>∨</span>
-          </button>
-          {open && (
-            <div className="p-3 border border-white/[0.08] border-t-0"
-              style={{ background:"rgba(15,20,50,.8)", borderRadius:"0 0 12px 12px" }}>
-              <p className="text-[12px] text-white/40 text-center py-2">
-                天体データは鑑定完了後に表示されます
-              </p>
-            </div>
-          )}
-        </div>
-
-        {/* テーマ別 2x2 */}
-        <div className="grid grid-cols-2 gap-2.5 mt-2.5">
-          {THEME_CARDS.map(({ key, label, icon, c, bg }) => {
-            const text = (outputs as any)?.[key]
-            if (!text) return null
-            return (
-              <div key={key} className="card p-3.5">
-                <div className="w-11 h-11 rounded-full flex items-center justify-center mb-2 text-lg"
-                  style={{ background:bg, border:`1px solid ${c}30`, color:c }}>
-                  {icon}
-                </div>
-                <div className="text-[12px] font-bold mb-1.5" style={{ color:c }}>{label}</div>
-                <p className="font-sans text-[11px] leading-[1.75] text-[#A0A0C0] font-light">{text}</p>
+        {!isGuest && (
+          <div className="mt-2.5">
+            <button onClick={() => setOpen(o => !o)}
+              className="w-full card flex items-center justify-center gap-2 py-3 cursor-pointer"
+              style={{ borderRadius: open ? "12px 12px 0 0" : 12 }}>
+              <span className="text-[12px] text-white/50">この鑑定の根拠を見る</span>
+              <span className={clsx("text-gold text-[12px] transition-transform duration-200",
+                open && "rotate-180")}>∨</span>
+            </button>
+            {open && (
+              <div className="p-3 border border-white/[0.08] border-t-0"
+                style={{ background:"rgba(15,20,50,.8)", borderRadius:"0 0 12px 12px" }}>
+                <p className="text-[12px] text-white/40 text-center py-2">
+                  天体データは鑑定完了後に表示されます
+                </p>
               </div>
-            )
-          })}
-        </div>
+            )}
+          </div>
+        )}
 
-        {/* キーワード */}
-        {(outputs?.keywords as any)?.length > 0 && (
+        {/* テーマ別 2x2 - ゲストには非表示 */}
+        {!isGuest && (
+          <div className="grid grid-cols-2 gap-2.5 mt-2.5">
+            {THEME_CARDS.map(({ key, label, icon, c, bg }) => {
+              const text = (outputs as any)?.[key]
+              if (!text) return null
+              return (
+                <div key={key} className="card p-3.5">
+                  <div className="w-11 h-11 rounded-full flex items-center justify-center mb-2 text-lg"
+                    style={{ background:bg, border:`1px solid ${c}30`, color:c }}>
+                    {icon}
+                  </div>
+                  <div className="text-[12px] font-bold mb-1.5" style={{ color:c }}>{label}</div>
+                  <p className="font-sans text-[11px] leading-[1.75] text-[#A0A0C0] font-light">{text}</p>
+                </div>
+              )
+            })}
+          </div>
+        )}
+
+        {/* キーワード - ゲストには非表示 */}
+        {!isGuest && (outputs?.keywords as any)?.length > 0 && (
           <div className="card mt-2.5 p-4">
             <div className="flex items-center gap-1.5 mb-2.5">
               <span className="text-gold text-xs">✦</span>
@@ -126,8 +135,8 @@ export default function ReadingResultPage() {
           </div>
         )}
 
-        {/* ラッキーアクション */}
-        {outputs?.lucky_action && (
+        {/* ラッキーアクション - ゲストには非表示 */}
+        {!isGuest && outputs?.lucky_action && (
           <div className="mt-2.5 p-4 rounded-xl"
             style={{ background:"linear-gradient(135deg,rgba(120,80,10,.85),rgba(80,50,5,.85))", border:"1px solid rgba(201,165,84,.3)" }}>
             <div className="text-[11px] text-gold tracking-wider mb-1.5">✦ ラッキーアクション</div>
@@ -137,8 +146,8 @@ export default function ReadingResultPage() {
           </div>
         )}
 
-        {/* アドバイス */}
-        {outputs?.advice && (
+        {/* アドバイス - ゲストには非表示 */}
+        {!isGuest && outputs?.advice && (
           <div className="card mt-2.5 p-4">
             <div className="flex items-center gap-1.5 mb-2">
               <span className="text-gold text-xs">✦</span>
@@ -150,11 +159,33 @@ export default function ReadingResultPage() {
           </div>
         )}
 
+        {/* ゲストのペイウォール */}
+        {isGuest && (
+          <div className="mt-4 p-5 rounded-xl text-center"
+            style={{ background:"linear-gradient(135deg,rgba(30,20,60,.95),rgba(20,15,50,.95))", border:"1px solid rgba(201,165,84,.3)" }}>
+            <div className="text-gold text-lg mb-2">✦</div>
+            <h3 className="font-serif text-[15px] text-[#F0F0F8] mb-2">続きを読む・再鑑定する</h3>
+            <p className="text-[12px] text-white/50 mb-4 leading-6">
+              会員登録（無料）で<br />全文表示・全テーマ・履歴保存が使えます
+            </p>
+            <button onClick={() => router.push("/auth/register")}
+              className="btn-gold w-full py-3.5 text-[14px] mb-2">
+              無料で会員登録する
+            </button>
+            <button onClick={() => router.push("/auth/login")}
+              className="text-[12px] text-white/40 hover:text-white/70">
+              すでにアカウントをお持ちの方
+            </button>
+          </div>
+        )}
+
         {/* Back */}
-        <button onClick={() => router.push("/reading")}
-          className="btn-gold-outline w-full py-3.5 mt-4 flex items-center justify-center gap-2">
-          <span>←</span><span>別の鑑定を行う</span>
-        </button>
+        {!isGuest && (
+          <button onClick={() => router.push("/reading")}
+            className="btn-gold-outline w-full py-3.5 mt-4 flex items-center justify-center gap-2">
+            <span>←</span><span>別の鑑定を行う</span>
+          </button>
+        )}
       </div>
 
       <div className="md:hidden"><BottomNav /></div>
@@ -177,35 +208,45 @@ function LoadingView() {
   )
 }
 
-function OverallText({ text }: { text: string }) {
-  // 【見出し】本文 の形式を解析して段落に分割
+function OverallText({ text, isGuest }: { text: string; isGuest: boolean }) {
   const parts = text.split(/(?=【)/)
-  if (parts.length <= 1) {
+
+  // ゲストは最初の段落のみ表示してフェードアウト
+  const displayParts = isGuest ? parts.slice(0, 1) : parts
+
+  if (displayParts.length <= 1 && !isGuest) {
     return (
       <p className="font-serif text-[13px] leading-8 text-[#D0D0E8] font-light">{text}</p>
     )
   }
+
   return (
-    <div className="space-y-4">
-      {parts.map((part, i) => {
-        if (!part.trim()) return null
-        const match = part.match(/^【(.+?)】(.*)$/s)
-        if (match) {
+    <div className="relative">
+      <div className="space-y-4">
+        {displayParts.map((part, i) => {
+          if (!part.trim()) return null
+          const match = part.match(/^【(.+?)】(.*)$/s)
+          if (match) {
+            return (
+              <div key={i}>
+                <div className="text-[12px] font-bold text-gold/80 mb-1.5">【{match[1]}】</div>
+                <p className="font-serif text-[13px] leading-8 text-[#D0D0E8] font-light">
+                  {match[2].trim()}
+                </p>
+              </div>
+            )
+          }
           return (
-            <div key={i}>
-              <div className="text-[12px] font-bold text-gold/80 mb-1.5">【{match[1]}】</div>
-              <p className="font-serif text-[13px] leading-8 text-[#D0D0E8] font-light">
-                {match[2].trim()}
-              </p>
-            </div>
+            <p key={i} className="font-serif text-[13px] leading-8 text-[#D0D0E8] font-light">
+              {part.trim()}
+            </p>
           )
-        }
-        return (
-          <p key={i} className="font-serif text-[13px] leading-8 text-[#D0D0E8] font-light">
-            {part.trim()}
-          </p>
-        )
-      })}
+        })}
+      </div>
+      {isGuest && (
+        <div className="absolute bottom-0 left-0 right-0 h-20"
+          style={{ background:"linear-gradient(to bottom, transparent, rgba(10,12,30,0.95))" }} />
+      )}
     </div>
   )
 }
