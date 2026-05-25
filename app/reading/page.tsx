@@ -26,11 +26,14 @@ export default function ReadingInputPage() {
   const [loading,setLoading]= useState(false)
   const [error,  setError]  = useState<string | null>(null)
 
-  // ログイン済みプロフィールを取得して自動入力
   useEffect(() => {
-    profileApi.list().then((profiles: any[]) => {
-      if (profiles && profiles.length > 0) {
+    profileApi.list().then((res: any) => {
+      console.log("profileApi.list raw:", JSON.stringify(res))
+      // profiles キーがある場合とない場合の両方に対応
+      const profiles = Array.isArray(res) ? res : (res?.profiles ?? [])
+      if (profiles.length > 0) {
         const p = profiles[0]
+        console.log("profile[0]:", JSON.stringify(p))
         setExistingProfileId(p.id)
         const [y, m, d] = (p.birth_date || "").split("-")
         if (y) setYear(y)
@@ -40,7 +43,7 @@ export default function ReadingInputPage() {
         if (p.birth_time_unknown) setNoTime(true)
         if (p.birth_place_name) setPlace(p.birth_place_name)
       }
-    }).catch(() => {})
+    }).catch((e: any) => console.log("profileApi.list error:", e))
   }, [])
 
   const dateStr = useMemo(() => {
@@ -56,7 +59,6 @@ export default function ReadingInputPage() {
     setLoading(true)
     setError(null)
     try {
-      // 既存プロフィールがあればそのまま使う、なければ作成
       let profileId = existingProfileId
       if (!profileId) {
         const profile = await profileApi.create({
@@ -69,11 +71,9 @@ export default function ReadingInputPage() {
         profileId = profile.id
       }
 
-      // 期間計算
       const now  = new Date()
       const [ps, pe] = getPeriodDates(period, now)
 
-      // 鑑定リクエスト → ポーリング
       const result = await readingApi.pollUntilDone(
         (await readingApi.create({
           profile_id:   profileId!,
@@ -93,7 +93,6 @@ export default function ReadingInputPage() {
     <div className="relative min-h-screen pb-24">
       <Stars />
       <div className="relative z-10 max-w-app mx-auto px-5">
-        {/* Header */}
         <div className="pt-9 pb-5 text-center">
           <div className="font-serif text-[15px] tracking-widest shimmer-gold mb-2">
             ✦ ASTERIA ✦
@@ -104,7 +103,6 @@ export default function ReadingInputPage() {
           </p>
         </div>
 
-        {/* Sign badge */}
         {sunSign && (
           <div className="flex justify-center mb-4">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full"
@@ -117,12 +115,9 @@ export default function ReadingInputPage() {
           </div>
         )}
 
-        {/* Form */}
         <div className="card p-5 mb-3">
-          {/* 既存プロフィールがない場合のみ生年月日・出生地を表示 */}
           {!existingProfileId && (
             <>
-              {/* 生年月日 */}
               <div className="mb-4">
                 <label className="text-[11px] text-white/50 tracking-widest uppercase block mb-2">
                   生年月日 *
@@ -144,7 +139,6 @@ export default function ReadingInputPage() {
                 </div>
               </div>
 
-              {/* 出生時刻 */}
               <div className="mb-4">
                 <div className="flex justify-between items-center mb-2">
                   <label className="text-[11px] text-white/50 tracking-widest uppercase">出生時刻</label>
@@ -159,7 +153,6 @@ export default function ReadingInputPage() {
                   className={clsx("input-field", noTime && "opacity-40")} />
               </div>
 
-              {/* 出生地 */}
               <div className="mb-4">
                 <label className="text-[11px] text-white/50 tracking-widest uppercase block mb-2">
                   出生地 *
@@ -170,7 +163,6 @@ export default function ReadingInputPage() {
             </>
           )}
 
-          {/* 既存プロフィールがある場合は情報を表示 */}
           {existingProfileId && (
             <div className="mb-4 p-3 rounded-xl bg-white/5 border border-white/10">
               <div className="text-[11px] text-white/40 mb-1">登録済みの情報</div>
@@ -178,7 +170,6 @@ export default function ReadingInputPage() {
             </div>
           )}
 
-          {/* テーマ */}
           <div className="mb-4">
             <label className="text-[11px] text-white/50 tracking-widest uppercase block mb-2.5">
               占いたいテーマ
@@ -199,7 +190,6 @@ export default function ReadingInputPage() {
             </div>
           </div>
 
-          {/* 期間 */}
           <div>
             <label className="text-[11px] text-white/50 tracking-widest uppercase block mb-2.5">
               占いたい期間
@@ -220,7 +210,6 @@ export default function ReadingInputPage() {
           </div>
         </div>
 
-        {/* Error */}
         {error && (
           <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/35
                           text-[12px] text-red-400 flex gap-2 mb-3">
@@ -228,7 +217,6 @@ export default function ReadingInputPage() {
           </div>
         )}
 
-        {/* CTA */}
         <button onClick={handleSubmit} disabled={!ok || loading}
           className="btn-gold w-full py-3.5 text-[15px]">
           {loading ? "鑑定中..." : "✦ 鑑定を開始する ✦"}
