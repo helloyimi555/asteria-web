@@ -21,7 +21,7 @@ export default function MyPage() {
   const [mbtiType, setMbtiType] = useState<string>("")
   const [isEditingProfile, setIsEditingProfile] = useState(false)
   const [localProfile, setLocalProfile] = useState<any>(null)
-  const [editForm, setEditForm] = useState({ year: "", month: "", day: "", time: "", place: "" })
+  const [editForm, setEditForm] = useState({ year: "", month: "", day: "", time: "", place: "", mbti: "" })
 
   const profile = localProfile ?? profiles?.[0]
   const readings = history?.readings ?? []
@@ -32,6 +32,7 @@ export default function MyPage() {
       setMbtiType(profile.mbti_type)
     }
   }, [profile?.id, profile?.mbti_type])
+
   const abbreviatedPlace = profile ? (() => {
     const parts = (profile.birth_place_name || "").split(",").map(p => p.trim()).filter(Boolean)
     while (parts.length > 0) {
@@ -64,6 +65,7 @@ export default function MyPage() {
       day,
       time: profile?.birth_time || profile?.birthTime || "",
       place: profile?.birth_place_name || profile?.birthPlaceName || "",
+      mbti: profile?.mbti_type || "",
     })
     setIsEditingProfile(true)
   }
@@ -81,8 +83,13 @@ export default function MyPage() {
       birth_date: formattedDate,
       birth_time: editForm.time,
       birth_place_name: editForm.place,
+      mbti_type: editForm.mbti || null,
     }
     try {
+      if (profile?.id) {
+        await profileApi.update(profile.id, { mbti_type: editForm.mbti || null })
+        setMbtiType(editForm.mbti || "")
+      }
       localStorage.setItem("asteria_profile", JSON.stringify(updatedProfile))
       setLocalProfile(updatedProfile)
       setIsEditingProfile(false)
@@ -186,6 +193,15 @@ export default function MyPage() {
                 <div>
                   <label className="text-[11px] text-white/50 tracking-widest uppercase block mb-2">出生地</label>
                   <input type="text" value={editForm.place} onChange={e => handleEditFormChange("place", e.target.value)} className="input-field w-full" />
+                </div>
+                <div>
+                  <label className="text-[11px] text-white/50 tracking-widest uppercase block mb-2">MBTIタイプ（任意）</label>
+                  <select value={editForm.mbti ?? ""} onChange={e => handleEditFormChange("mbti", e.target.value)} className="input-field w-full">
+                    <option value="">選択しない</option>
+                    {["INTJ","INTP","ENTJ","ENTP","INFJ","INFP","ENFJ","ENFP","ISTJ","ISFJ","ESTJ","ESFJ","ISTP","ISFP","ESTP","ESFP"].map(t => (
+                      <option key={t} value={t}>{t}</option>
+                    ))}
+                  </select>
                 </div>
               </div>
             </div>
@@ -318,7 +334,6 @@ export default function MyPage() {
                   </div>
                 </div>
               )}
-
               <div>
                 <div className="text-[11px] text-white/50 uppercase tracking-widest mb-2">
                   強み
@@ -331,7 +346,6 @@ export default function MyPage() {
                   ))}
                 </div>
               </div>
-
               <div>
                 <div className="text-[11px] text-white/50 uppercase tracking-widest mb-2">
                   課題
@@ -344,7 +358,6 @@ export default function MyPage() {
                   ))}
                 </div>
               </div>
-
               <div>
                 <div className="text-[11px] text-white/50 uppercase tracking-widest mb-2">
                   人生のテーマ
@@ -353,7 +366,6 @@ export default function MyPage() {
                   {personalityResult.life_theme}
                 </div>
               </div>
-
               <div>
                 <div className="text-[11px] text-white/50 uppercase tracking-widest mb-2">
                   仕事・才能
@@ -362,7 +374,6 @@ export default function MyPage() {
                   {personalityResult.career}
                 </div>
               </div>
-
               <div>
                 <div className="text-[11px] text-white/50 uppercase tracking-widest mb-2">
                   対人関係・恋愛
