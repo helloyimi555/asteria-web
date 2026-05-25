@@ -2,6 +2,7 @@
 import { useState, useMemo, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Stars } from "@/components/ui/Stars"
+import AstrologyLoading from "@/components/ui/AstrologyLoading"
 import { BottomNav } from "@/components/layout/BottomNav"
 import { getSunSign, READING_THEMES, READING_PERIODS } from "@/lib/zodiac"
 import { profileApi, readingApi, guestReadingApi, isLoggedIn } from "@/lib/api"
@@ -115,6 +116,10 @@ export default function ReadingInputPage() {
       setError(e?.response?.data?.detail ?? "エラーが発生しました。もう一度お試しください。")
       setLoading(false)
     }
+  }
+// ローディング表示
+  if (loading) {
+    return <AstrologyLoading message="星図を読み解いています..." subMessage="あなたの天体配置から、今の運勢を紡いでいます" />
   }
 
   // ゲストが既に使用済みの場合
