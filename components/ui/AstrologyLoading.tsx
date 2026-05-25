@@ -16,8 +16,8 @@ export default function AstrologyLoading({
       aria-live="polite"
     >
       <img
-        src="/asteria/loading/star-field-bg.webp"
-        srcSet="/asteria/loading/star-field-bg.webp 375w, /asteria/loading/star-field-bg@2x.webp 750w"
+        src="/loading/star-field-bg.webp"
+        srcSet="/loading/star-field-bg.webp 375w, /loading/star-field-bg@2x.webp 750w"
         alt=""
         className="absolute inset-0 h-full w-full object-cover"
         draggable={false}
@@ -28,7 +28,7 @@ export default function AstrologyLoading({
       <div className="relative z-10 flex w-full max-w-[420px] flex-col items-center">
         <div className="relative aspect-square w-[min(108vw,430px)] -translate-y-10">
           <img
-            src="/asteria/loading/zodiac-ring-transparent.png"
+            src="/loading/zodiac-ring-transparent.png"
             alt=""
             className="absolute inset-0 h-full w-full animate-[asteria-spin_30s_linear_infinite] object-contain opacity-90 motion-reduce:animate-none"
             draggable={false}
@@ -36,7 +36,7 @@ export default function AstrologyLoading({
 
           <div className="absolute inset-0 flex items-center justify-center">
             <img
-              src="/asteria/loading/center-logo-transparent.png"
+              src="/loading/center-logo-transparent.png"
               alt="ASTERIA"
               className="w-[44%] animate-[asteria-pulse_3.4s_ease-in-out_infinite] object-contain opacity-95 motion-reduce:animate-none"
               draggable={false}
@@ -87,3 +87,4 @@ export default function AstrologyLoading({
     </section>
   );
 }
+
