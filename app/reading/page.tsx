@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation"
 import { Stars } from "@/components/ui/Stars"
 import { BottomNav } from "@/components/layout/BottomNav"
 import { getSunSign, READING_THEMES, READING_PERIODS } from "@/lib/zodiac"
-import { profileApi, readingApi, isLoggedIn } from "@/lib/api"
+import { profileApi, readingApi, guestReadingApi, isLoggedIn } from "@/lib/api"
 import clsx from "clsx"
 
 const YEARS  = Array.from({ length:75 }, (_, i) => 2008 - i)
@@ -66,17 +66,32 @@ export default function ReadingInputPage() {
     setLoading(true)
     setError(null)
     try {
-      let profileId = existingProfileId
-      if (!profileId) {
-        const profile = await profileApi.create({
-          display_name:       "メイン",
-          birth_date:         dateStr,
-          birth_time:         (!noTime && time) ? time : undefined,
-          birth_time_unknown: noTime,
-          birth_place_name:   place,
+      const now = new Date()
+      const [ps, pe] = getPeriodDates(period, now)
+
+      if (!loggedIn) {
+        // ゲスト鑑定
+        const result = await guestReadingApi.create({
+          birth_date:       dateStr,
+          birth_place_name: place,
+          theme:            theme,
+          period_start:     ps,
+          period_end:       pe,
         })
-        profileId = profile.id
-        if (loggedIn) {
+        localStorage.setItem(GUEST_KEY, "1")
+        localStorage.setItem("asteria_guest_result", JSON.stringify(result))
+        router.push("/reading/guest-result")
+      } else {
+        let profileId = existingProfileId
+        if (!profileId) {
+          const profile = await profileApi.create({
+            display_name:       "メイン",
+            birth_date:         dateStr,
+            birth_time:         (!noTime && time) ? time : undefined,
+            birth_time_unknown: noTime,
+            birth_place_name:   place,
+          })
+          profileId = profile.id
           localStorage.setItem(PROFILE_KEY, JSON.stringify({
             id: profile.id,
             birth_date: dateStr,
@@ -85,26 +100,17 @@ export default function ReadingInputPage() {
             birth_place_name: place,
           }))
         }
+
+        const result = await readingApi.pollUntilDone(
+          (await readingApi.create({
+            profile_id:   profileId!,
+            theme:        theme as any,
+            period_start: ps,
+            period_end:   pe,
+          })).reading_id
+        )
+        router.push(`/reading/${result.reading_id}`)
       }
-
-      const now  = new Date()
-      const [ps, pe] = getPeriodDates(period, now)
-
-      const result = await readingApi.pollUntilDone(
-        (await readingApi.create({
-          profile_id:   profileId!,
-          theme:        theme as any,
-          period_start: ps,
-          period_end:   pe,
-        })).reading_id
-      )
-
-      // ゲストの場合は使用済みフラグを立てる
-      if (!loggedIn) {
-        localStorage.setItem(GUEST_KEY, "1")
-      }
-
-      router.push(`/reading/${result.reading_id}?guest=${!loggedIn}`)
     } catch (e: any) {
       setError(e?.response?.data?.detail ?? "エラーが発生しました。もう一度お試しください。")
       setLoading(false)
@@ -134,11 +140,6 @@ export default function ReadingInputPage() {
       </div>
     )
   }
-
-  const availableThemes = loggedIn ? READING_THEMES : READING_THEMES.filter(t => t.id === "general")
-  const availablePeriods = loggedIn
-    ? READING_PERIODS
-    : READING_PERIODS.filter(p => ["today", "tomorrow", "week"].includes(p.id))
 
   return (
     <div className="relative min-h-screen pb-24">

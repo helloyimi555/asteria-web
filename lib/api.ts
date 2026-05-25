@@ -120,6 +120,21 @@ export const readingApi = {
   },
 }
 
+
+// ── Guest Readings ────────────────────────────────────────────
+export const guestReadingApi = {
+  create: (input: {
+    birth_date: string
+    birth_place_name: string
+    theme: string
+    period_start: string
+    period_end: string
+  }) =>
+    api.post<Reading>("/readings/guest", input).then(r => r.data),
+}
+
+
+
 // ── Masters ───────────────────────────────────────────────────
 export const mastersApi = {
   planets: () => api.get("/masters/planets").then(r => r.data),
