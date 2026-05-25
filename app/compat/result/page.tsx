@@ -108,7 +108,6 @@ export default function CompatResultPage() {
             </div>
             <div className="grid gap-4">
               <div className="text-center">
-                <div className="text-[12px] text-white/50 mb-2">星のシンクロスコア</div>
                 <div className="text-[44px] font-bold text-[#F0F0F8]">{outputs.scores.overall ?? 0} / 100</div>
                 <div className="mt-2 text-[13px] font-semibold text-[#D0D0E8]">{overallLabel}</div>
               </div>
@@ -144,6 +143,30 @@ export default function CompatResultPage() {
             </div>
             <p className="font-serif text-[13px] leading-8 text-[#D0D0E8] font-light">
               {outputs.relationship}
+            </p>
+          </div>
+        )}
+
+        {outputs?.from_my_view && (
+          <div className="card mt-2.5 p-4" style={{ borderLeft:"3px solid #F07098" }}>
+            <div className="flex items-center gap-2 mb-3">
+              <span className="text-[#F07098] text-sm">👁</span>
+              <span className="text-[12px] font-bold text-[#F0F0F8]">あなたから見たお相手</span>
+            </div>
+            <p className="font-serif text-[13px] leading-7 text-[#D0D0E8] font-light">
+              {outputs.from_my_view}
+            </p>
+          </div>
+        )}
+
+        {outputs?.from_their_view && (
+          <div className="card mt-2.5 p-4" style={{ borderLeft:"3px solid #70B4FF" }}>
+            <div className="flex items-center gap-2 mb-3">
+              <span className="text-[#70B4FF] text-sm">👁</span>
+              <span className="text-[12px] font-bold text-[#F0F0F8]">お相手から見たあなた</span>
+            </div>
+            <p className="font-serif text-[13px] leading-7 text-[#D0D0E8] font-light">
+              {outputs.from_their_view}
             </p>
           </div>
         )}
