@@ -38,11 +38,12 @@ api.interceptors.response.use(
         saveTokens(data)
         original.headers!.Authorization = `Bearer ${data.access_token}`
         return api(original)
-      } catch {
+        } catch {
         clearTokens()
-        window.location.href = "/auth/login"
-      }
-    }
+        if (typeof window !== 'undefined') {
+          window.location.href = "/asteria/auth/login"
+        }
+      }    }
     return Promise.reject(err)
   }
 )
