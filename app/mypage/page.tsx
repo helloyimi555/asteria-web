@@ -8,6 +8,10 @@ import AstrologyLoading from "@/components/ui/AstrologyLoading"
 import { BottomNav } from "@/components/layout/BottomNav"
 import Link from "next/link"
 
+const YEARS = Array.from({ length: 75 }, (_, i) => 2008 - i)
+const MONTHS = Array.from({ length: 12 }, (_, i) => i + 1)
+const DAYS = Array.from({ length: 31 }, (_, i) => i + 1)
+
 export default function MyPage() {
   const { isAuthenticated, logout } = useAuth()
   const { data: profiles } = useProfiles()
@@ -15,11 +19,14 @@ export default function MyPage() {
   const [personalityResult, setPersonalityResult] = useState<any | null>(null)
   const [loadingPersonality, setLoadingPersonality] = useState(false)
   const [mbtiType, setMbtiType] = useState<string>("")
+  const [isEditingProfile, setIsEditingProfile] = useState(false)
+  const [localProfile, setLocalProfile] = useState<any>(null)
+  const [editForm, setEditForm] = useState({ year: "", month: "", day: "", time: "", place: "" })
 
-  const profile = profiles?.[0]
+  const profile = localProfile ?? profiles?.[0]
   const readings = history?.readings ?? []
   const abbreviatedPlace = profile ? (() => {
-    const parts = profile.birth_place_name.split(",").map(p => p.trim()).filter(Boolean)
+    const parts = (profile.birth_place_name || "").split(",").map(p => p.trim()).filter(Boolean)
     while (parts.length > 0) {
       const last = parts[parts.length - 1]
       if (last === "日本" || /^\d{3}-\d{4}$/.test(last) || /\d/.test(last)) {
@@ -30,6 +37,56 @@ export default function MyPage() {
     }
     return parts.slice(-2).join(", ")
   })() : ""
+
+  const getBirthDateParts = (value: string | undefined) => {
+    if (!value) return { year: "", month: "", day: "" }
+    const [year, month, day] = value.split("-")
+    return {
+      year: year ?? "",
+      month: month ? String(Number(month)) : "",
+      day: day ? String(Number(day)) : "",
+    }
+  }
+
+  const openProfileEdit = () => {
+    const birthDate = profile?.birth_date || profile?.birthDate || ""
+    const { year, month, day } = getBirthDateParts(birthDate)
+    setEditForm({
+      year,
+      month,
+      day,
+      time: profile?.birth_time || profile?.birthTime || "",
+      place: profile?.birth_place_name || profile?.birthPlaceName || "",
+    })
+    setIsEditingProfile(true)
+  }
+
+  const handleCancelEdit = () => {
+    setIsEditingProfile(false)
+  }
+
+  const handleSaveProfile = async () => {
+    const formattedDate = editForm.year && editForm.month && editForm.day
+      ? `${editForm.year}-${String(editForm.month).padStart(2, "0")}-${String(editForm.day).padStart(2, "0")}`
+      : ""
+    const updatedProfile = {
+      ...profile,
+      birth_date: formattedDate,
+      birth_time: editForm.time,
+      birth_place_name: editForm.place,
+    }
+    try {
+      localStorage.setItem("asteria_profile", JSON.stringify(updatedProfile))
+      setLocalProfile(updatedProfile)
+      setIsEditingProfile(false)
+    } catch (error) {
+      console.error("Failed to save profile", error)
+    }
+  }
+
+  const handleEditFormChange = (key: string, value: string) => {
+    setEditForm(prev => ({ ...prev, [key]: value }))
+  }
 
   const handleFetchPersonality = async () => {
     if (!profile) return
@@ -83,12 +140,51 @@ export default function MyPage() {
             ) : (
               <div className="text-[13px] text-white/50">プロフィール未設定</div>
             )}
-            <Link href="/reading"
+            <button type="button" onClick={openProfileEdit}
               className="text-[12px] text-gold mt-1.5 inline-flex items-center gap-1">
               プロフィールを編集 <span>›</span>
-            </Link>
+            </button>
           </div>
         </div>
+
+        {isEditingProfile && (
+          <div className="card mb-3 p-4" style={{ border:"1px solid rgba(201,165,84,.25)" }}>
+            <div className="mb-4">
+              <div className="text-[12px] text-gold font-semibold mb-2">プロフィールを編集</div>
+              <div className="grid gap-3">
+                <div>
+                  <label className="text-[11px] text-white/50 tracking-widest uppercase block mb-2">生年月日</label>
+                  <div className="grid grid-cols-[2fr_1.1fr_1.1fr] gap-2">
+                    <select value={editForm.year} onChange={e => handleEditFormChange("year", e.target.value)} className="input-field">
+                      <option value="">年</option>
+                      {YEARS.map(y => <option key={y} value={y}>{y}年</option>)}
+                    </select>
+                    <select value={editForm.month} onChange={e => handleEditFormChange("month", e.target.value)} className="input-field">
+                      <option value="">月</option>
+                      {MONTHS.map(m => <option key={m} value={m}>{String(m).padStart(2, "0")}月</option>)}
+                    </select>
+                    <select value={editForm.day} onChange={e => handleEditFormChange("day", e.target.value)} className="input-field">
+                      <option value="">日</option>
+                      {DAYS.map(d => <option key={d} value={d}>{String(d).padStart(2, "0")}日</option>)}
+                    </select>
+                  </div>
+                </div>
+                <div>
+                  <label className="text-[11px] text-white/50 tracking-widest uppercase block mb-2">出生時刻</label>
+                  <input type="time" value={editForm.time} onChange={e => handleEditFormChange("time", e.target.value)} className="input-field w-full" />
+                </div>
+                <div>
+                  <label className="text-[11px] text-white/50 tracking-widest uppercase block mb-2">出生地</label>
+                  <input type="text" value={editForm.place} onChange={e => handleEditFormChange("place", e.target.value)} className="input-field w-full" />
+                </div>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <button type="button" onClick={handleSaveProfile} className="btn-gold flex-1 py-3 text-[14px]">保存する</button>
+              <button type="button" onClick={handleCancelEdit} className="btn-gold-outline flex-1 py-3 text-[14px]">キャンセル</button>
+            </div>
+          </div>
+        )}
 
         {/* Premium badge */}
         <div className="card mb-4 p-3.5 flex items-center justify-between cursor-pointer"
