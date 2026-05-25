@@ -1,12 +1,12 @@
 "use client"
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Stars } from "@/components/ui/Stars"
 import AstrologyLoading from "@/components/ui/AstrologyLoading"
 import { BottomNav } from "@/components/layout/BottomNav"
 import { getSunSign } from "@/lib/zodiac"
 import clsx from "clsx"
-import { compatApi } from "@/lib/api"
+import { compatApi, isLoggedIn } from "@/lib/api"
 
 const YEARS  = Array.from({ length:75 }, (_, i) => 2008 - i)
 const MONTHS = Array.from({ length:12 }, (_, i) => i + 1)
@@ -77,6 +77,38 @@ export default function CompatInputPage() {
   const [relType,     setRelType]     = useState("partner")
   const [loading,     setLoading]     = useState(false)
   const [error,       setError]       = useState(null)
+
+  useEffect(() => {
+    if (!isLoggedIn()) return
+    const rawProfile = localStorage.getItem("asteria_profile")
+    if (!rawProfile) return
+
+    try {
+      const profile = JSON.parse(rawProfile)
+      const nextForm: { year?: string; month?: string; day?: string; place?: string } = {}
+      if (profile.year) nextForm.year = String(profile.year)
+      if (profile.month) nextForm.month = String(profile.month)
+      if (profile.day) nextForm.day = String(profile.day)
+      if (profile.birth_date || profile.birthDate) {
+        const birthDate = profile.birth_date || profile.birthDate
+        if (typeof birthDate === "string") {
+          const [year, month, day] = birthDate.split("-")
+          if (year && month && day) {
+            nextForm.year = String(year)
+            nextForm.month = String(Number(month))
+            nextForm.day = String(Number(day))
+          }
+        }
+      }
+      const place = profile.birth_place_name || profile.birthPlaceName || profile.place || profile.birth_place
+      if (place) nextForm.place = place
+      if (Object.keys(nextForm).length) {
+        setMyForm(prev => ({ ...prev, ...nextForm }))
+      }
+    } catch {
+      // ignore malformed stored profile
+    }
+  }, [])
 
   const toDate = (f) => f.year && f.month && f.day
     ? `${f.year}-${String(f.month).padStart(2,"0")}-${String(f.day).padStart(2,"0")}` : ""
