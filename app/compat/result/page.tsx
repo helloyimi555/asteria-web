@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { Stars } from "@/components/ui/Stars"
+import NatalChart from "@/components/ui/NatalChart"
 import { BottomNav } from "@/components/layout/BottomNav"
 import { TONE_COLOR } from "@/lib/zodiac"
 import clsx from "clsx"
@@ -93,6 +94,38 @@ export default function CompatResultPage() {
             <p className="font-serif text-[13px] leading-8 text-[#D0D0E8] font-light">
               {outputs.relationship}
             </p>
+          </div>
+        )}
+
+        {/* シナストリー TOP5 */}
+        {synastry?.length > 0 && (
+          <div className="card mt-2.5 p-4">
+            <div className="flex items-center gap-1.5 mb-3">
+              <span className="text-gold text-xs">✦</span>
+              <span className="text-[12px] font-bold text-[#F0F0F8]">シナストリー（天体の相性）</span>
+            </div>
+            <div className="grid gap-2">
+              {synastry.slice(0, 5).map((s: any, i: number) => (
+                <div key={i} className="p-3 rounded-[10px]"
+                  style={{ background:"rgba(255,255,255,.03)", border:"1px solid rgba(255,255,255,.06)" }}>
+                  <div className="flex justify-between items-start mb-1.5 flex-wrap gap-1">
+                    <span className="text-[12px] text-[#D0D0E8]">
+                      あなたの{s.my_planet_ja} × お相手の{s.their_planet_ja}
+                    </span>
+                    <span className="text-[10px] px-2 py-0.5 rounded-full"
+                      style={{ background:`${TONE_COLOR[s.tone]}18`, color:TONE_COLOR[s.tone], border:`1px solid ${TONE_COLOR[s.tone]}30` }}>
+                      {s.aspect_ja}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2 mt-1">
+                    <div className="flex-1 h-[3px] rounded-full bg-white/[.06]">
+                      <div className="h-full rounded-full" style={{ width:`${s.importance}%`, background:TONE_COLOR[s.tone] }} />
+                    </div>
+                    <span className="text-[10px] text-white/50 whitespace-nowrap">{s.importance} / 100</span>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         )}
 

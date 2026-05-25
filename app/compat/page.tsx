@@ -2,6 +2,7 @@
 import { useState, useMemo } from "react"
 import { useRouter } from "next/navigation"
 import { Stars } from "@/components/ui/Stars"
+import AstrologyLoading from "@/components/ui/AstrologyLoading"
 import { BottomNav } from "@/components/layout/BottomNav"
 import { getSunSign } from "@/lib/zodiac"
 import clsx from "clsx"
@@ -93,6 +94,7 @@ const handleSubmit = async () => {
 
   return (
     <div className="relative min-h-screen pb-24">
+      {loading && <AstrologyLoading message="ふたりの星の相性を読み解いています..." subMessage="シナストリー計算とAI分析を行っています" />}
       <Stars />
       <div className="relative z-10 max-w-app mx-auto px-5">
         <div className="pt-8 pb-5 text-center">
