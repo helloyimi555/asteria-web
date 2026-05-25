@@ -4,7 +4,6 @@ import { useReading } from "@/hooks/useReading"
 import { Stars } from "@/components/ui/Stars"
 import { BottomNav } from "@/components/layout/BottomNav"
 import { TopNav } from "@/components/layout/TopNav"
-import { TONE_COLOR } from "@/lib/zodiac"
 import clsx from "clsx"
 import { useState } from "react"
 
@@ -14,6 +13,15 @@ const THEME_CARDS = [
   { key:"health",  label:"健康運",  icon:"◎",  c:"#70DDA8", bg:"rgba(112,221,168,.15)" },
   { key:"caution", label:"注意点",  icon:"△",  c:"#FFC96E", bg:"rgba(255,201,110,.15)" },
 ]
+
+const THEME_LABEL: Record<string, string> = {
+  general:      "総合運",
+  work:         "仕事運",
+  love:         "恋愛運",
+  health:       "健康運",
+  money:        "金運",
+  relationship: "人間関係",
+}
 
 export default function ReadingResultPage() {
   const { id }  = useParams<{ id: string }>()
@@ -29,6 +37,7 @@ export default function ReadingResultPage() {
   }
 
   const { outputs } = reading
+  const themeLabel = THEME_LABEL[reading.theme] ?? "鑑定結果"
 
   return (
     <div className="relative min-h-screen pb-28">
@@ -49,12 +58,12 @@ export default function ReadingResultPage() {
           </p>
         )}
 
-        {/* 総合運 */}
+        {/* メインテーマ */}
         {outputs?.overall && (
           <div className="card mt-3 p-4" style={{ borderLeft:"3px solid rgba(201,165,84,.6)" }}>
             <div className="flex items-center gap-1.5 mb-2.5">
               <span className="text-gold text-sm">✦</span>
-              <span className="font-sans text-[13px] font-bold text-[#F0F0F8]">総合運</span>
+              <span className="font-sans text-[13px] font-bold text-[#F0F0F8]">{themeLabel}</span>
             </div>
             <p className="font-serif text-[13px] leading-8 text-[#D0D0E8] font-light">
               {outputs.overall}
