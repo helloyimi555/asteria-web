@@ -4,6 +4,7 @@ import { useAuth } from "@/lib/auth-context"
 import { useProfiles, useReadingHistory } from "@/hooks/useReading"
 import { profileApi } from "@/lib/api"
 import { Stars } from "@/components/ui/Stars"
+import AstrologyLoading from "@/components/ui/AstrologyLoading"
 import { BottomNav } from "@/components/layout/BottomNav"
 import Link from "next/link"
 
@@ -29,6 +30,15 @@ export default function MyPage() {
     } finally {
       setLoadingPersonality(false)
     }
+  }
+
+  if (loadingPersonality) {
+    return (
+      <AstrologyLoading
+        message="星の配置を読み解いています..."
+        subMessage="あなたの本質的な才能と課題を紡いでいます"
+      />
+    )
   }
 
   return (
