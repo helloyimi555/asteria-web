@@ -20,6 +20,15 @@ const THEME_CARDS = [
   { key:"caution",       label:"注意が必要なこと",        icon:"△", c:"#FFC96E" },
 ]
 
+const IMPORTANCE_LABEL_BY_ASPECT: Record<string, string> = {
+  conjunction: "相性度",
+  trine: "相性度",
+  sextile: "相性度",
+  opposition: "影響度",
+  square: "影響度",
+  quincunx: "影響度",
+}
+
 const SCORE_FIELDS = [
   { key: "love", label: "恋愛・ときめき", color: "#F07098" },
   { key: "trust", label: "安心感・信頼", color: "#70DDA8" },
@@ -67,6 +76,11 @@ export default function CompatResultPage() {
     : overallScore >= 50 ? "△ 対話で相性を高める関係"
     : "努力でより良くなる関係"
     : ""
+
+  const adviceText = outputs?.advice?.replace(
+    "あなたの強い言葉が時に相手を傷つける可能性があることを意識しましょう",
+    "あなたのまっすぐな表現が、時にお相手には強く感じられることがあります。"
+  )
 
   return (
     <div className="relative min-h-screen pb-28">
@@ -150,7 +164,7 @@ export default function CompatResultPage() {
         {outputs?.from_my_view && (
           <div className="card mt-2.5 p-4" style={{ borderLeft:"3px solid #F07098" }}>
             <div className="flex items-center gap-2 mb-3">
-              <span className="text-[#F07098] text-sm">👁</span>
+              <span className="text-[#F07098] text-sm">✦</span>
               <span className="text-[12px] font-bold text-[#F0F0F8]">あなたから見たお相手</span>
             </div>
             <p className="font-serif text-[13px] leading-7 text-[#D0D0E8] font-light">
@@ -162,7 +176,7 @@ export default function CompatResultPage() {
         {outputs?.from_their_view && (
           <div className="card mt-2.5 p-4" style={{ borderLeft:"3px solid #70B4FF" }}>
             <div className="flex items-center gap-2 mb-3">
-              <span className="text-[#70B4FF] text-sm">👁</span>
+              <span className="text-[#70B4FF] text-sm">☽</span>
               <span className="text-[12px] font-bold text-[#F0F0F8]">お相手から見たあなた</span>
             </div>
             <p className="font-serif text-[13px] leading-7 text-[#D0D0E8] font-light">
@@ -195,7 +209,9 @@ export default function CompatResultPage() {
                     <div className="flex-1 h-[3px] rounded-full bg-white/[.06]">
                       <div className="h-full rounded-full" style={{ width:`${s.importance}%`, background:TONE_COLOR[s.tone] }} />
                     </div>
-                    <span className="text-[10px] text-white/50 whitespace-nowrap">{s.importance} / 100</span>
+                    <span className="text-[10px] text-white/50 whitespace-nowrap">
+                      {IMPORTANCE_LABEL_BY_ASPECT[s.aspect] ?? "相性度"} {s.importance}
+                    </span>
                   </div>
                 </div>
               ))}
@@ -296,7 +312,7 @@ export default function CompatResultPage() {
               <span className="text-[12px] font-bold text-[#F0F0F8]">アドバイス</span>
             </div>
             <p className="font-serif text-[13px] leading-8 text-[#C0C0D8] font-light">
-              {outputs.advice}
+              {adviceText}
             </p>
           </div>
         )}
