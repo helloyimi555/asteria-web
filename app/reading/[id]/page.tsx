@@ -61,15 +61,14 @@ export default function ReadingResultPage() {
         {/* メインテーマ */}
         {outputs?.overall && (
           <div className="card mt-3 p-4" style={{ borderLeft:"3px solid rgba(201,165,84,.6)" }}>
-            <div className="flex items-center gap-1.5 mb-2.5">
+            <div className="flex items-center gap-1.5 mb-3">
               <span className="text-gold text-sm">✦</span>
               <span className="font-sans text-[13px] font-bold text-[#F0F0F8]">{themeLabel}</span>
             </div>
-            <p className="font-serif text-[13px] leading-8 text-[#D0D0E8] font-light">
-              {outputs.overall}
-            </p>
+            <OverallText text={outputs.overall} />
           </div>
         )}
+
 
         {/* 根拠 toggle */}
         <div className="mt-2.5">
@@ -174,6 +173,39 @@ function LoadingView() {
         <p className="text-[15px] text-[#F0F0F8] mb-2">あなたの未来の流れを読み解いています..</p>
         <p className="text-[12px] text-white/45">天体の配置を計算し、AIがストーリーを紡ぎます</p>
       </div>
+    </div>
+  )
+}
+
+function OverallText({ text }: { text: string }) {
+  // 【見出し】本文 の形式を解析して段落に分割
+  const parts = text.split(/(?=【)/)
+  if (parts.length <= 1) {
+    return (
+      <p className="font-serif text-[13px] leading-8 text-[#D0D0E8] font-light">{text}</p>
+    )
+  }
+  return (
+    <div className="space-y-4">
+      {parts.map((part, i) => {
+        if (!part.trim()) return null
+        const match = part.match(/^【(.+?)】(.*)$/s)
+        if (match) {
+          return (
+            <div key={i}>
+              <div className="text-[12px] font-bold text-gold/80 mb-1.5">【{match[1]}】</div>
+              <p className="font-serif text-[13px] leading-8 text-[#D0D0E8] font-light">
+                {match[2].trim()}
+              </p>
+            </div>
+          )
+        }
+        return (
+          <p key={i} className="font-serif text-[13px] leading-8 text-[#D0D0E8] font-light">
+            {part.trim()}
+          </p>
+        )
+      })}
     </div>
   )
 }

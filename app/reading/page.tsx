@@ -241,6 +241,19 @@ export default function ReadingInputPage() {
 
 function getPeriodDates(periodId: string, now: Date): [string, string] {
   const fmt = (d: Date) => d.toISOString().split("T")[0]
+  if (periodId === "today") {
+    return [fmt(now), fmt(now)]
+  }
+  if (periodId === "tomorrow") {
+    const tomorrow = new Date(now)
+    tomorrow.setDate(now.getDate() + 1)
+    return [fmt(tomorrow), fmt(tomorrow)]
+  }
+  if (periodId === "week") {
+    const end = new Date(now)
+    end.setDate(now.getDate() + 6)
+    return [fmt(now), fmt(end)]
+  }
   if (periodId === "month") {
     const end = new Date(now.getFullYear(), now.getMonth() + 1, 0)
     return [fmt(now), fmt(end)]

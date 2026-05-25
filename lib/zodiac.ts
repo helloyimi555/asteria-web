@@ -45,9 +45,12 @@ export const READING_THEMES = [
 ] as const
 
 export const READING_PERIODS = [
-  { id:"month", label:"今月",     start:(now: Date) => now, end:(now: Date) => new Date(now.getFullYear(), now.getMonth()+1, 0) },
-  { id:"half2", label:"今年後半", start:()=>new Date(new Date().getFullYear(),6,1), end:()=>new Date(new Date().getFullYear(),11,31) },
-  { id:"year",  label:"来年",     start:()=>new Date(new Date().getFullYear()+1,0,1), end:()=>new Date(new Date().getFullYear()+1,11,31) },
+  { id:"today", label:"今日" },
+  { id:"tomorrow", label:"明日" },
+  { id:"week", label:"今週" },
+  { id:"month", label:"今月" },
+  { id:"half2", label:"今年後半" },
+  { id:"year",  label:"来年" },
 ] as const
 
 export const TONE_COLOR: Record<string, string> = {
