@@ -90,6 +90,9 @@ export default function MyPage() {
 
   const handleFetchPersonality = async () => {
     if (!profile) return
+    if (mbtiType) {
+      localStorage.setItem("asteria_mbti", mbtiType)
+    }
     setLoadingPersonality(true)
     try {
       const data = await profileApi.getPersonality(profile.id, mbtiType || undefined)
