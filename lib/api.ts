@@ -1,7 +1,7 @@
 import axios, { AxiosError, AxiosInstance } from "axios"
 import Cookies from "js-cookie"
 import type {
-  AuthTokens, BirthProfile, ProfileCreateInput,
+  AuthTokens, BirthProfile, ProfileCreateInput, ProfileUpdateInput,
   NatalChart, TransitEvent, Reading, ReadingCreateInput,
   CompatResult, CompatCreateInput,
 } from "@/types"
@@ -82,6 +82,9 @@ export const profileApi = {
 
   create: (input: ProfileCreateInput) =>
     api.post<BirthProfile & { natal_chart: NatalChart }>("/profiles", input).then(r => r.data),
+
+  update: (profileId: string, input: ProfileUpdateInput) =>
+    api.patch<BirthProfile>(`/profiles/${profileId}`, input).then(r => r.data),
 
   getNatalChart: (profileId: string) =>
     api.get<NatalChart>(`/profiles/${profileId}/natal-chart`).then(r => r.data),

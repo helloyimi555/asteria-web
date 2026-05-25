@@ -20,6 +20,7 @@ export interface BirthProfile {
   birth_place_name:   string
   birth_timezone:     string
   birth_time_unknown: boolean
+  mbti_type?:         string | null
   created_at:         string
 }
 
@@ -29,6 +30,16 @@ export interface ProfileCreateInput {
   birth_time?:        string   // HH:MM
   birth_time_unknown: boolean
   birth_place_name:   string
+  mbti_type?:         string | null
+}
+
+export interface ProfileUpdateInput {
+  display_name?:       string
+  birth_date?:         string
+  birth_time?:         string
+  birth_time_unknown?: boolean
+  birth_place_name?:   string
+  mbti_type?:         string | null
 }
 
 // ── Natal Chart ───────────────────────────────────────────────

@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useAuth } from "@/lib/auth-context"
 import { useProfiles, useReadingHistory } from "@/hooks/useReading"
 import { profileApi } from "@/lib/api"
@@ -25,6 +25,13 @@ export default function MyPage() {
 
   const profile = localProfile ?? profiles?.[0]
   const readings = history?.readings ?? []
+
+  useEffect(() => {
+    if (!profile) return
+    if (profile.mbti_type) {
+      setMbtiType(profile.mbti_type)
+    }
+  }, [profile?.id, profile?.mbti_type])
   const abbreviatedPlace = profile ? (() => {
     const parts = (profile.birth_place_name || "").split(",").map(p => p.trim()).filter(Boolean)
     while (parts.length > 0) {
@@ -90,11 +97,11 @@ export default function MyPage() {
 
   const handleFetchPersonality = async () => {
     if (!profile) return
-    if (mbtiType) {
-      localStorage.setItem("asteria_mbti", mbtiType)
-    }
     setLoadingPersonality(true)
     try {
+      if (profile.id) {
+        await profileApi.update(profile.id, { mbti_type: mbtiType ?? null })
+      }
       const data = await profileApi.getPersonality(profile.id, mbtiType || undefined)
       setPersonalityResult(data)
     } catch (error) {
