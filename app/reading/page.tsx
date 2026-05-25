@@ -88,8 +88,8 @@ export default function ReadingInputPage() {
           const profile = await profileApi.create({
             display_name:       "メイン",
             birth_date:         dateStr,
-            birth_time:         (!noTime && time) ? time : undefined,
-            birth_time_unknown: noTime,
+            birth_time:         (!noTime && time) ? time : null,
+            birth_time_unknown: noTime || !time,
             birth_place_name:   place,
           })
           profileId = profile.id
