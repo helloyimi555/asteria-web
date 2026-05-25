@@ -122,6 +122,13 @@ export const readingApi = {
 
 
 // ── Guest Readings ────────────────────────────────────────────
+// ゲスト用（認証インターセプターなし）
+const guestApi = axios.create({
+  baseURL: BASE_URL,
+  timeout: 60_000,
+  headers: { "Content-Type": "application/json" },
+})
+
 export const guestReadingApi = {
   create: (input: {
     birth_date: string
@@ -130,7 +137,7 @@ export const guestReadingApi = {
     period_start: string
     period_end: string
   }) =>
-    api.post<Reading>("/readings/guest", input).then(r => r.data),
+    guestApi.post<Reading>("/readings/guest", input).then(r => r.data),
 }
 
 
