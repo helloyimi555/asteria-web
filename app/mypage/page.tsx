@@ -13,6 +13,7 @@ export default function MyPage() {
   const { data: history  } = useReadingHistory()
   const [personalityResult, setPersonalityResult] = useState<any | null>(null)
   const [loadingPersonality, setLoadingPersonality] = useState(false)
+  const [mbtiType, setMbtiType] = useState<string>("")
 
   const profile = profiles?.[0]
   const readings = history?.readings ?? []
@@ -21,7 +22,7 @@ export default function MyPage() {
     if (!profile) return
     setLoadingPersonality(true)
     try {
-      const data = await profileApi.getPersonality(profile.id)
+      const data = await profileApi.getPersonality(profile.id, mbtiType || undefined)
       setPersonalityResult(data)
     } catch (error) {
       console.error(error)
@@ -129,6 +130,22 @@ export default function MyPage() {
         </div>
 
         <div className="card p-4 mb-4">
+          <div className="mb-4">
+            <label className="text-[11px] text-white/50 tracking-widest uppercase block mb-2">
+              MBTIタイプ（任意）
+            </label>
+            <select value={mbtiType} onChange={e => setMbtiType(e.target.value)} className="input-field w-full">
+              <option value="">選択しない</option>
+              {[
+                "INTJ", "INTP", "ENTJ", "ENTP",
+                "INFJ", "INFP", "ENFJ", "ENFP",
+                "ISTJ", "ISFJ", "ESTJ", "ESFJ",
+                "ISTP", "ISFP", "ESTP", "ESFP",
+              ].map(type => (
+                <option key={type} value={type}>{type}</option>
+              ))}
+            </select>
+          </div>
           <button
             type="button"
             onClick={handleFetchPersonality}
