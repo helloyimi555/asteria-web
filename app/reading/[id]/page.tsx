@@ -7,6 +7,7 @@ import { TopNav } from "@/components/layout/TopNav"
 import { isLoggedIn } from "@/lib/api"
 import clsx from "clsx"
 import { useState, useEffect } from "react"
+import NatalChart from "@/components/ui/NatalChart"
 
 const THEME_CARDS = [
   { key:"work",    label:"仕事運",  icon:"💼", c:"#70B4FF", bg:"rgba(112,180,255,.15)" },
@@ -94,6 +95,11 @@ export default function ReadingResultPage() {
               </div>
             )}
           </div>
+        )}
+
+        {/* ネイタルチャート */}
+        {!isGuest && reading.natal_positions?.length > 0 && (
+          <NatalChart positions={reading.natal_positions} />
         )}
 
         {/* テーマ別 2x2 - ゲストには非表示 */}
