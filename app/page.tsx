@@ -61,6 +61,10 @@ export default function HomePage() {
             className="btn-gold flex items-center justify-center gap-2 py-4 px-6 text-[16px] mb-3">
             ✦ 無料で鑑定を始める
           </Link>
+          <Link href="/auth/register"
+            className="btn-gold-outline flex items-center justify-center gap-2 py-3 px-6 text-[14px]">
+            会員登録（無料）
+          </Link>
         </div>
       </section>
 
@@ -133,7 +137,7 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
             className="card flex items-center justify-between px-5 py-4">
             <div>
               <div className="text-[13px] text-[#F0F0F8] font-bold mb-0.5">マイページ</div>
-              <div className="text-[11px] text-white/40">プロフィール・設定</div>
+              <div class="text-[11px] text-white/40">プロフィール・設定</div>
             </div>
             <span className="text-white/30">›</span>
           </Link>
