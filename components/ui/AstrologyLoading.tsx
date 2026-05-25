@@ -3,7 +3,6 @@ type AstrologyLoadingProps = {
   message?: string;
   subMessage?: string;
 };
-
 export default function AstrologyLoading({
   className = "",
   message = "星図を読み解いています...",
@@ -16,41 +15,36 @@ export default function AstrologyLoading({
       aria-live="polite"
     >
       <img
-        src="/loading/star-field-bg.webp"
-        srcSet="/loading/star-field-bg.webp 375w, /loading/star-field-bg@2x.webp 750w"
+        src="/asteria/loading/star-field-bg.webp"
+        srcSet="/asteria/loading/star-field-bg.webp 375w, /asteria/loading/star-field-bg@2x.webp 750w"
         alt=""
         className="absolute inset-0 h-full w-full object-cover"
         draggable={false}
       />
-
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(201,165,84,0.10),transparent_34%),linear-gradient(to_bottom,rgba(9,14,31,0)_0%,rgba(9,14,31,0.25)_72%,rgba(9,14,31,0.72)_100%)]" />
-
       <div className="relative z-10 flex w-full max-w-[420px] flex-col items-center">
         <div className="relative aspect-square w-[min(108vw,430px)] -translate-y-10">
           <img
-            src="/loading/zodiac-ring-transparent.png"
+            src="/asteria/loading/zodiac-ring-transparent.png"
             alt=""
             className="absolute inset-0 h-full w-full animate-[asteria-spin_30s_linear_infinite] object-contain opacity-90 motion-reduce:animate-none"
             draggable={false}
           />
-
           <div className="absolute inset-0 flex items-center justify-center">
             <img
-              src="/loading/center-logo-transparent.png"
+              src="/asteria/loading/center-logo-transparent.png"
               alt="ASTERIA"
               className="w-[44%] animate-[asteria-pulse_3.4s_ease-in-out_infinite] object-contain opacity-95 motion-reduce:animate-none"
               draggable={false}
             />
           </div>
         </div>
-
         <div className="-mt-10 text-center font-serif">
           <div className="mb-4 flex items-center justify-center gap-4 text-[#C9A554]/70">
             <span className="h-px w-20 bg-[#C9A554]/25" />
             <span className="text-sm">✦</span>
             <span className="h-px w-20 bg-[#C9A554]/25" />
           </div>
-
           <p className="text-[24px] leading-relaxed tracking-[0.08em] text-[#F6F1E4]/95">
             {message}
           </p>
@@ -59,7 +53,6 @@ export default function AstrologyLoading({
           </p>
         </div>
       </div>
-
       <style jsx>{`
         @keyframes asteria-spin {
           from {
@@ -69,7 +62,6 @@ export default function AstrologyLoading({
             transform: rotate(360deg);
           }
         }
-
         @keyframes asteria-pulse {
           0%,
           100% {
@@ -87,4 +79,3 @@ export default function AstrologyLoading({
     </section>
   );
 }
-
