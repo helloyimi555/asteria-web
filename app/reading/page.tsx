@@ -21,6 +21,7 @@ export default function ReadingInputPage() {
   const [loggedIn, setLoggedIn] = useState(false)
   const [guestUsed, setGuestUsed] = useState(false)
   const [existingProfileId, setExistingProfileId] = useState<string | null>(null)
+  const [useExisting, setUseExisting] = useState(true)
   const [year,   setYear]   = useState("")
   const [month,  setMonth]  = useState("")
   const [day,    setDay]    = useState("")
@@ -32,6 +33,15 @@ export default function ReadingInputPage() {
   const [mbti,   setMbti]   = useState<string>("")
   const [loading,setLoading]= useState(false)
   const [error,  setError]  = useState<string | null>(null)
+
+  // 別の人を占う用のフォーム状態
+  const [otherYear,  setOtherYear]  = useState("")
+  const [otherMonth, setOtherMonth] = useState("")
+  const [otherDay,   setOtherDay]   = useState("")
+  const [otherTime,  setOtherTime]  = useState("")
+  const [otherNoTime,setOtherNoTime]= useState(false)
+  const [otherPlace, setOtherPlace] = useState("")
+  const [otherMbti,  setOtherMbti]  = useState("")
 
   useEffect(() => {
     const li = isLoggedIn()
@@ -56,13 +66,22 @@ export default function ReadingInputPage() {
     }
   }, [])
 
+  const activeDateStr = useMemo(() => {
+    const y = useExisting ? year : otherYear
+    const m = useExisting ? month : otherMonth
+    const d = useExisting ? day : otherDay
+    if (!y || !m || !d) return ""
+    return `${y}-${String(m).padStart(2,"0")}-${String(d).padStart(2,"0")}`
+  }, [useExisting, year, month, day, otherYear, otherMonth, otherDay])
+
   const dateStr = useMemo(() => {
     if (!year || !month || !day) return ""
     return `${year}-${String(month).padStart(2,"0")}-${String(day).padStart(2,"0")}`
   }, [year, month, day])
 
-  const sunSign = useMemo(() => getSunSign(dateStr), [dateStr])
-  const ok = !!dateStr && !!place.trim()
+  const sunSign = useMemo(() => getSunSign(activeDateStr), [activeDateStr])
+  const activePlace = useExisting ? place : otherPlace
+  const ok = !!activeDateStr && !!activePlace.trim()
 
   const handleSubmit = async () => {
     if (!ok) return
@@ -73,60 +92,70 @@ export default function ReadingInputPage() {
       const [ps, pe] = getPeriodDates(period, now)
 
       if (!loggedIn) {
-        // ゲスト鑑定
         const result = await guestReadingApi.create({
-          birth_date:       dateStr,
-          birth_place_name: place,
+          birth_date:       activeDateStr,
+          birth_place_name: activePlace,
           theme:            theme,
           period_start:     ps,
           period_end:       pe,
-          mbti_type:        mbti || undefined,
+          mbti_type:        (useExisting ? mbti : otherMbti) || undefined,
         })
         localStorage.setItem(GUEST_KEY, "1")
         localStorage.setItem("asteria_guest_result", JSON.stringify(result))
         router.push("/reading/guest-result")
       } else {
-        let profileId = existingProfileId
-        if (!profileId) {
+        if (useExisting && existingProfileId) {
+          // 自分のプロフィールで鑑定
+          const result = await readingApi.pollUntilDone(
+            (await readingApi.create({
+              profile_id:   existingProfileId,
+              theme:        theme as any,
+              period_start: ps,
+              period_end:   pe,
+              mbti_type:    mbti || undefined,
+            })).reading_id
+          )
+          router.push(`/reading/${result.reading_id}`)
+        } else {
+          // 別の人 or プロフィール未登録
           const profile = await profileApi.create({
             display_name:       "メイン",
-            birth_date:         dateStr,
-            birth_time:         (!noTime && time) ? time : null,
-            birth_time_unknown: noTime || !time,
-            birth_place_name:   place,
+            birth_date:         activeDateStr,
+            birth_time:         (!(useExisting ? otherNoTime : noTime) && (useExisting ? otherTime : time)) ? (useExisting ? otherTime : time) : null,
+            birth_time_unknown: (useExisting ? otherNoTime : noTime) || !(useExisting ? otherTime : time),
+            birth_place_name:   activePlace,
           })
-          profileId = profile.id
-          localStorage.setItem(PROFILE_KEY, JSON.stringify({
-            id: profile.id,
-            birth_date: dateStr,
-            birth_time: time,
-            birth_time_unknown: noTime,
-            birth_place_name: place,
-          }))
+          if (!existingProfileId) {
+            localStorage.setItem(PROFILE_KEY, JSON.stringify({
+              id: profile.id,
+              birth_date: activeDateStr,
+              birth_time: useExisting ? otherTime : time,
+              birth_time_unknown: useExisting ? otherNoTime : noTime,
+              birth_place_name: activePlace,
+            }))
+          }
+          const result = await readingApi.pollUntilDone(
+            (await readingApi.create({
+              profile_id:   profile.id,
+              theme:        theme as any,
+              period_start: ps,
+              period_end:   pe,
+              mbti_type:    (useExisting ? otherMbti : mbti) || undefined,
+            })).reading_id
+          )
+          router.push(`/reading/${result.reading_id}`)
         }
-
-        const result = await readingApi.pollUntilDone(
-          (await readingApi.create({
-            profile_id:   profileId!,
-            theme:        theme as any,
-            period_start: ps,
-            period_end:   pe,
-            mbti_type:    mbti || undefined,
-          })).reading_id
-        )
-        router.push(`/reading/${result.reading_id}`)
       }
     } catch (e: any) {
       setError(e?.response?.data?.detail ?? "エラーが発生しました。もう一度お試しください。")
       setLoading(false)
     }
   }
-// ローディング表示
+
   if (loading) {
     return <AstrologyLoading message="星図を読み解いています..." subMessage="あなたの天体配置から、今の運勢を紡いでいます" />
   }
 
-  // ゲストが既に使用済みの場合
   if (!loggedIn && guestUsed) {
     return (
       <div className="relative min-h-screen pb-24">
@@ -160,7 +189,7 @@ export default function ReadingInputPage() {
           </div>
           <h1 className="font-serif text-xl text-[#F0F0F8]">鑑定を行う</h1>
           <p className="text-[12px] text-white/45 mt-1">
-            {existingProfileId ? "テーマと期間を選んでください" : "あなたの情報を入力してください"}
+            テーマと期間を選んでください
           </p>
           {!loggedIn && (
             <p className="text-[11px] text-gold/70 mt-1">
@@ -182,7 +211,35 @@ export default function ReadingInputPage() {
         )}
 
         <div className="card p-5 mb-3">
-          {!existingProfileId && (
+
+          {/* 自分 / 別の人 トグル */}
+          {existingProfileId && (
+            <div className="flex gap-2 mb-4">
+              <button
+                onClick={() => setUseExisting(true)}
+                className={clsx("flex-1 py-2 rounded-xl text-[12px] border transition-all",
+                  useExisting ? "border-gold/60 bg-gold/10 text-gold" : "border-white/10 text-white/40")}>
+                自分を占う
+              </button>
+              <button
+                onClick={() => setUseExisting(false)}
+                className={clsx("flex-1 py-2 rounded-xl text-[12px] border transition-all",
+                  !useExisting ? "border-gold/60 bg-gold/10 text-gold" : "border-white/10 text-white/40")}>
+                別の人を占う
+              </button>
+            </div>
+          )}
+
+          {/* 自分のプロフィール表示 */}
+          {existingProfileId && useExisting && (
+            <div className="mb-4 p-3 rounded-xl bg-white/5 border border-white/10">
+              <div className="text-[11px] text-white/40 mb-1">登録済みの情報</div>
+              <div className="text-[13px] text-white/70">{dateStr} / {place}</div>
+            </div>
+          )}
+
+          {/* 別の人 or プロフィール未登録のフォーム */}
+          {(!existingProfileId || !useExisting) && (
             <>
               <div className="mb-4">
                 <label className="text-[11px] text-white/50 tracking-widest uppercase block mb-2">
@@ -190,9 +247,9 @@ export default function ReadingInputPage() {
                 </label>
                 <div className="grid grid-cols-[2fr_1.1fr_1.1fr] gap-2">
                   {[
-                    { val:year,  set:setYear,  opts:YEARS,  ph:"年", fmt:(v:number) => `${v}年` },
-                    { val:month, set:setMonth, opts:MONTHS, ph:"月", fmt:(v:number) => `${String(v).padStart(2,"0")}月` },
-                    { val:day,   set:setDay,   opts:DAYS,   ph:"日", fmt:(v:number) => `${String(v).padStart(2,"0")}日` },
+                    { val:otherYear,  set:setOtherYear,  opts:YEARS,  ph:"年", fmt:(v:number) => `${v}年` },
+                    { val:otherMonth, set:setOtherMonth, opts:MONTHS, ph:"月", fmt:(v:number) => `${String(v).padStart(2,"0")}月` },
+                    { val:otherDay,   set:setOtherDay,   opts:DAYS,   ph:"日", fmt:(v:number) => `${String(v).padStart(2,"0")}日` },
                   ].map(({ val, set, opts, ph, fmt }, i) => (
                     <div key={i} className="relative">
                       <select value={val} onChange={e => set(e.target.value)} className="input-field">
@@ -209,38 +266,35 @@ export default function ReadingInputPage() {
                 <div className="flex justify-between items-center mb-2">
                   <label className="text-[11px] text-white/50 tracking-widest uppercase">出生時刻</label>
                   <label className="flex items-center gap-1.5 cursor-pointer text-[11px] text-white/50">
-                    <input type="checkbox" checked={noTime} onChange={e => setNoTime(e.target.checked)}
+                    <input type="checkbox" checked={otherNoTime} onChange={e => setOtherNoTime(e.target.checked)}
                       className="accent-gold w-3 h-3" />
                     時刻不明
                   </label>
                 </div>
-                <input type="time" value={time} disabled={noTime}
-                  onChange={e => setTime(e.target.value)}
-                  className={clsx("input-field", noTime && "opacity-40")} />
+                <input type="time" value={otherTime} disabled={otherNoTime}
+                  onChange={e => setOtherTime(e.target.value)}
+                  className={clsx("input-field", otherNoTime && "opacity-40")} />
               </div>
 
               <div className="mb-4">
                 <label className="text-[11px] text-white/50 tracking-widest uppercase block mb-2">
                   出生地 *
                 </label>
-                <input type="text" value={place} placeholder="例：神奈川県横浜市"
-                  onChange={e => setPlace(e.target.value)} className="input-field" />
+                <input type="text" value={otherPlace} placeholder="例：神奈川県横浜市"
+                  onChange={e => setOtherPlace(e.target.value)} className="input-field" />
               </div>
             </>
           )}
 
-          {existingProfileId && (
-            <div className="mb-4 p-3 rounded-xl bg-white/5 border border-white/10">
-              <div className="text-[11px] text-white/40 mb-1">登録済みの情報</div>
-              <div className="text-[13px] text-white/70">{dateStr} / {place}</div>
-            </div>
-          )}
-
+          {/* MBTI */}
           <div className="mb-4">
             <label className="text-[11px] text-white/50 tracking-widest uppercase block mb-2.5">
               MBTIタイプ（任意・入力すると鑑定精度が上がります）
             </label>
-            <select value={mbti} onChange={e => setMbti(e.target.value)} className="input-field">
+            <select
+              value={useExisting ? mbti : otherMbti}
+              onChange={e => useExisting ? setMbti(e.target.value) : setOtherMbti(e.target.value)}
+              className="input-field">
               <option value="">選択してください</option>
               {[
                 "INTJ", "INTP", "ENTJ", "ENTP",
