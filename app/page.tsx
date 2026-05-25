@@ -44,7 +44,7 @@ export default function HomePage() {
         <ZodiacWheelSVG />
         <h1 className="font-serif text-[clamp(26px,7vw,36px)] font-normal leading-[1.45]
                        text-white mb-5 animate-fade-up">
-          天体の動きを根拠に、<br />あなたの今を<br />言語化する
+          最強占い、はじまる。<br />星とMBTIで、<br />本質と相性を読み解く
         </h1>
         <div className="flex items-center gap-2.5 w-full mb-4 opacity-0 animate-fade-up"
           style={{ animationDelay:"0.2s" }}>
