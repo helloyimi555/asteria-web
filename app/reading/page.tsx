@@ -29,6 +29,7 @@ export default function ReadingInputPage() {
   const [place,  setPlace]  = useState("")
   const [theme,  setTheme]  = useState<string>("general")
   const [period, setPeriod] = useState<string>("week")
+  const [mbti,   setMbti]   = useState<string>("")
   const [loading,setLoading]= useState(false)
   const [error,  setError]  = useState<string | null>(null)
 
@@ -78,6 +79,7 @@ export default function ReadingInputPage() {
           theme:            theme,
           period_start:     ps,
           period_end:       pe,
+          mbti_type:        mbti || undefined,
         })
         localStorage.setItem(GUEST_KEY, "1")
         localStorage.setItem("asteria_guest_result", JSON.stringify(result))
@@ -108,6 +110,7 @@ export default function ReadingInputPage() {
             theme:        theme as any,
             period_start: ps,
             period_end:   pe,
+            mbti_type:    mbti || undefined,
           })).reading_id
         )
         router.push(`/reading/${result.reading_id}`)
@@ -231,6 +234,23 @@ export default function ReadingInputPage() {
               <div className="text-[13px] text-white/70">{dateStr} / {place}</div>
             </div>
           )}
+
+          <div className="mb-4">
+            <label className="text-[11px] text-white/50 tracking-widest uppercase block mb-2.5">
+              MBTIタイプ（任意・入力すると鑑定精度が上がります）
+            </label>
+            <select value={mbti} onChange={e => setMbti(e.target.value)} className="input-field">
+              <option value="">選択してください</option>
+              {[
+                "INTJ", "INTP", "ENTJ", "ENTP",
+                "INFJ", "INFP", "ENFJ", "ENFP",
+                "ISTJ", "ISFJ", "ESTJ", "ESFJ",
+                "ISTP", "ISFP", "ESTP", "ESFP",
+              ].map(type => (
+                <option key={type} value={type}>{type}</option>
+              ))}
+            </select>
+          </div>
 
           {/* テーマ */}
           <div className="mb-4">
