@@ -5,6 +5,7 @@ import { Stars } from "@/components/ui/Stars"
 import { BottomNav } from "@/components/layout/BottomNav"
 import { getSunSign } from "@/lib/zodiac"
 import clsx from "clsx"
+import { compatApi } from "@/lib/api"
 
 const YEARS  = Array.from({ length:75 }, (_, i) => 2008 - i)
 const MONTHS = Array.from({ length:12 }, (_, i) => i + 1)
@@ -69,14 +70,23 @@ export default function CompatInputPage() {
   const theirSign = useMemo(() => getSunSign(theirDate), [theirDate])
   const ok = !!myDate && !!myForm.place.trim() && !!theirDate && !!theirForm.place.trim()
 
-  const handleSubmit = async () => {
+const handleSubmit = async () => {
     if (!ok) return
     setLoading(true); setError(null)
     try {
-      const id = `${myDate}_${theirDate}_${relType}`
-      router.push(`/compat/${encodeURIComponent(id)}`)
-    } catch {
-      setError("エラーが発生しました。もう一度お試しください。")
+      const result = await compatApi.create({
+        my_birth_date:       myDate,
+        my_birth_place_name: myForm.place,
+        my_birth_time:       myForm.time || undefined,
+        their_birth_date:       theirDate,
+        their_birth_place_name: theirForm.place,
+        their_birth_time:       theirForm.time || undefined,
+        relationship_type:   relType,
+      })
+      localStorage.setItem("asteria_compat_result", JSON.stringify(result))
+      router.push(`/compat/result`)
+    } catch (e: any) {
+      setError(e?.response?.data?.detail ?? "エラーが発生しました。もう一度お試しください。")
       setLoading(false)
     }
   }
