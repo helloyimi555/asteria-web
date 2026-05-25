@@ -11,6 +11,8 @@ const YEARS  = Array.from({ length:75 }, (_, i) => 2008 - i)
 const MONTHS = Array.from({ length:12 }, (_, i) => i + 1)
 const DAYS   = Array.from({ length:31 }, (_, i) => i + 1)
 
+const PROFILE_KEY = "asteria_profile"
+
 export default function ReadingInputPage() {
   const router  = useRouter()
 
@@ -27,23 +29,21 @@ export default function ReadingInputPage() {
   const [error,  setError]  = useState<string | null>(null)
 
   useEffect(() => {
-    profileApi.list().then((res: any) => {
-      console.log("profileApi.list raw:", JSON.stringify(res))
-      // profiles キーがある場合とない場合の両方に対応
-      const profiles = Array.isArray(res) ? res : (res?.profiles ?? [])
-      if (profiles.length > 0) {
-        const p = profiles[0]
-        console.log("profile[0]:", JSON.stringify(p))
+    // localStorageから保存済みプロフィールを復元
+    try {
+      const saved = localStorage.getItem(PROFILE_KEY)
+      if (saved) {
+        const p = JSON.parse(saved)
         setExistingProfileId(p.id)
         const [y, m, d] = (p.birth_date || "").split("-")
         if (y) setYear(y)
         if (m) setMonth(String(parseInt(m)))
         if (d) setDay(String(parseInt(d)))
         if (p.birth_time) setTime(p.birth_time)
-        if (p.birth_time_unknown) setNoTime(true)
+        if (p.birth_time_unknown) setNoTime(p.birth_time_unknown)
         if (p.birth_place_name) setPlace(p.birth_place_name)
       }
-    }).catch((e: any) => console.log("profileApi.list error:", e))
+    } catch {}
   }, [])
 
   const dateStr = useMemo(() => {
@@ -69,6 +69,14 @@ export default function ReadingInputPage() {
           birth_place_name:   place,
         })
         profileId = profile.id
+        // localStorageに保存
+        localStorage.setItem(PROFILE_KEY, JSON.stringify({
+          id: profile.id,
+          birth_date: dateStr,
+          birth_time: time,
+          birth_time_unknown: noTime,
+          birth_place_name: place,
+        }))
       }
 
       const now  = new Date()
