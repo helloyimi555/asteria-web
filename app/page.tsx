@@ -137,7 +137,7 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
             className="card flex items-center justify-between px-5 py-4">
             <div>
               <div className="text-[13px] text-[#F0F0F8] font-bold mb-0.5">マイページ</div>
-              <div class="text-[11px] text-white/40">プロフィール・設定</div>
+              <div className="text-[11px] text-white/40">プロフィール・設定</div>
             </div>
             <span className="text-white/30">›</span>
           </Link>
