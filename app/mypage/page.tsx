@@ -1,6 +1,8 @@
 "use client"
+import { useState } from "react"
 import { useAuth } from "@/lib/auth-context"
 import { useProfiles, useReadingHistory } from "@/hooks/useReading"
+import { profileApi } from "@/lib/api"
 import { Stars } from "@/components/ui/Stars"
 import { BottomNav } from "@/components/layout/BottomNav"
 import Link from "next/link"
@@ -9,9 +11,24 @@ export default function MyPage() {
   const { isAuthenticated, logout } = useAuth()
   const { data: profiles } = useProfiles()
   const { data: history  } = useReadingHistory()
+  const [personalityResult, setPersonalityResult] = useState<any | null>(null)
+  const [loadingPersonality, setLoadingPersonality] = useState(false)
 
   const profile = profiles?.[0]
   const readings = history?.readings ?? []
+
+  const handleFetchPersonality = async () => {
+    if (!profile) return
+    setLoadingPersonality(true)
+    try {
+      const data = await profileApi.getPersonality(profile.id)
+      setPersonalityResult(data)
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setLoadingPersonality(false)
+    }
+  }
 
   return (
     <div className="relative min-h-screen pb-24">
@@ -103,6 +120,90 @@ export default function MyPage() {
             ))}
           </div>
         )}
+
+        <div className="flex items-center gap-2.5 mb-3.5">
+          <span className="text-gold text-sm">✦</span>
+          <h2 className="font-serif text-[15px] text-[#F0F0F8]">星の性格分析</h2>
+          <div className="flex-1 h-px bg-gradient-to-r from-gold/30 to-transparent" />
+          <span className="text-gold text-sm">✦</span>
+        </div>
+
+        <div className="card p-4 mb-4">
+          <button
+            type="button"
+            onClick={handleFetchPersonality}
+            disabled={!profile || loadingPersonality}
+            className="btn-gold w-full py-3.5 text-[15px] mb-4"
+          >
+            {loadingPersonality ? "分析中..." : "✦ あなたの星の性格分析"}
+          </button>
+
+          {personalityResult && (
+            <div className="space-y-4">
+              <div>
+                <div className="text-[11px] text-white/50 uppercase tracking-widest mb-2">
+                  全体的な性格
+                </div>
+                <div className="text-[14px] text-[#F0F0F8] leading-6">
+                  {personalityResult.personality}
+                </div>
+              </div>
+
+              <div>
+                <div className="text-[11px] text-white/50 uppercase tracking-widest mb-2">
+                  強み
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {(personalityResult.strengths ?? []).map((item: string, idx: number) => (
+                    <span key={idx} className="px-3 py-1 rounded-full bg-gold/10 text-gold text-[12px]">
+                      {item}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <div className="text-[11px] text-white/50 uppercase tracking-widest mb-2">
+                  課題
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {(personalityResult.challenges ?? []).map((item: string, idx: number) => (
+                    <span key={idx} className="px-3 py-1 rounded-full bg-white/5 text-white/75 text-[12px]">
+                      {item}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <div className="text-[11px] text-white/50 uppercase tracking-widest mb-2">
+                  人生のテーマ
+                </div>
+                <div className="text-[14px] text-[#F0F0F8] leading-6">
+                  {personalityResult.life_theme}
+                </div>
+              </div>
+
+              <div>
+                <div className="text-[11px] text-white/50 uppercase tracking-widest mb-2">
+                  仕事・才能
+                </div>
+                <div className="text-[14px] text-[#F0F0F8] leading-6">
+                  {personalityResult.career}
+                </div>
+              </div>
+
+              <div>
+                <div className="text-[11px] text-white/50 uppercase tracking-widest mb-2">
+                  対人関係・恋愛
+                </div>
+                <div className="text-[14px] text-[#F0F0F8] leading-6">
+                  {personalityResult.relationships}
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
 
         {/* CTA */}
         <Link href="/reading"

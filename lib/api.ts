@@ -86,6 +86,9 @@ export const profileApi = {
   getNatalChart: (profileId: string) =>
     api.get<NatalChart>(`/profiles/${profileId}/natal-chart`).then(r => r.data),
 
+  getPersonality: (profileId: string, mbtiType?: string) =>
+    api.post<any>(`/profiles/${profileId}/personality`, { mbti_type: mbtiType }).then(r => r.data),
+
   getTransits: (profileId: string, from: string, to: string, minImportance = 50) =>
     api.get<{ transits: TransitEvent[] }>(`/profiles/${profileId}/transits`, {
       params: { from, to, min_importance: minImportance },
