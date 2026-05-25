@@ -50,6 +50,7 @@ export default function ReadingInputPage() {
           if (p.birth_time) setTime(p.birth_time)
           if (p.birth_time_unknown) setNoTime(p.birth_time_unknown)
           if (p.birth_place_name) setPlace(p.birth_place_name)
+          if (p.mbti_type) setMbti(p.mbti_type)
         }
       } catch {}
     }
