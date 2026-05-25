@@ -20,6 +20,15 @@ const THEME_CARDS = [
   { key:"caution",       label:"注意が必要なこと",        icon:"△", c:"#FFC96E" },
 ]
 
+const SCORE_FIELDS = [
+  { key: "love", label: "恋愛・ときめき", color: "#F07098" },
+  { key: "trust", label: "安心感・信頼", color: "#70DDA8" },
+  { key: "communication", label: "会話のしやすさ", color: "#70B4FF" },
+  { key: "values", label: "価値観の一致", color: "#D4AF37" },
+  { key: "growth", label: "成長し合う力", color: "#A37DFF" },
+  { key: "caution", label: "すれ違い注意度", color: "#FFA94D" },
+]
+
 export default function CompatResultPage() {
   const router = useRouter()
   const [result, setResult] = useState<any>(null)
@@ -51,6 +60,13 @@ export default function CompatResultPage() {
   }
 
   const { outputs, my_sign, their_sign, synastry } = result
+  const overallScore = outputs?.scores?.overall ?? null
+  const overallLabel = overallScore !== null
+    ? overallScore >= 85 ? "◎ 深く惹かれ合う関係"
+    : overallScore >= 70 ? "○ 理解し合えるほど育つ関係"
+    : overallScore >= 50 ? "△ 対話で相性を高める関係"
+    : "努力でより良くなる関係"
+    : ""
 
   return (
     <div className="relative min-h-screen pb-28">
@@ -82,6 +98,41 @@ export default function CompatResultPage() {
             <span>{outputs.headline}</span>
             <span className="text-[11px]">✦</span>
           </p>
+        )}
+
+        {outputs?.scores && (
+          <div className="card mt-3 p-4" style={{ borderLeft:"3px solid rgba(201,165,84,.6)" }}>
+            <div className="flex items-center gap-1.5 mb-4">
+              <span className="text-gold text-sm">✦</span>
+              <span className="font-sans text-[13px] font-bold text-[#F0F0F8]">星のシンクロスコア</span>
+            </div>
+            <div className="grid gap-4">
+              <div className="text-center">
+                <div className="text-[12px] text-white/50 mb-2">星のシンクロスコア</div>
+                <div className="text-[44px] font-bold text-[#F0F0F8]">{outputs.scores.overall ?? 0} / 100</div>
+                <div className="mt-2 text-[13px] font-semibold text-[#D0D0E8]">{overallLabel}</div>
+              </div>
+              <div className="grid gap-3">
+                {SCORE_FIELDS.map(({ key, label, color }) => {
+                  const score = outputs.scores?.[key] ?? 0
+                  return (
+                    <div key={key}>
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-[12px] text-[#E8E8FF]">{label}</span>
+                        <span className="text-[12px] text-white/60">{score} / 100</span>
+                      </div>
+                      <div className="h-2 rounded-full bg-white/[.08] overflow-hidden">
+                        <div className="h-full rounded-full" style={{ width:`${Math.max(0, Math.min(100, score))}%`, background: color }} />
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+              <p className="text-[11px] text-white/40 leading-5 pt-3 border-t border-white/10">
+                スコアは良い・悪いの判定ではなく、ふたりの関係に表れやすいテーマの強さを示しています
+              </p>
+            </div>
+          </div>
         )}
 
         {/* ふたりの関係 */}
