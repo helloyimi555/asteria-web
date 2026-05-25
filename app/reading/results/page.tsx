@@ -25,9 +25,10 @@ export default function ReadingResultsPage() {
   const [readings, setReadings] = useState<Reading[]>([])
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    readingApi.list({ limit: 20 }).then(res => {
-      setReadings(res.readings.filter(r => r.status === "completed"))
+useEffect(() => {
+    readingApi.list({ limit: 20 }).then((res: any) => {
+      const list = Array.isArray(res) ? res : (res.readings ?? [])
+      setReadings(list.filter((r: any) => r.status === "completed"))
     }).catch(() => {}).finally(() => setLoading(false))
   }, [])
 
