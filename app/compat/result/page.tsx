@@ -317,6 +317,46 @@ export default function CompatResultPage() {
           </div>
         )}
 
+{/* 盛り上がりポイント */}
+        {outputs?.highlight && (
+          <div className="card mt-2.5 p-4">
+            <div className="flex items-center gap-1.5 mb-2">
+              <span className="text-gold text-xs">✦</span>
+              <span className="text-[12px] font-bold text-[#F0F0F8]">ふたりの盛り上がりポイント</span>
+            </div>
+            <p className="font-serif text-[13px] leading-8 text-[#C0C0D8] font-light">
+              {outputs.highlight}
+            </p>
+          </div>
+        )}
+
+        {/* すれ違いシーン */}
+        {outputs?.conflict_scene && (
+          <div className="card mt-2.5 p-4">
+            <div className="flex items-center gap-1.5 mb-2">
+              <span className="text-[#FFC96E] text-xs">△</span>
+              <span className="text-[12px] font-bold text-[#F0F0F8]">すれ違いやすい場面と対処法</span>
+            </div>
+            <p className="font-serif text-[13px] leading-8 text-[#C0C0D8] font-light">
+              {outputs.conflict_scene}
+            </p>
+          </div>
+        )}
+
+        {/* 合言葉 */}
+        {outputs?.magic_phrase && (
+          <div className="card mt-2.5 p-4 text-center">
+            <div className="flex items-center justify-center gap-1.5 mb-2">
+              <span className="text-gold text-xs">✦</span>
+              <span className="text-[12px] font-bold text-[#F0F0F8]">ふたりの合言葉</span>
+              <span className="text-gold text-xs">✦</span>
+            </div>
+            <p className="font-serif text-[16px] text-gold leading-8">
+              「{outputs.magic_phrase}」
+            </p>
+          </div>
+        )}
+
         <button onClick={() => router.push("/compat")}
           className="btn-gold-outline w-full py-3.5 mt-4 rounded-full flex items-center justify-center gap-2">
           <span>←</span><span>別の相性を診断する</span>
