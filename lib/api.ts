@@ -143,6 +143,22 @@ export const guestReadingApi = {
 
 
 
+// ── Compat ────────────────────────────────────────────────────
+export const compatApi = {
+  create: (input: {
+    my_birth_date: string
+    my_birth_place_name: string
+    my_birth_time?: string
+    their_birth_date: string
+    their_birth_place_name: string
+    their_birth_time?: string
+    relationship_type: string
+  }) =>
+    api.post("/compat", input).then(r => r.data),
+}
+
+
+
 // ── Masters ───────────────────────────────────────────────────
 export const mastersApi = {
   planets: () => api.get("/masters/planets").then(r => r.data),
