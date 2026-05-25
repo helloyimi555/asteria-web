@@ -174,19 +174,44 @@ export default function MyPage() {
             disabled={!profile || loadingPersonality}
             className="btn-gold w-full py-3.5 text-[15px] mb-4"
           >
-            {loadingPersonality ? "分析中..." : "✦ あなたの星の性格分析"}
+            {loadingPersonality ? "分析中..." : mbtiType ? "✦ 星とMBTIで読むあなたの性格分析" : "✦ あなたの星の性格分析"}
           </button>
 
           {personalityResult && (
             <div className="space-y-4">
+              {personalityResult.type_name && (
+                <div className="font-serif text-center text-gold text-[17px] mb-4">
+                  あなたは「{personalityResult.type_name}」タイプです
+                </div>
+              )}
               <div>
                 <div className="text-[11px] text-white/50 uppercase tracking-widest mb-2">
-                  全体的な性格
+                  星が示す本質
                 </div>
                 <div className="text-[14px] text-[#F0F0F8] leading-6">
                   {personalityResult.personality}
                 </div>
               </div>
+              {personalityResult.mbti_insight && (
+                <div>
+                  <div className="text-[11px] text-white/50 uppercase tracking-widest mb-2">
+                    MBTIが示す行動パターン
+                  </div>
+                  <div className="text-[14px] text-[#F0F0F8] leading-6">
+                    {personalityResult.mbti_insight}
+                  </div>
+                </div>
+              )}
+              {personalityResult.combined && (
+                <div>
+                  <div className="text-[11px] text-white/50 uppercase tracking-widest mb-2">
+                    星×MBTIの総合
+                  </div>
+                  <div className="text-[14px] text-[#F0F0F8] leading-6">
+                    {personalityResult.combined}
+                  </div>
+                </div>
+              )}
 
               <div>
                 <div className="text-[11px] text-white/50 uppercase tracking-widest mb-2">
