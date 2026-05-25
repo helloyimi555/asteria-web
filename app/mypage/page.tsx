@@ -18,6 +18,18 @@ export default function MyPage() {
 
   const profile = profiles?.[0]
   const readings = history?.readings ?? []
+  const abbreviatedPlace = profile ? (() => {
+    const parts = profile.birth_place_name.split(",").map(p => p.trim()).filter(Boolean)
+    while (parts.length > 0) {
+      const last = parts[parts.length - 1]
+      if (last === "日本" || /^\d{3}-\d{4}$/.test(last) || /\d/.test(last)) {
+        parts.pop()
+      } else {
+        break
+      }
+    }
+    return parts.slice(-2).join(", ")
+  })() : ""
 
   const handleFetchPersonality = async () => {
     if (!profile) return
@@ -66,7 +78,7 @@ export default function MyPage() {
                 <div className="font-serif text-[17px] text-[#F0F0F8] font-semibold mb-0.5">
                   {profile.display_name}
                 </div>
-                <div className="text-[11px] text-white/50">{profile.birth_place_name}</div>
+                <div className="text-[11px] text-white/50">{abbreviatedPlace}</div>
               </>
             ) : (
               <div className="text-[13px] text-white/50">プロフィール未設定</div>
