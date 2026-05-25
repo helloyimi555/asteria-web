@@ -1,5 +1,5 @@
 "use client"
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Stars } from "@/components/ui/Stars"
 import { BottomNav } from "@/components/layout/BottomNav"
@@ -14,6 +14,7 @@ const DAYS   = Array.from({ length:31 }, (_, i) => i + 1)
 export default function ReadingInputPage() {
   const router  = useRouter()
 
+  const [existingProfileId, setExistingProfileId] = useState<string | null>(null)
   const [year,   setYear]   = useState("")
   const [month,  setMonth]  = useState("")
   const [day,    setDay]    = useState("")
@@ -24,6 +25,23 @@ export default function ReadingInputPage() {
   const [period, setPeriod] = useState<string>("half2")
   const [loading,setLoading]= useState(false)
   const [error,  setError]  = useState<string | null>(null)
+
+  // ログイン済みプロフィールを取得して自動入力
+  useEffect(() => {
+    profileApi.list().then((profiles: any[]) => {
+      if (profiles && profiles.length > 0) {
+        const p = profiles[0]
+        setExistingProfileId(p.id)
+        const [y, m, d] = (p.birth_date || "").split("-")
+        if (y) setYear(y)
+        if (m) setMonth(String(parseInt(m)))
+        if (d) setDay(String(parseInt(d)))
+        if (p.birth_time) setTime(p.birth_time)
+        if (p.birth_time_unknown) setNoTime(true)
+        if (p.birth_place_name) setPlace(p.birth_place_name)
+      }
+    }).catch(() => {})
+  }, [])
 
   const dateStr = useMemo(() => {
     if (!year || !month || !day) return ""
@@ -38,14 +56,18 @@ export default function ReadingInputPage() {
     setLoading(true)
     setError(null)
     try {
-      // プロフィール作成
-      const profile = await profileApi.create({
-        display_name:       "メイン",
-        birth_date:         dateStr,
-        birth_time:         (!noTime && time) ? time : undefined,
-        birth_time_unknown: noTime,
-        birth_place_name:   place,
-      })
+      // 既存プロフィールがあればそのまま使う、なければ作成
+      let profileId = existingProfileId
+      if (!profileId) {
+        const profile = await profileApi.create({
+          display_name:       "メイン",
+          birth_date:         dateStr,
+          birth_time:         (!noTime && time) ? time : undefined,
+          birth_time_unknown: noTime,
+          birth_place_name:   place,
+        })
+        profileId = profile.id
+      }
 
       // 期間計算
       const now  = new Date()
@@ -54,7 +76,7 @@ export default function ReadingInputPage() {
       // 鑑定リクエスト → ポーリング
       const result = await readingApi.pollUntilDone(
         (await readingApi.create({
-          profile_id:   profile.id,
+          profile_id:   profileId!,
           theme:        theme as any,
           period_start: ps,
           period_end:   pe,
@@ -77,7 +99,9 @@ export default function ReadingInputPage() {
             ✦ ASTERIA ✦
           </div>
           <h1 className="font-serif text-xl text-[#F0F0F8]">鑑定を行う</h1>
-          <p className="text-[12px] text-white/45 mt-1">あなたの情報を入力してください</p>
+          <p className="text-[12px] text-white/45 mt-1">
+            {existingProfileId ? "テーマと期間を選んでください" : "あなたの情報を入力してください"}
+          </p>
         </div>
 
         {/* Sign badge */}
@@ -95,51 +119,64 @@ export default function ReadingInputPage() {
 
         {/* Form */}
         <div className="card p-5 mb-3">
-          {/* 生年月日 */}
-          <div className="mb-4">
-            <label className="text-[11px] text-white/50 tracking-widest uppercase block mb-2">
-              生年月日 *
-            </label>
-            <div className="grid grid-cols-[2fr_1.1fr_1.1fr] gap-2">
-              {[
-                { val:year,  set:setYear,  opts:YEARS,  ph:"年", fmt:(v:number) => `${v}年` },
-                { val:month, set:setMonth, opts:MONTHS, ph:"月", fmt:(v:number) => `${String(v).padStart(2,"0")}月` },
-                { val:day,   set:setDay,   opts:DAYS,   ph:"日", fmt:(v:number) => `${String(v).padStart(2,"0")}日` },
-              ].map(({ val, set, opts, ph, fmt }, i) => (
-                <div key={i} className="relative">
-                  <select value={val} onChange={e => set(e.target.value)} className="input-field">
-                    <option value="">{ph}</option>
-                    {opts.map(o => <option key={o} value={o}>{fmt(o)}</option>)}
-                  </select>
-                  <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-white/30 pointer-events-none text-[11px]">▾</span>
+          {/* 既存プロフィールがない場合のみ生年月日・出生地を表示 */}
+          {!existingProfileId && (
+            <>
+              {/* 生年月日 */}
+              <div className="mb-4">
+                <label className="text-[11px] text-white/50 tracking-widest uppercase block mb-2">
+                  生年月日 *
+                </label>
+                <div className="grid grid-cols-[2fr_1.1fr_1.1fr] gap-2">
+                  {[
+                    { val:year,  set:setYear,  opts:YEARS,  ph:"年", fmt:(v:number) => `${v}年` },
+                    { val:month, set:setMonth, opts:MONTHS, ph:"月", fmt:(v:number) => `${String(v).padStart(2,"0")}月` },
+                    { val:day,   set:setDay,   opts:DAYS,   ph:"日", fmt:(v:number) => `${String(v).padStart(2,"0")}日` },
+                  ].map(({ val, set, opts, ph, fmt }, i) => (
+                    <div key={i} className="relative">
+                      <select value={val} onChange={e => set(e.target.value)} className="input-field">
+                        <option value="">{ph}</option>
+                        {opts.map(o => <option key={o} value={o}>{fmt(o)}</option>)}
+                      </select>
+                      <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-white/30 pointer-events-none text-[11px]">▾</span>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          </div>
+              </div>
 
-          {/* 出生時刻 */}
-          <div className="mb-4">
-            <div className="flex justify-between items-center mb-2">
-              <label className="text-[11px] text-white/50 tracking-widest uppercase">出生時刻</label>
-              <label className="flex items-center gap-1.5 cursor-pointer text-[11px] text-white/50">
-                <input type="checkbox" checked={noTime} onChange={e => setNoTime(e.target.checked)}
-                  className="accent-gold w-3 h-3" />
-                時刻不明
-              </label>
-            </div>
-            <input type="time" value={time} disabled={noTime}
-              onChange={e => setTime(e.target.value)}
-              className={clsx("input-field", noTime && "opacity-40")} />
-          </div>
+              {/* 出生時刻 */}
+              <div className="mb-4">
+                <div className="flex justify-between items-center mb-2">
+                  <label className="text-[11px] text-white/50 tracking-widest uppercase">出生時刻</label>
+                  <label className="flex items-center gap-1.5 cursor-pointer text-[11px] text-white/50">
+                    <input type="checkbox" checked={noTime} onChange={e => setNoTime(e.target.checked)}
+                      className="accent-gold w-3 h-3" />
+                    時刻不明
+                  </label>
+                </div>
+                <input type="time" value={time} disabled={noTime}
+                  onChange={e => setTime(e.target.value)}
+                  className={clsx("input-field", noTime && "opacity-40")} />
+              </div>
 
-          {/* 出生地 */}
-          <div className="mb-4">
-            <label className="text-[11px] text-white/50 tracking-widest uppercase block mb-2">
-              出生地 *
-            </label>
-            <input type="text" value={place} placeholder="例：神奈川県横浜市"
-              onChange={e => setPlace(e.target.value)} className="input-field" />
-          </div>
+              {/* 出生地 */}
+              <div className="mb-4">
+                <label className="text-[11px] text-white/50 tracking-widest uppercase block mb-2">
+                  出生地 *
+                </label>
+                <input type="text" value={place} placeholder="例：神奈川県横浜市"
+                  onChange={e => setPlace(e.target.value)} className="input-field" />
+              </div>
+            </>
+          )}
+
+          {/* 既存プロフィールがある場合は情報を表示 */}
+          {existingProfileId && (
+            <div className="mb-4 p-3 rounded-xl bg-white/5 border border-white/10">
+              <div className="text-[11px] text-white/40 mb-1">登録済みの情報</div>
+              <div className="text-[13px] text-white/70">{dateStr} / {place}</div>
+            </div>
+          )}
 
           {/* テーマ */}
           <div className="mb-4">
