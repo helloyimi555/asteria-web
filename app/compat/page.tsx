@@ -142,9 +142,12 @@ const handleSubmit = async () => {
     }
   }
 
+  if (loading) {
+    return <AstrologyLoading message="ふたりの星の相性を読み解いています..." subMessage="シナストリー計算とAI分析を行っています" />
+  }
+
   return (
     <div className="relative min-h-screen pb-24">
-      {loading && <AstrologyLoading message="ふたりの星の相性を読み解いています..." subMessage="シナストリー計算とAI分析を行っています" />}
       <Stars />
       <div className="relative z-10 max-w-app mx-auto px-5">
         <div className="pt-8 pb-5 text-center">
