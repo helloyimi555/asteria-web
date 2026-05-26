@@ -66,13 +66,15 @@ export default function ReadingInputPage() {
     }
   }, [])
 
+  const actualUseExisting = Boolean(existingProfileId && useExisting)
+
   const activeDateStr = useMemo(() => {
-    const y = useExisting ? year : otherYear
-    const m = useExisting ? month : otherMonth
-    const d = useExisting ? day : otherDay
+    const y = actualUseExisting ? year : otherYear
+    const m = actualUseExisting ? month : otherMonth
+    const d = actualUseExisting ? day : otherDay
     if (!y || !m || !d) return ""
     return `${y}-${String(m).padStart(2,"0")}-${String(d).padStart(2,"0")}`
-  }, [useExisting, year, month, day, otherYear, otherMonth, otherDay])
+  }, [actualUseExisting, year, month, day, otherYear, otherMonth, otherDay])
 
   const dateStr = useMemo(() => {
     if (!year || !month || !day) return ""
@@ -80,7 +82,7 @@ export default function ReadingInputPage() {
   }, [year, month, day])
 
   const sunSign = useMemo(() => getSunSign(activeDateStr), [activeDateStr])
-  const activePlace = useExisting ? place : otherPlace
+  const activePlace = actualUseExisting ? place : otherPlace
   const ok = !!activeDateStr && !!activePlace.trim()
 
   const handleSubmit = async () => {
