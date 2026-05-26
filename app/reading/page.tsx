@@ -110,22 +110,6 @@ export default function ReadingInputPage() {
     // 新規プロフィール / 別の人を占う場合: 出生地は任意（空なら handleSubmit 内で「東京都」をデフォルト）
     : (!!otherYear && !!otherMonth && !!otherDay)
 
-  // DEBUG: ボタンが押せない場合の原因切り分け用
-  if (typeof window !== "undefined") {
-    console.log("ok debug:", {
-      existingProfileId,
-      activeDateStr,
-      actualUseExisting,
-      useExisting,
-      year, month, day,
-      otherYear, otherMonth, otherDay,
-      otherPlace,
-      activeTime,
-      loading,
-      ok,
-    })
-  }
-
   const handleSubmit = async () => {
     if (!ok) return
     setLoading(true)
