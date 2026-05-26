@@ -171,10 +171,7 @@ export default function MyPage() {
     }
     setLoadingPersonality(true)
     try {
-      if (profile.id) {
-        await profileApi.update(profile.id, { mbti_type: mbtiType ?? null })
-      }
-      const data = await profileApi.getPersonality(profile.id, mbtiType || undefined)
+      const data = await profileApi.getPersonality(profile.id, profile.mbti_type || undefined)
       setPersonalityResult(data)
     } catch (error) {
       console.error(error)
@@ -322,29 +319,19 @@ export default function MyPage() {
         )}
 
         <div className="card p-4 mb-4">
-          <div className="mb-4">
-            <label className="text-[11px] text-white/50 tracking-widest uppercase block mb-2">
-              MBTIタイプ（任意）
-            </label>
-            <select value={mbtiType} onChange={e => setMbtiType(e.target.value)} className="input-field w-full">
-              <option value="">選択しない</option>
-              {[
-                "INTJ", "INTP", "ENTJ", "ENTP",
-                "INFJ", "INFP", "ENFJ", "ENFP",
-                "ISTJ", "ISFJ", "ESTJ", "ESFJ",
-                "ISTP", "ISFP", "ESTP", "ESFP",
-              ].map(type => (
-                <option key={type} value={type}>{type}</option>
-              ))}
-            </select>
-          </div>
+          {profile?.mbti_type && (
+            <div className="text-[11px] text-white/50 mb-3">
+              MBTIタイプ：<span className="text-gold/85 font-medium tracking-wider">{profile.mbti_type}</span>
+              <span className="text-white/30 ml-2">（プロフィール編集で変更可）</span>
+            </div>
+          )}
           <button
             type="button"
             onClick={handleFetchPersonality}
             disabled={!profile || loadingPersonality}
             className="btn-gold w-full py-3.5 text-[15px] mb-4"
           >
-            {loadingPersonality ? "分析中..." : mbtiType ? "✦ 星とMBTIで読むあなたの性格分析" : "✦ あなたの星の性格分析"}
+            {loadingPersonality ? "分析中..." : profile?.mbti_type ? "✦ 星とMBTIで読むあなたの性格分析" : "✦ あなたの星の性格分析"}
           </button>
 
           {personalityResult && (
@@ -362,7 +349,7 @@ export default function MyPage() {
                   {personalityResult.personality}
                 </div>
               </div>
-              {mbtiType && personalityResult.mbti_insight && (
+              {profile?.mbti_type && personalityResult.mbti_insight && (
                 <div>
                   <div className="text-[11px] text-white/50 uppercase tracking-widest mb-2">
                     MBTIが示す行動パターン
@@ -372,7 +359,7 @@ export default function MyPage() {
                   </div>
                 </div>
               )}
-              {mbtiType && personalityResult.combined && (
+              {profile?.mbti_type && personalityResult.combined && (
                 <div>
                   <div className="text-[11px] text-white/50 uppercase tracking-widest mb-2">
                     星×MBTIの総合

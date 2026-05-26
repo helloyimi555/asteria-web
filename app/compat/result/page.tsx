@@ -329,30 +329,34 @@ export default function CompatResultPage() {
               <span className="text-[12px] font-bold text-[#F0F0F8]">ふたりのエレメント相性</span>
             </div>
 
-            <div className="grid grid-cols-2 gap-3 mb-3">
+            <div className="flex flex-col gap-2.5 mb-3">
               {[
                 { label: "あなた",   pct: myPct,    balance: myBalance!,    dom: myDominant },
                 { label: "お相手",   pct: theirPct, balance: theirBalance!, dom: theirDominant },
               ].map(({ label, pct, balance, dom }) => (
-                <div key={label} className="p-2.5 rounded-[10px]"
+                <div key={label} className="p-3 rounded-[10px]"
                   style={{ background:"rgba(255,255,255,.03)", border:"1px solid rgba(255,255,255,.06)" }}>
-                  <div className="flex items-baseline justify-between mb-2">
-                    <span className="text-[10px] text-white/50">{label}</span>
-                    <span className="font-serif text-[11px]" style={{ color: ELEMENT_INFO[dom].color }}>
+                  <div className="flex items-baseline justify-between mb-2.5">
+                    <span className="text-[11px] text-white/55">{label}</span>
+                    <span className="font-serif text-[12px]" style={{ color: ELEMENT_INFO[dom].color }}>
                       {getElementTitle(balance)}
                     </span>
                   </div>
-                  <div className="space-y-1">
+                  <div className="space-y-1.5">
                     {ELEMENTS.map(el => (
-                      <div key={el} className="flex items-center gap-1.5">
-                        <span className="text-[9px] w-3 shrink-0" style={{ color: ELEMENT_INFO[el].color }}>
+                      <div key={el} className="flex items-center gap-2">
+                        <span className="text-[10px] w-4 shrink-0" style={{ color: ELEMENT_INFO[el].color }}>
                           {ELEMENT_INFO[el].ja}
                         </span>
-                        <div className="flex-1 h-1.5 rounded-full bg-white/[0.05] overflow-hidden">
+                        <div className="flex-1 h-3 rounded-full bg-white/[0.05] overflow-hidden">
                           <div className="h-full rounded-full"
-                            style={{ width: `${pct[el]}%`, background: `linear-gradient(90deg, ${ELEMENT_INFO[el].color}, #C9A554)` }} />
+                            style={{
+                              width: `${Math.max(pct[el], 4)}%`,
+                              minWidth: 2,
+                              background: `linear-gradient(90deg, ${ELEMENT_INFO[el].color}, #C9A554)`,
+                            }} />
                         </div>
-                        <span className="text-[9px] text-white/45 w-7 text-right tabular-nums">{pct[el]}%</span>
+                        <span className="text-[10px] text-white/55 w-8 text-right tabular-nums">{pct[el]}%</span>
                       </div>
                     ))}
                   </div>
