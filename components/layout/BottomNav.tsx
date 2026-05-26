@@ -14,12 +14,17 @@ const NAV_ITEMS = [
 export function BottomNav() {
   const pathname = usePathname()
 
+  // 複数項目が prefix マッチする場合は最も具体的（href が長い）な項目だけを active にする
+  const activeHref = [...NAV_ITEMS]
+    .filter(item => pathname === item.href || pathname.startsWith(item.href + "/"))
+    .sort((a, b) => b.href.length - a.href.length)[0]?.href
+
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-white/[0.08]"
       style={{ background:"rgba(8,12,30,.95)", paddingBottom:"calc(8px + env(safe-area-inset-bottom))" }}>
       <div className="flex justify-around pt-2">
         {NAV_ITEMS.map(item => {
-          const active = pathname === item.href || pathname.startsWith(item.href + "/")
+          const active = item.href === activeHref
           return (
             <Link key={item.href} href={item.href}
               className="flex flex-col items-center gap-0.5 px-2 py-1">
