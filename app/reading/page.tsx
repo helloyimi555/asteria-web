@@ -107,7 +107,24 @@ export default function ReadingInputPage() {
     // 既存プロフィールで鑑定する場合: profile_id がバックエンドに送られ、出生地/日付は DB から取得される。
     // FE で必須にすべきは「プロフィールが存在すること」のみ（保険として activeDateStr もチェック）
     ? (!!existingProfileId && !!activeDateStr)
-    : (!!otherYear && !!otherMonth && !!otherDay && !!otherPlace.trim())
+    // 新規プロフィール / 別の人を占う場合: 出生地は任意（空なら handleSubmit 内で「東京都」をデフォルト）
+    : (!!otherYear && !!otherMonth && !!otherDay)
+
+  // DEBUG: ボタンが押せない場合の原因切り分け用
+  if (typeof window !== "undefined") {
+    console.log("ok debug:", {
+      existingProfileId,
+      activeDateStr,
+      actualUseExisting,
+      useExisting,
+      year, month, day,
+      otherYear, otherMonth, otherDay,
+      otherPlace,
+      activeTime,
+      loading,
+      ok,
+    })
+  }
 
   const handleSubmit = async () => {
     if (!ok) return
@@ -117,10 +134,13 @@ export default function ReadingInputPage() {
       const now = new Date()
       const [ps, pe] = getPeriodDates(period, now)
 
+      // 出生地が空の場合は東京都をデフォルト値として使用
+      const effectivePlace = activePlace.trim() || "東京都"
+
       if (!loggedIn) {
         const result = await guestReadingApi.create({
           birth_date:       activeDateStr,
-          birth_place_name: activePlace,
+          birth_place_name: effectivePlace,
           theme:            theme,
           period_start:     ps,
           period_end:       pe,
@@ -149,7 +169,7 @@ export default function ReadingInputPage() {
             birth_date:         activeDateStr,
             birth_time:         (!(useExisting ? otherNoTime : noTime) && (useExisting ? otherTime : time)) ? (useExisting ? otherTime : time) : null,
             birth_time_unknown: (useExisting ? otherNoTime : noTime) || !(useExisting ? otherTime : time),
-            birth_place_name:   activePlace,
+            birth_place_name:   effectivePlace,
           })
           if (!existingProfileId) {
             localStorage.setItem(PROFILE_KEY, JSON.stringify({
@@ -157,7 +177,7 @@ export default function ReadingInputPage() {
               birth_date: activeDateStr,
               birth_time: useExisting ? otherTime : time,
               birth_time_unknown: useExisting ? otherNoTime : noTime,
-              birth_place_name: activePlace,
+              birth_place_name: effectivePlace,
             }))
           } else {
             // 既存のプロフィールがある場合は、別の人を占う際に保存済みプロフィールを上書きしない
