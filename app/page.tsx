@@ -12,6 +12,10 @@ const FEATURES = [
   { icon:"✨", title:"AI文章化",  desc:"あなただけの言葉で表現" },
 ]
 
+const YEARS  = Array.from({ length:75 }, (_, i) => 2008 - i)
+const MONTHS = Array.from({ length:12 }, (_, i) => i + 1)
+const DAYS   = Array.from({ length:31 }, (_, i) => i + 1)
+
 export default function HomePage() {
   const router = useRouter()
   const [loggedIn, setLoggedIn] = useState(false)
@@ -167,28 +171,32 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
 
 function PartnerPersonalityCard() {
   const [open, setOpen]             = useState(false)
-  const [birthDate, setBirthDate]   = useState("")
+  const [birthYear, setBirthYear]   = useState("")
+  const [birthMonth, setBirthMonth] = useState("")
+  const [birthDay, setBirthDay]     = useState("")
   const [birthPlace, setBirthPlace] = useState("")
   const [mbti, setMbti]             = useState("")
   const [loading, setLoading]       = useState(false)
   const [error, setError]           = useState<string | null>(null)
   const [result, setResult]         = useState<GuestPersonalityResult | null>(null)
 
-  const handleDateChange = (v: string) => {
-    setBirthDate(v)
-    setError(null)
-  }
+  const dateReady = !!(birthYear && birthMonth && birthDay)
+  const birthDate = dateReady
+    ? `${birthYear}-${String(birthMonth).padStart(2,"0")}-${String(birthDay).padStart(2,"0")}`
+    : ""
 
   const reset = () => {
     setResult(null)
-    setBirthDate("")
+    setBirthYear("")
+    setBirthMonth("")
+    setBirthDay("")
     setBirthPlace("")
     setMbti("")
     setError(null)
   }
 
   const submit = async () => {
-    if (!birthDate) {
+    if (!dateReady) {
       setError("生年月日を入力してください")
       return
     }
@@ -276,12 +284,25 @@ function PartnerPersonalityCard() {
                 <label className="block text-[11px] text-white/50 mb-1.5">
                   生年月日 <span className="text-gold">*</span>
                 </label>
-                <input
-                  type="date"
-                  value={birthDate}
-                  max={new Date().toISOString().split("T")[0]}
-                  onChange={e => handleDateChange(e.target.value)}
-                  className="w-full bg-white/[0.04] border border-white/10 rounded-md px-3 py-2 text-[13px] text-white focus:outline-none focus:border-gold/50" />
+                <div className="grid grid-cols-[2fr_1.1fr_1.1fr] gap-2">
+                  {[
+                    { val: birthYear,  set: setBirthYear,  opts: YEARS,  ph: "年", fmt: (v: number) => `${v}年` },
+                    { val: birthMonth, set: setBirthMonth, opts: MONTHS, ph: "月", fmt: (v: number) => `${String(v).padStart(2,"0")}月` },
+                    { val: birthDay,   set: setBirthDay,   opts: DAYS,   ph: "日", fmt: (v: number) => `${String(v).padStart(2,"0")}日` },
+                  ].map(({ val, set, opts, ph, fmt }) => (
+                    <div key={ph} className="relative">
+                      <select
+                        value={val}
+                        onChange={e => { set(e.target.value); setError(null) }}
+                        style={{ backgroundColor: "#0d0d1a" }}
+                        className="w-full appearance-none border border-white/10 rounded-md pl-3 pr-7 py-2 text-[13px] text-white focus:outline-none focus:border-gold/50">
+                        <option value="">{ph}</option>
+                        {opts.map(o => <option key={o} value={o}>{fmt(o)}</option>)}
+                      </select>
+                      <span className="absolute right-2 top-1/2 -translate-y-1/2 text-white/30 pointer-events-none text-[10px]">▾</span>
+                    </div>
+                  ))}
+                </div>
               </div>
               <div>
                 <label className="block text-[11px] text-white/50 mb-1.5">出生地（任意）</label>
@@ -312,7 +333,7 @@ function PartnerPersonalityCard() {
               <button
                 type="button"
                 onClick={submit}
-                disabled={loading}
+                disabled={loading || !dateReady}
                 className="btn-gold w-full py-3 text-[14px] disabled:opacity-50">
                 {loading ? "分析中…" : "✦ 性格を分析する"}
               </button>
