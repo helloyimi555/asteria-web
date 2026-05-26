@@ -151,7 +151,7 @@ export default function CompatResultPage() {
                         <span className="text-[12px] text-[#E8E8FF]">{label}</span>
                         <span className="text-[12px] text-white/60">{score} / 100</span>
                       </div>
-                      <div className="h-3 rounded-full bg-white/[.08] overflow-hidden">
+                      <div className="h-1 rounded-full bg-white/[.08] overflow-hidden">
                         <div className="h-full rounded-full transition-all" style={{ width:`${Math.max(0, Math.min(100, score))}%`, background: color }} />
                       </div>
                     </div>
@@ -351,7 +351,7 @@ export default function CompatResultPage() {
                           </span>
                           <span className="text-[12px] text-white/60 tabular-nums">{pct[el]}%</span>
                         </div>
-                        <div className="h-3 rounded-full bg-white/[.08] overflow-hidden">
+                        <div className="h-1 rounded-full bg-white/[.08] overflow-hidden">
                           <div className="h-full rounded-full transition-all"
                             style={{ width: `${pct[el]}%`, background: ELEMENT_INFO[el].color }} />
                         </div>

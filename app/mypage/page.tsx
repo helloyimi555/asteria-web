@@ -307,7 +307,7 @@ export default function MyPage() {
                   <span className="text-[11px] w-16 shrink-0" style={{ color: ELEMENT_INFO[el].color }}>
                     {ELEMENT_INFO[el].ja}（{ELEMENT_INFO[el].desc.split("・")[0]}）
                   </span>
-                  <div className="flex-1 h-3 rounded-full bg-white/[.08] overflow-hidden">
+                  <div className="flex-1 h-1 rounded-full bg-white/[.08] overflow-hidden">
                     <div className="h-full rounded-full transition-all"
                       style={{ width: `${elementPct[el]}%`, background: ELEMENT_INFO[el].color }} />
                   </div>
