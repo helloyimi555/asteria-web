@@ -11,8 +11,8 @@ const PLANET_COLORS: Record<string, string> = {
   Neptune: "#9B59B6", Pluto: "#E74C3C",
 }
 
-// 円上の天体配置半径（コンテナ幅の % で表現。旧 R_PLANET=85 in 320px = 26.5%）
-const PLANET_RADIUS_PCT = 26.5
+// 円上の天体配置半径（コンテナ幅の % で表現。黄道輪の内側に寄せた配置）
+const PLANET_RADIUS_PCT = 35
 
 interface PlanetPosition {
   planet: string
