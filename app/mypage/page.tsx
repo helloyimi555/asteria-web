@@ -119,6 +119,10 @@ export default function MyPage() {
 
   const handleFetchPersonality = async () => {
     if (!profile) return
+    if (!profile.birth_date) {
+      alert("生年月日を登録してから性格分析を行ってください")
+      return
+    }
     setLoadingPersonality(true)
     try {
       if (profile.id) {
