@@ -237,7 +237,13 @@ function PartnerPersonalityCard() {
 
       {open && (
         <div className="px-5 pb-5 border-t border-white/[0.06]">
-          {result ? (
+          {loading ? (
+            <div className="py-12 flex flex-col items-center justify-center gap-4" aria-busy="true" aria-live="polite">
+              <div className="w-10 h-10 border-2 border-gold/25 border-t-gold rounded-full animate-spin" />
+              <div className="text-[13px] text-[#F0F0F8] font-serif tracking-wider">星を読み解いています…</div>
+              <div className="text-[11px] text-white/45">数秒お待ちください</div>
+            </div>
+          ) : result ? (
             <div className="pt-4 space-y-3">
               <div className="text-center">
                 <div className="text-[11px] text-gold/70 mb-1">タイプ</div>
