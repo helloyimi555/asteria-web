@@ -8,6 +8,9 @@ import AstrologyLoading from "@/components/ui/AstrologyLoading"
 import { BottomNav } from "@/components/layout/BottomNav"
 import { XShareButton } from "@/components/ui/XShareButton"
 import Link from "next/link"
+import {
+  calcElementBalance, elementPercents, getElementTitle, ELEMENTS, ELEMENT_INFO,
+} from "@/lib/elements"
 
 const YEARS = Array.from({ length: 75 }, (_, i) => 2008 - i)
 const MONTHS = Array.from({ length: 12 }, (_, i) => i + 1)
@@ -22,10 +25,29 @@ export default function MyPage() {
   const [isEditingProfile, setIsEditingProfile] = useState(false)
   const [localProfile, setLocalProfile] = useState<any>(null)
   const [editForm, setEditForm] = useState({ year: "", month: "", day: "", time: "", place: "", mbti: "" })
+  const [natalPositions, setNatalPositions] = useState<Array<{ planet: string; sign: string }>>([])
 
   const profile = localProfile ?? profiles?.[0]
   const { data: history } = useReadingHistory(profile?.id)
   const readings = Array.isArray(history) ? history : history?.readings ?? []
+
+  // プロフィールがあればネイタルチャートを取得（エレメントバランス算出用）
+  useEffect(() => {
+    if (!profile?.id) return
+    let cancelled = false
+    profileApi.getNatalChart(profile.id)
+      .then(chart => {
+        if (cancelled) return
+        const planets = (chart.planets ?? []).map((p: any) => ({ planet: p.planet, sign: p.sign }))
+        setNatalPositions(planets)
+      })
+      .catch(() => { /* graceful: バランス表示なし */ })
+    return () => { cancelled = true }
+  }, [profile?.id])
+
+  const elementBalance = natalPositions.length > 0 ? calcElementBalance(natalPositions) : null
+  const elementPct     = elementBalance ? elementPercents(elementBalance) : null
+  const elementTitle   = elementBalance ? getElementTitle(elementBalance) : ""
 
   useEffect(() => {
     if (!profile) return
@@ -272,6 +294,32 @@ export default function MyPage() {
           <div className="flex-1 h-px bg-gradient-to-r from-gold/30 to-transparent" />
           <span className="text-gold text-sm">✦</span>
         </div>
+
+        {elementPct && (
+          <div className="card p-4 mb-4">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-1.5">
+                <span className="text-gold text-xs">✦</span>
+                <span className="text-[12px] font-bold text-[#F0F0F8]">星の四元素バランス</span>
+              </div>
+              <span className="font-serif text-[12px] text-gold">{elementTitle}</span>
+            </div>
+            <div className="space-y-2">
+              {ELEMENTS.map(el => (
+                <div key={el} className="flex items-center gap-2">
+                  <span className="text-[11px] w-16 shrink-0" style={{ color: ELEMENT_INFO[el].color }}>
+                    {ELEMENT_INFO[el].ja}（{ELEMENT_INFO[el].desc.split("・")[0]}）
+                  </span>
+                  <div className="flex-1 h-2 rounded-full bg-white/[0.05] overflow-hidden">
+                    <div className="h-full rounded-full transition-all"
+                      style={{ width: `${elementPct[el]}%`, background: `linear-gradient(90deg, ${ELEMENT_INFO[el].color}, #C9A554)` }} />
+                  </div>
+                  <span className="text-[10px] text-white/55 w-10 text-right tabular-nums">{elementPct[el]}%</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         <div className="card p-4 mb-4">
           <div className="mb-4">

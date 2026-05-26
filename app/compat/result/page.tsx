@@ -7,6 +7,10 @@ import NatalChart from "@/components/ui/NatalChart"
 import { BottomNav } from "@/components/layout/BottomNav"
 import { TONE_COLOR } from "@/lib/zodiac"
 import { XShareButton } from "@/components/ui/XShareButton"
+import {
+  calcElementBalance, elementPercents, getDominantElement, getElementCompatibility,
+  getElementTitle, ELEMENTS, ELEMENT_INFO,
+} from "@/lib/elements"
 import clsx from "clsx"
 
 const EVAL: Record<string, { c:string; bg:string; bc:string }> = {
@@ -83,6 +87,17 @@ export default function CompatResultPage() {
     "あなたの強い言葉が時に相手を傷つける可能性があることを意識しましょう",
     "あなたのまっすぐな表現が、時にお相手には強く感じられることがあります。"
   )
+
+  const myNatalPositions    = result.my_natal_positions    ?? []
+  const theirNatalPositions = result.their_natal_positions ?? []
+  const myBalance    = myNatalPositions.length    ? calcElementBalance(myNatalPositions)    : null
+  const theirBalance = theirNatalPositions.length ? calcElementBalance(theirNatalPositions) : null
+  const myPct        = myBalance    ? elementPercents(myBalance)    : null
+  const theirPct     = theirBalance ? elementPercents(theirBalance) : null
+  const myDominant    = myBalance    ? getDominantElement(myBalance)    : null
+  const theirDominant = theirBalance ? getDominantElement(theirBalance) : null
+  const elementCompat = (myDominant && theirDominant)
+    ? getElementCompatibility(myDominant, theirDominant) : ""
 
   return (
     <div className="relative min-h-screen pb-28">
@@ -302,6 +317,64 @@ export default function CompatResultPage() {
                   #{kw}
                 </span>
               ))}
+            </div>
+          </div>
+        )}
+
+        {/* ふたりのエレメント相性 */}
+        {myPct && theirPct && myDominant && theirDominant && (
+          <div className="card mt-2.5 p-4">
+            <div className="flex items-center gap-1.5 mb-3">
+              <span className="text-gold text-xs">✦</span>
+              <span className="text-[12px] font-bold text-[#F0F0F8]">ふたりのエレメント相性</span>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3 mb-3">
+              {[
+                { label: "あなた",   pct: myPct,    balance: myBalance!,    dom: myDominant },
+                { label: "お相手",   pct: theirPct, balance: theirBalance!, dom: theirDominant },
+              ].map(({ label, pct, balance, dom }) => (
+                <div key={label} className="p-2.5 rounded-[10px]"
+                  style={{ background:"rgba(255,255,255,.03)", border:"1px solid rgba(255,255,255,.06)" }}>
+                  <div className="flex items-baseline justify-between mb-2">
+                    <span className="text-[10px] text-white/50">{label}</span>
+                    <span className="font-serif text-[11px]" style={{ color: ELEMENT_INFO[dom].color }}>
+                      {getElementTitle(balance)}
+                    </span>
+                  </div>
+                  <div className="space-y-1">
+                    {ELEMENTS.map(el => (
+                      <div key={el} className="flex items-center gap-1.5">
+                        <span className="text-[9px] w-3 shrink-0" style={{ color: ELEMENT_INFO[el].color }}>
+                          {ELEMENT_INFO[el].ja}
+                        </span>
+                        <div className="flex-1 h-1.5 rounded-full bg-white/[0.05] overflow-hidden">
+                          <div className="h-full rounded-full"
+                            style={{ width: `${pct[el]}%`, background: `linear-gradient(90deg, ${ELEMENT_INFO[el].color}, #C9A554)` }} />
+                        </div>
+                        <span className="text-[9px] text-white/45 w-7 text-right tabular-nums">{pct[el]}%</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="p-3 rounded-[10px]"
+              style={{ background:"rgba(201,165,84,.06)", border:"1px solid rgba(201,165,84,.2)" }}>
+              <div className="text-[11px] mb-1.5 flex items-center gap-1.5">
+                <span className="font-serif" style={{ color: ELEMENT_INFO[myDominant].color }}>
+                  {ELEMENT_INFO[myDominant].ja}
+                </span>
+                <span className="text-white/40 text-[10px]">×</span>
+                <span className="font-serif" style={{ color: ELEMENT_INFO[theirDominant].color }}>
+                  {ELEMENT_INFO[theirDominant].ja}
+                </span>
+                <span className="text-[10px] text-gold/70 ml-1">の組み合わせ</span>
+              </div>
+              <p className="text-[12px] text-[#C0C0D8] leading-relaxed font-light">
+                {elementCompat}
+              </p>
             </div>
           </div>
         )}
