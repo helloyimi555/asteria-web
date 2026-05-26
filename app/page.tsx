@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import { Stars } from "@/components/ui/Stars"
 import { BottomNav } from "@/components/layout/BottomNav"
 import AstrologyLoading from "@/components/ui/AstrologyLoading"
+import { XShareButton } from "@/components/ui/XShareButton"
 import { isLoggedIn, clearTokens, guestPersonalityApi, type GuestPersonalityResult } from "@/lib/api"
 
 const FEATURES = [
@@ -285,6 +286,13 @@ function PartnerPersonalityCard({ onLoadingChange }: { onLoadingChange?: (loadin
                       </li>
                     ))}
                   </ul>
+                </div>
+              )}
+              {result?.type_name && (
+                <div className="pt-1">
+                  <XShareButton
+                    text={`✦ 相手は「${result.type_name}」タイプ。ASTERIAで星の性格分析をしました。#ASTERIA #占星術`}
+                  />
                 </div>
               )}
               <button
