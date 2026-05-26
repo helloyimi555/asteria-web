@@ -45,10 +45,10 @@ export default function AstrologyLoading({
             <span className="text-sm">✦</span>
             <span className="h-px w-20 bg-[#C9A554]/25" />
           </div>
-          <p className="w-full whitespace-nowrap text-[24px] leading-relaxed tracking-[0.08em] text-[#F6F1E4]/95">
+          <p className="w-full text-center text-[20px] leading-relaxed tracking-[0.08em] text-[#F6F1E4]/95">
             {message}
           </p>
-          <p className="w-full whitespace-nowrap mt-8 text-[13px] leading-loose tracking-[0.12em] text-[#F6F1E4]/58">
+          <p className="w-full text-center mt-8 text-[13px] leading-loose tracking-[0.12em] text-[#F6F1E4]/58">
             {subMessage}
           </p>
         </div>
