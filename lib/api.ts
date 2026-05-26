@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosInstance } from "axios"
+import axios, { AxiosError, AxiosInstance, AxiosResponse } from "axios"
 import Cookies from "js-cookie"
 import type {
   AuthTokens, BirthProfile, ProfileCreateInput, ProfileUpdateInput,
@@ -76,6 +76,18 @@ export const authApi = {
 }
 
 // ── Profiles ──────────────────────────────────────────────────
+export interface DegreeMeaning {
+  planet: string
+  title:  string
+  short:  string
+  detail: string
+}
+
+export interface NatalMeaningResponse {
+  profile_id: string
+  meanings:   DegreeMeaning[]
+}
+
 export const profileApi = {
   list: () =>
     api.get<{ profiles: BirthProfile[] }>("/profiles").then(r => r.data.profiles),
@@ -87,7 +99,12 @@ export const profileApi = {
     api.patch<BirthProfile>(`/profiles/${profileId}`, input).then(r => r.data),
 
   getNatalChart: (profileId: string) =>
-    api.get<NatalChart>(`/profiles/${profileId}/natal-chart`).then(r => r.data),
+    api.get<NatalChart>(`/profiles/${profileId}/natal-chart`, { timeout: 60_000 })
+      .then((r: AxiosResponse<NatalChart>) => r.data),
+
+  getNatalMeaning: (profileId: string) =>
+    api.get<NatalMeaningResponse>(`/profiles/${profileId}/natal-meaning`, { timeout: 60_000 })
+      .then((r: AxiosResponse<NatalMeaningResponse>) => r.data),
 
   getPersonality: (profileId: string, mbtiType?: string) =>
     api.post<any>(`/profiles/${profileId}/personality`, { mbti_type: mbtiType }).then(r => r.data),
