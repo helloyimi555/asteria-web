@@ -105,12 +105,14 @@ export interface ReadingHighlight {
 }
 
 export interface Reading {
-  reading_id:  string
-  status:      "pending" | "processing" | "completed" | "failed"
-  theme:       ReadingTheme
-  outputs:     ReadingOutputs | null
-  highlights:  ReadingHighlight[] | null
-  created_at:  string
+  reading_id:        string
+  status:            "pending" | "processing" | "completed" | "failed"
+  theme:             ReadingTheme
+  outputs:           ReadingOutputs | null
+  highlights:        ReadingHighlight[] | null
+  natal_positions?:  PlanetPosition[]
+  birth_profile_id?: string | null
+  created_at:        string
 }
 
 // ── Compatibility ─────────────────────────────────────────────

@@ -1,4 +1,5 @@
 "use client"
+import { useState } from "react"
 
 const SIGNS_JA = ["牡羊座","牡牛座","双子座","蟹座","獅子座","乙女座","天秤座","蠍座","射手座","山羊座","水瓶座","魚座"]
 const SIGN_SYMBOLS = ["♈","♉","♊","♋","♌","♍","♎","♏","♐","♑","♒","♓"]
@@ -20,11 +21,18 @@ interface PlanetPosition {
   retrograde: boolean
 }
 
-interface NatalChartProps {
-  positions: PlanetPosition[]
+interface DegreeMeaning {
+  title:  string
+  short:  string
+  detail: string
 }
 
-export default function NatalChart({ positions }: NatalChartProps) {
+interface NatalChartProps {
+  positions: PlanetPosition[]
+  meanings?: Record<string, DegreeMeaning>
+}
+
+export default function NatalChart({ positions, meanings }: NatalChartProps) {
   const cx = 160
   const cy = 160
   const R_OUTER = 145
@@ -116,24 +124,62 @@ export default function NatalChart({ positions }: NatalChartProps) {
 
       {/* 天体一覧 */}
       <div className="grid grid-cols-2 gap-1.5 mt-3">
-        {positions.map((p, i) => {
-          const color = PLANET_COLORS[p.planet] ?? "#C9A554"
-          const symbol = PLANET_SYMBOLS[p.planet] ?? "✦"
-          return (
-            <div key={i} className="flex items-center gap-2 px-2 py-1.5 rounded-lg"
-              style={{ background:"rgba(255,255,255,.03)", border:"1px solid rgba(255,255,255,.06)" }}>
-              <span style={{ color, fontSize:14 }}>{symbol}</span>
-              <div>
-                <div className="text-[10px] text-white/50">{p.planet}</div>
-                <div className="text-[11px] text-white/80">
-                  {p.sign_ja} {p.sign_degree.toFixed(1)}°
-                  {p.retrograde && <span className="text-[9px] text-gold/60 ml-1">℞</span>}
-                </div>
-              </div>
-            </div>
-          )
-        })}
+        {positions.map((p, i) => (
+          <PlanetCard key={i} position={p} meaning={meanings?.[p.planet]} />
+        ))}
       </div>
+    </div>
+  )
+}
+
+function PlanetCard({ position, meaning }: { position: PlanetPosition; meaning?: DegreeMeaning }) {
+  const [expanded, setExpanded] = useState(false)
+  const color  = PLANET_COLORS[position.planet] ?? "#C9A554"
+  const symbol = PLANET_SYMBOLS[position.planet] ?? "✦"
+
+  return (
+    <div className="flex flex-col gap-1.5 px-2 py-2 rounded-lg"
+      style={{ background:"rgba(255,255,255,.03)", border:"1px solid rgba(255,255,255,.06)" }}>
+      <div className="flex items-center gap-2">
+        <span style={{ color, fontSize:14 }}>{symbol}</span>
+        <div className="min-w-0">
+          <div className="text-[10px] text-white/50">{position.planet}</div>
+          <div className="text-[11px] text-white/80">
+            {position.sign_ja} {position.sign_degree.toFixed(1)}°
+            {position.retrograde && <span className="text-[9px] text-gold/60 ml-1">℞</span>}
+          </div>
+        </div>
+      </div>
+
+      {meaning && (
+        <>
+          {meaning.title && (
+            <div className="text-[10px] text-gold/85 font-medium leading-tight">
+              {meaning.title}
+            </div>
+          )}
+          {meaning.short && (
+            <div className="text-[10px] text-white/55 leading-snug">
+              {meaning.short}
+            </div>
+          )}
+          {meaning.detail && (
+            <>
+              <button
+                type="button"
+                onClick={() => setExpanded(v => !v)}
+                className="self-start text-[9px] text-gold/70 hover:text-gold transition-colors">
+                {expanded ? "閉じる ∧" : "詳しく見る ∨"}
+              </button>
+              {expanded && (
+                <div className="text-[10px] text-white/70 leading-relaxed pt-1.5 mt-0.5 border-t border-white/[0.06]">
+                  {meaning.detail}
+                </div>
+              )}
+            </>
+          )}
+        </>
+      )}
     </div>
   )
 }

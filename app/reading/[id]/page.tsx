@@ -4,7 +4,7 @@ import { useReading } from "@/hooks/useReading"
 import { Stars } from "@/components/ui/Stars"
 import { BottomNav } from "@/components/layout/BottomNav"
 import { TopNav } from "@/components/layout/TopNav"
-import { isLoggedIn } from "@/lib/api"
+import { isLoggedIn, profileApi, type DegreeMeaning } from "@/lib/api"
 import clsx from "clsx"
 import { useState, useEffect } from "react"
 import NatalChart from "@/components/ui/NatalChart"
@@ -32,10 +32,28 @@ export default function ReadingResultPage() {
   const { data: reading, isLoading } = useReading(id)
   const [open,  setOpen] = useState(false)
   const [isGuest, setIsGuest] = useState(false)
+  const [meanings, setMeanings] = useState<Record<string, DegreeMeaning>>({})
 
   useEffect(() => {
     setIsGuest(!isLoggedIn())
   }, [])
+
+  useEffect(() => {
+    const profileId = reading?.birth_profile_id
+    if (!profileId || isGuest) return
+    let cancelled = false
+    profileApi.getNatalMeaning(profileId)
+      .then(res => {
+        if (cancelled) return
+        const map: Record<string, DegreeMeaning> = {}
+        for (const m of res.meanings ?? []) {
+          if (m?.planet) map[m.planet] = m
+        }
+        setMeanings(map)
+      })
+      .catch(() => { /* graceful: 意味文なしで天体だけ表示 */ })
+    return () => { cancelled = true }
+  }, [reading?.reading_id, reading?.birth_profile_id, isGuest])
 
   if (isLoading || reading?.status === "pending" || reading?.status === "processing") {
     return <LoadingView />
@@ -100,7 +118,7 @@ export default function ReadingResultPage() {
 
         {/* ネイタルチャート */}
         {!isGuest && reading.natal_positions?.length > 0 && (
-          <NatalChart positions={reading.natal_positions} />
+          <NatalChart positions={reading.natal_positions} meanings={meanings} />
         )}
 
         {/* テーマ別 2x2 - ゲストには非表示 */}
