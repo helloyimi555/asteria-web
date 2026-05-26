@@ -119,7 +119,12 @@ export default function MyPage() {
     }
     try {
       if (profile?.id) {
-        await profileApi.update(profile.id, { mbti_type: editForm.mbti || null })
+        await profileApi.update(profile.id, {
+          birth_date:       formattedDate || undefined,
+          birth_time:       editForm.time || undefined,
+          birth_place_name: editForm.place || undefined,
+          mbti_type:        editForm.mbti || null,
+        })
         setMbtiType(editForm.mbti || "")
       }
       localStorage.setItem("asteria_profile", JSON.stringify(updatedProfile))
