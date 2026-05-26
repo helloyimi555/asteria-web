@@ -118,11 +118,26 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
           <p className="text-[13px] text-white/50">今日の天体はあなたに何を語りますか</p>
         </div>
 
-        <div className="space-y-3">
+<div className="space-y-3">
           <Link href="/reading"
             className="btn-gold flex items-center justify-center gap-2 py-4 text-[15px]">
             ✦ 新しい鑑定を始める
           </Link>
+
+          <div className="grid grid-cols-2 gap-3">
+            <Link href="/compat"
+              className="card flex flex-col items-center justify-center px-4 py-5 text-center">
+              <span className="text-2xl mb-2">♡</span>
+              <div className="text-[13px] text-[#F0F0F8] font-bold mb-0.5">相性診断</div>
+              <div className="text-[10px] text-white/40">ふたりの星を読む</div>
+            </Link>
+            <Link href="/guide"
+              className="card flex flex-col items-center justify-center px-4 py-5 text-center">
+              <span className="text-2xl mb-2">✦</span>
+              <div className="text-[13px] text-[#F0F0F8] font-bold mb-0.5">星ガイド</div>
+              <div className="text-[10px] text-white/40">天体・星座を学ぶ</div>
+            </Link>
+          </div>
 
           <Link href="/reading/results"
             className="card flex items-center justify-between px-5 py-4">
