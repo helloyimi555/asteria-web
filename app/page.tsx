@@ -106,6 +106,17 @@ export default function HomePage() {
 }
 
 function LoggedInHome({ onLogout }: { onLogout: () => void }) {
+  const [partnerLoading, setPartnerLoading] = useState(false)
+
+  if (partnerLoading) {
+    return (
+      <AstrologyLoading
+        message="星の配置を読み解いています..."
+        subMessage="あなたの本質的な才能と課題を紡いでいます"
+      />
+    )
+  }
+
   return (
     <div className="relative min-h-screen pb-24">
       <Stars />
@@ -144,7 +155,7 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
             </Link>
           </div>
 
-          <PartnerPersonalityCard />
+          <PartnerPersonalityCard onLoadingChange={setPartnerLoading} />
 
           <Link href="/reading/results"
             className="card flex items-center justify-between px-5 py-4">
@@ -170,7 +181,7 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
   )
 }
 
-function PartnerPersonalityCard() {
+function PartnerPersonalityCard({ onLoadingChange }: { onLoadingChange?: (loading: boolean) => void }) {
   const [open, setOpen]             = useState(false)
   const [birthYear, setBirthYear]   = useState("")
   const [birthMonth, setBirthMonth] = useState("")
@@ -180,6 +191,10 @@ function PartnerPersonalityCard() {
   const [loading, setLoading]       = useState(false)
   const [error, setError]           = useState<string | null>(null)
   const [result, setResult]         = useState<GuestPersonalityResult | null>(null)
+
+  useEffect(() => {
+    onLoadingChange?.(loading)
+  }, [loading, onLoadingChange])
 
   const dateReady = !!(birthYear && birthMonth && birthDay)
   const birthDate = dateReady
@@ -219,15 +234,6 @@ function PartnerPersonalityCard() {
     } finally {
       setLoading(false)
     }
-  }
-
-  if (loading) {
-    return (
-      <AstrologyLoading
-        message="星の配置を読み解いています..."
-        subMessage="あなたの本質的な才能と課題を紡いでいます"
-      />
-    )
   }
 
   return (
