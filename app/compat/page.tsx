@@ -85,7 +85,7 @@ export default function CompatInputPage() {
 
     try {
       const profile = JSON.parse(rawProfile)
-      const nextForm: { year?: string; month?: string; day?: string; place?: string } = {}
+      const nextForm: { year?: string; month?: string; day?: string; time?: string; place?: string } = {}
       if (profile.year) nextForm.year = String(profile.year)
       if (profile.month) nextForm.month = String(profile.month)
       if (profile.day) nextForm.day = String(profile.day)
@@ -100,6 +100,7 @@ export default function CompatInputPage() {
           }
         }
       }
+      if (profile.birth_time) nextForm.time = profile.birth_time
       const place = profile.birth_place_name || profile.birthPlaceName || profile.place || profile.birth_place
       if (place) nextForm.place = place
       if (Object.keys(nextForm).length) {
