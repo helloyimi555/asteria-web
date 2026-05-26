@@ -130,7 +130,7 @@ export const readingApi = {
 
 // ── Guest Readings ────────────────────────────────────────────
 // ゲスト用（認証インターセプターなし）
-const guestApi = axios.create({
+const guestApi: AxiosInstance = axios.create({
   baseURL: BASE_URL,
   timeout: 60_000,
   headers: { "Content-Type": "application/json" },
@@ -145,6 +145,36 @@ export const guestReadingApi = {
     period_end: string
   }) =>
     guestApi.post<Reading>("/readings/guest", input).then(r => r.data),
+}
+
+export interface GuestPersonalityResult {
+  type_name:    string
+  personality:  string
+  mbti_insight: string
+  combined:     string
+  strengths:    string[]
+  challenges:   string[]
+  life_theme:   string
+  career:       string
+  relationships: string
+  natal_positions: Array<{
+    planet:      string
+    sign:        string
+    sign_ja:     string
+    degree:      number
+    sign_degree: number
+    house:       number
+    retrograde:  boolean
+  }>
+}
+
+export const guestPersonalityApi = {
+  create: (input: {
+    birth_date:        string
+    birth_place_name?: string
+    mbti_type?:        string
+  }) =>
+    guestApi.post<GuestPersonalityResult>("/profiles/personality/guest", input).then(r => r.data),
 }
 
 

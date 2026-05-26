@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx tsc *)",
+      "Bash(./node_modules/.bin/tsc --noEmit -p .)",
+      "PowerShell(npx --no-install tsc --noEmit -p . 2>&1)"
+    ]
+  }
+}

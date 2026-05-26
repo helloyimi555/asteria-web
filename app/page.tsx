@@ -4,7 +4,7 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Stars } from "@/components/ui/Stars"
 import { BottomNav } from "@/components/layout/BottomNav"
-import { isLoggedIn, clearTokens } from "@/lib/api"
+import { isLoggedIn, clearTokens, guestPersonalityApi, type GuestPersonalityResult } from "@/lib/api"
 
 const FEATURES = [
   { icon:"🔭", title:"天体計算",  desc:"Swiss Ephemerisによる正確な計算" },
@@ -139,6 +139,8 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
             </Link>
           </div>
 
+          <PartnerPersonalityCard />
+
           <Link href="/reading/results"
             className="card flex items-center justify-between px-5 py-4">
             <div>
@@ -159,6 +161,138 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
         </div>
       </div>
       <BottomNav />
+    </div>
+  )
+}
+
+function PartnerPersonalityCard() {
+  const [open, setOpen]             = useState(false)
+  const [birthDate, setBirthDate]   = useState("")
+  const [birthPlace, setBirthPlace] = useState("")
+  const [mbti, setMbti]             = useState("")
+  const [loading, setLoading]       = useState(false)
+  const [error, setError]           = useState<string | null>(null)
+  const [result, setResult]         = useState<GuestPersonalityResult | null>(null)
+
+  const submit = async () => {
+    if (!birthDate) {
+      setError("生年月日を入力してください")
+      return
+    }
+    setLoading(true)
+    setError(null)
+    try {
+      const data = await guestPersonalityApi.create({
+        birth_date:       birthDate,
+        birth_place_name: birthPlace || undefined,
+        mbti_type:        mbti || undefined,
+      })
+      setResult(data)
+    } catch (e: any) {
+      setError(e?.response?.data?.detail ?? "分析に失敗しました")
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <div className="card overflow-hidden">
+      <button
+        type="button"
+        onClick={() => setOpen(v => !v)}
+        className="w-full flex items-center justify-between px-5 py-4 text-left">
+        <div>
+          <div className="text-[13px] text-[#F0F0F8] font-bold mb-0.5">
+            <span className="mr-1">👤</span>相手の性格を分析する
+          </div>
+          <div className="text-[11px] text-white/40">生年月日から性格を読み解く</div>
+        </div>
+        <span className={`text-white/30 transition-transform ${open ? "rotate-90" : ""}`}>›</span>
+      </button>
+
+      {open && (
+        <div className="px-5 pb-5 space-y-3 border-t border-white/[0.06]">
+          <div className="pt-4">
+            <label className="block text-[11px] text-white/50 mb-1.5">生年月日 <span className="text-gold">*</span></label>
+            <input
+              type="date"
+              value={birthDate}
+              onChange={e => setBirthDate(e.target.value)}
+              className="w-full bg-white/[0.04] border border-white/10 rounded-md px-3 py-2 text-[13px] text-white focus:outline-none focus:border-gold/50" />
+          </div>
+          <div>
+            <label className="block text-[11px] text-white/50 mb-1.5">出生地（任意）</label>
+            <input
+              type="text"
+              value={birthPlace}
+              onChange={e => setBirthPlace(e.target.value)}
+              placeholder="例：東京都"
+              className="w-full bg-white/[0.04] border border-white/10 rounded-md px-3 py-2 text-[13px] text-white placeholder-white/25 focus:outline-none focus:border-gold/50" />
+          </div>
+          <div>
+            <label className="block text-[11px] text-white/50 mb-1.5">MBTI（任意）</label>
+            <input
+              type="text"
+              value={mbti}
+              onChange={e => setMbti(e.target.value.toUpperCase())}
+              placeholder="例：INFJ"
+              maxLength={4}
+              className="w-full bg-white/[0.04] border border-white/10 rounded-md px-3 py-2 text-[13px] text-white placeholder-white/25 focus:outline-none focus:border-gold/50" />
+          </div>
+
+          {error && (
+            <div className="text-[12px] text-red-300/90">{error}</div>
+          )}
+
+          <button
+            type="button"
+            onClick={submit}
+            disabled={loading}
+            className="btn-gold w-full py-3 text-[14px] disabled:opacity-50">
+            {loading ? "分析中…" : "✦ 性格を分析する"}
+          </button>
+
+          {result && (
+            <div className="mt-4 space-y-3 pt-3 border-t border-white/[0.06]">
+              <div className="text-center">
+                <div className="text-[11px] text-gold/70 mb-1">タイプ</div>
+                <div className="font-serif text-[16px] text-[#F0F0F8]">{result.type_name}</div>
+              </div>
+
+              <div>
+                <div className="text-[11px] text-gold/70 mb-1">性格</div>
+                <p className="text-[12px] text-white/75 leading-relaxed whitespace-pre-line">{result.personality}</p>
+              </div>
+
+              {result.strengths?.length > 0 && (
+                <div>
+                  <div className="text-[11px] text-gold/70 mb-1">強み</div>
+                  <ul className="space-y-1">
+                    {result.strengths.map((s, i) => (
+                      <li key={i} className="text-[12px] text-white/75 leading-relaxed pl-3 relative">
+                        <span className="absolute left-0 text-gold/60">・</span>{s}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {result.challenges?.length > 0 && (
+                <div>
+                  <div className="text-[11px] text-gold/70 mb-1">課題</div>
+                  <ul className="space-y-1">
+                    {result.challenges.map((c, i) => (
+                      <li key={i} className="text-[12px] text-white/75 leading-relaxed pl-3 relative">
+                        <span className="absolute left-0 text-gold/60">・</span>{c}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   )
 }
