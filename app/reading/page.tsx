@@ -82,7 +82,27 @@ export default function ReadingInputPage() {
   }, [year, month, day])
 
   const sunSign = useMemo(() => getSunSign(activeDateStr), [activeDateStr])
+  const activeTime  = actualUseExisting ? time  : otherTime
   const activePlace = actualUseExisting ? place : otherPlace
+
+  // 出生時刻なしの境界日（前日 or 翌日と星座が違う）に隣接サインを返す
+  const boundarySigns = useMemo(() => {
+    if (!activeDateStr || activeTime) return null
+    const [y, m, d] = activeDateStr.split("-").map(Number)
+    if (!y || !m || !d) return null
+    const toStr = (dt: Date) =>
+      `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, "0")}-${String(dt.getDate()).padStart(2, "0")}`
+    const cur  = new Date(y, m - 1, d)
+    const prev = new Date(cur); prev.setDate(prev.getDate() - 1)
+    const next = new Date(cur); next.setDate(next.getDate() + 1)
+    const curSign  = getSunSign(activeDateStr)
+    const prevSign = getSunSign(toStr(prev))
+    const nextSign = getSunSign(toStr(next))
+    if (!curSign) return null
+    if (prevSign && prevSign.sign !== curSign.sign) return [prevSign, curSign]
+    if (nextSign && nextSign.sign !== curSign.sign) return [curSign, nextSign]
+    return null
+  }, [activeDateStr, activeTime])
   const ok = actualUseExisting
     ? (!!activeDateStr && !!activePlace.trim())
     : (!!otherYear && !!otherMonth && !!otherDay && !!otherPlace.trim())
@@ -205,14 +225,26 @@ export default function ReadingInputPage() {
         </div>
 
         {sunSign && (
-          <div className="flex justify-center mb-4">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full"
-              style={{ background:`${sunSign.color}12`, border:`1px solid ${sunSign.color}30` }}>
-              <span style={{ color:sunSign.color }}>{sunSign.symbol}</span>
-              <span className="font-serif text-[13px]" style={{ color:sunSign.color }}>
-                {sunSign.sign}
-              </span>
-            </div>
+          <div className="flex flex-col items-center mb-4">
+            {boundarySigns ? (
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full"
+                style={{ background:`${sunSign.color}10`, border:`1px solid ${sunSign.color}30` }}>
+                <span style={{ color: boundarySigns[0].color, fontSize:18 }}>{boundarySigns[0].symbol}</span>
+                <span className="text-white/35 text-[12px]">/</span>
+                <span style={{ color: boundarySigns[1].color, fontSize:18 }}>{boundarySigns[1].symbol}</span>
+              </div>
+            ) : (
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full"
+                style={{ background:`${sunSign.color}12`, border:`1px solid ${sunSign.color}30` }}>
+                <span style={{ color:sunSign.color }}>{sunSign.symbol}</span>
+                <span className="font-serif text-[13px]" style={{ color:sunSign.color }}>
+                  {sunSign.sign}
+                </span>
+              </div>
+            )}
+            {boundarySigns && (
+              <p className="mt-1.5 text-[10px] text-white/45 tracking-wider">時刻入力で確定</p>
+            )}
           </div>
         )}
 
