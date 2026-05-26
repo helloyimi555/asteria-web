@@ -106,9 +106,11 @@ export default function CompatInputPage() {
         setMyForm(prev => ({ ...prev, ...nextForm }))
       }
 
-      const savedMbti = localStorage.getItem("asteria_mbti")
-      if (savedMbti) {
-        setMyMbti(savedMbti)
+      const profileMbti = profile.mbti_type || profile.mbtiType
+      const legacyMbti  = localStorage.getItem("asteria_mbti")
+      const resolvedMbti = profileMbti || legacyMbti
+      if (resolvedMbti) {
+        setMyMbti(resolvedMbti)
       }
     } catch {
       // ignore malformed stored profile
