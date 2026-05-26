@@ -322,7 +322,7 @@ export default function MyPage() {
                   {personalityResult.personality}
                 </div>
               </div>
-              {personalityResult.mbti_insight && (
+              {mbtiType && personalityResult.mbti_insight && (
                 <div>
                   <div className="text-[11px] text-white/50 uppercase tracking-widest mb-2">
                     MBTIが示す行動パターン
@@ -332,7 +332,7 @@ export default function MyPage() {
                   </div>
                 </div>
               )}
-              {personalityResult.combined && (
+              {mbtiType && personalityResult.combined && (
                 <div>
                   <div className="text-[11px] text-white/50 uppercase tracking-widest mb-2">
                     星×MBTIの総合
