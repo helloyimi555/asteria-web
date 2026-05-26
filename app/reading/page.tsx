@@ -104,7 +104,9 @@ export default function ReadingInputPage() {
     return null
   }, [activeDateStr, activeTime])
   const ok = actualUseExisting
-    ? (!!activeDateStr && !!activePlace.trim())
+    // 既存プロフィールで鑑定する場合: profile_id がバックエンドに送られ、出生地/日付は DB から取得される。
+    // FE で必須にすべきは「プロフィールが存在すること」のみ（保険として activeDateStr もチェック）
+    ? (!!existingProfileId && !!activeDateStr)
     : (!!otherYear && !!otherMonth && !!otherDay && !!otherPlace.trim())
 
   const handleSubmit = async () => {
