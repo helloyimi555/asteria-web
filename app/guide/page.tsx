@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Stars } from "@/components/ui/Stars"
 import { BottomNav } from "@/components/layout/BottomNav"
 
@@ -58,6 +58,23 @@ export default function GuidePage() {
   const [tab, setTab] = useState(0)
   const tabs = ["天体（10）","角度の種類","12星座"]
 
+  // /guide#sun などのハッシュリンクから着地した時に
+  // 該当天体タブを開いてアンカーへスクロール
+  useEffect(() => {
+    const planetNames = PLANETS.map(p => p.planet.toLowerCase())
+    const handleHash = () => {
+      const hash = window.location.hash.slice(1).toLowerCase()
+      if (!hash || !planetNames.includes(hash)) return
+      setTab(0)
+      setTimeout(() => {
+        document.getElementById(hash)?.scrollIntoView({ behavior: "smooth", block: "start" })
+      }, 80)
+    }
+    handleHash()
+    window.addEventListener("hashchange", handleHash)
+    return () => window.removeEventListener("hashchange", handleHash)
+  }, [])
+
   return (
     <div className="relative min-h-screen pb-24">
       <Stars />
@@ -78,7 +95,7 @@ export default function GuidePage() {
         {tab===0 && (
           <div className="px-4 flex flex-col gap-3">
             {PLANETS.map(p => (
-              <div key={p.planet} className="card p-4 flex gap-3">
+              <div key={p.planet} id={p.planet.toLowerCase()} className="card p-4 flex gap-3 scroll-mt-24">
                 <OrbitSVG symbol={p.symbol} color={p.color} />
                 <div className="flex-1 min-w-0">
                   <div className="flex items-baseline gap-2 mb-2">

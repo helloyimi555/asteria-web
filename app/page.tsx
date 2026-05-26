@@ -140,6 +140,11 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
             ✦ 新しい鑑定を始める
           </Link>
 
+          <Link href="/guide"
+            className="block text-center text-[12px] text-gold/60 hover:text-gold transition-colors py-1 -mt-1">
+            ✦ 今日の星を学ぶ ›
+          </Link>
+
           <div className="grid grid-cols-2 gap-3">
             <Link href="/compat"
               className="card flex flex-col items-center justify-center px-4 py-5 text-center">

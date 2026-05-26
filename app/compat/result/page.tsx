@@ -1,6 +1,7 @@
 "use client"
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
+import Link from "next/link"
 import { Stars } from "@/components/ui/Stars"
 import NatalChart from "@/components/ui/NatalChart"
 import { BottomNav } from "@/components/layout/BottomNav"
@@ -199,7 +200,7 @@ export default function CompatResultPage() {
                   style={{ background:"rgba(255,255,255,.03)", border:"1px solid rgba(255,255,255,.06)" }}>
                   <div className="flex justify-between items-start mb-1.5 flex-wrap gap-1">
                     <span className="text-[12px] text-[#D0D0E8]">
-                      あなたの{s.my_planet_ja} × お相手の{s.their_planet_ja}
+                      あなたの<Link href={`/guide#${String(s.my_planet).toLowerCase()}`} className="text-gold/90 hover:text-gold underline-offset-2 hover:underline">{s.my_planet_ja}</Link> × お相手の<Link href={`/guide#${String(s.their_planet).toLowerCase()}`} className="text-gold/90 hover:text-gold underline-offset-2 hover:underline">{s.their_planet_ja}</Link>
                     </span>
                     <span className="text-[10px] px-2 py-0.5 rounded-full"
                       style={{ background:`${TONE_COLOR[s.tone]}18`, color:TONE_COLOR[s.tone], border:`1px solid ${TONE_COLOR[s.tone]}30` }}>
@@ -241,7 +242,7 @@ export default function CompatResultPage() {
                     style={{ background:"rgba(255,255,255,.04)", border:"1px solid rgba(255,255,255,.07)" }}>
                     <div className="flex justify-between items-start mb-1.5 flex-wrap gap-1">
                       <span className="text-[12px] text-[#D0D0E8]">
-                        あなたの{s.my_planet_ja} × お相手の{s.their_planet_ja}
+                        あなたの<Link href={`/guide#${String(s.my_planet).toLowerCase()}`} className="text-gold/90 hover:text-gold underline-offset-2 hover:underline">{s.my_planet_ja}</Link> × お相手の<Link href={`/guide#${String(s.their_planet).toLowerCase()}`} className="text-gold/90 hover:text-gold underline-offset-2 hover:underline">{s.their_planet_ja}</Link>
                       </span>
                       <span className="text-[10px] px-2 py-0.5 rounded-full"
                         style={{ background:`${TONE_COLOR[s.tone]}18`, color:TONE_COLOR[s.tone], border:`1px solid ${TONE_COLOR[s.tone]}30` }}>

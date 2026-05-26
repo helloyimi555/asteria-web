@@ -1,5 +1,6 @@
 "use client"
 import { useState } from "react"
+import Link from "next/link"
 
 const PLANET_SYMBOLS: Record<string, string> = {
   Sun: "☉", Moon: "☽", Mercury: "☿", Venus: "♀", Mars: "♂",
@@ -124,16 +125,18 @@ function PlanetCard({ position, meaning }: { position: PlanetPosition; meaning?:
   return (
     <div className="flex flex-col gap-1.5 px-2 py-2 rounded-lg"
       style={{ background:"rgba(255,255,255,.03)", border:"1px solid rgba(255,255,255,.06)" }}>
-      <div className="flex items-center gap-2">
+      <Link href={`/guide#${position.planet.toLowerCase()}`}
+        className="flex items-center gap-2 -m-1 p-1 rounded hover:bg-white/[0.04] transition-colors">
         <span style={{ color, fontSize:14 }}>{symbol}</span>
-        <div className="min-w-0">
+        <div className="min-w-0 flex-1">
           <div className="text-[10px] text-white/50">{position.planet}</div>
           <div className="text-[11px] text-white/80">
             {position.sign_ja} {position.sign_degree.toFixed(1)}°
             {position.retrograde && <span className="text-[9px] text-gold/60 ml-1">℞</span>}
           </div>
         </div>
-      </div>
+        <span className="text-[10px] text-gold/40">›</span>
+      </Link>
 
       {meaning && (
         <>
