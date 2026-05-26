@@ -19,15 +19,7 @@ export default function MyPage() {
   const [loadingPersonality, setLoadingPersonality] = useState(false)
   const [mbtiType, setMbtiType] = useState<string>("")
   const [isEditingProfile, setIsEditingProfile] = useState(false)
-  const [localProfile, setLocalProfile] = useState<any>(() => {
-    if (typeof window === "undefined") return null
-    try {
-      const saved = localStorage.getItem("asteria_profile")
-      return saved ? JSON.parse(saved) : null
-    } catch {
-      return null
-    }
-  })
+  const [localProfile, setLocalProfile] = useState<any>(null)
   const [editForm, setEditForm] = useState({ year: "", month: "", day: "", time: "", place: "", mbti: "" })
 
   const profile = localProfile ?? profiles?.[0]
@@ -40,6 +32,17 @@ export default function MyPage() {
       setMbtiType(profile.mbti_type)
     }
   }, [profile?.id, profile?.mbti_type])
+
+  useEffect(() => {
+    const saved = localStorage.getItem("asteria_profile")
+    if (saved) {
+      try {
+        setLocalProfile(JSON.parse(saved))
+      } catch {
+        // ignore invalid saved data
+      }
+    }
+  }, [])
 
   const abbreviatedPlace = profile ? (() => {
     const parts = (profile.birth_place_name || "").split(",").map(p => p.trim()).filter(Boolean)
