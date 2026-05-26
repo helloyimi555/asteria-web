@@ -1,16 +1,16 @@
 "use client"
 import { useState } from "react"
 import Link from "next/link"
-import { useAuth } from "@/lib/auth-context"
+import { authApi, saveTokens } from "@/lib/api"
 import { Stars } from "@/components/ui/Stars"
 
 export default function RegisterPage() {
-  const { register } = useAuth()
   const [email,    setEmail]    = useState("")
   const [password, setPassword] = useState("")
   const [confirm,  setConfirm]  = useState("")
   const [loading,  setLoading]  = useState(false)
   const [error,    setError]    = useState<string | null>(null)
+  const [sentTo,   setSentTo]   = useState<string | null>(null)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -18,12 +18,42 @@ export default function RegisterPage() {
     if (password.length < 8)  { setError("パスワードは8文字以上で設定してください"); return }
     setLoading(true); setError(null)
     try {
-      await register(email, password)
+      const tokens = await authApi.register(email, password)
+      // JWT は保存（既存挙動を維持）するが、ホームには遷移せず確認案内を表示
+      saveTokens(tokens)
+      setSentTo(email)
     } catch {
       setError("登録に失敗しました。このメールアドレスはすでに使用されている可能性があります。")
     } finally {
       setLoading(false)
     }
+  }
+
+  if (sentTo) {
+    return (
+      <div className="relative min-h-screen flex flex-col items-center justify-center px-5">
+        <Stars />
+        <div className="relative z-10 w-full max-w-sm">
+          <div className="text-center mb-8">
+            <Link href="/" className="font-serif text-[15px] tracking-widest shimmer-gold">✦ ASTERIA ✦</Link>
+          </div>
+          <div className="card p-6 text-center">
+            <div className="text-4xl text-gold mb-3">✉</div>
+            <h1 className="font-serif text-[18px] text-[#F0F0F8] mb-3">確認メールを送信しました</h1>
+            <p className="text-[13px] text-white/65 leading-7 mb-4">
+              <span className="text-gold">{sentTo}</span> 宛にメールを送信しました。<br />
+              メールのリンクをクリックして登録を完了してください。
+            </p>
+            <p className="text-[11px] text-white/40 leading-6 mb-5">
+              ※メールが届かない場合は、迷惑メールフォルダもご確認ください。
+            </p>
+            <Link href="/reading" className="btn-gold-outline inline-block px-6 py-2.5 text-[13px]">
+              まずは鑑定を試す
+            </Link>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   return (
