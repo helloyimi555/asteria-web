@@ -71,10 +71,9 @@ export default function ReadingResultPage() {
       <div className="hidden md:block"><TopNav /></div>
 
       <div className="relative z-10 max-w-app mx-auto px-[18px]">
-        {/* Nav */}
-        <div className="flex justify-between items-center pt-4 pb-0 md:hidden">
+        {/* Nav (モバイル: ブランドのみ。ナビゲーションは BottomNav が担当) */}
+        <div className="flex justify-center items-center pt-4 pb-0 md:hidden">
           <span className="font-serif text-[13px] tracking-wider shimmer-gold">ASTERIA</span>
-          <span className="text-white/50 text-lg">☰</span>
         </div>
 
         {/* Headline */}
