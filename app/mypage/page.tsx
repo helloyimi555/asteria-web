@@ -45,6 +45,22 @@ export default function MyPage() {
     }
   }, [])
 
+  useEffect(() => {
+    if (profiles?.[0]) {
+      const p = profiles[0]
+      const existing = localStorage.getItem("asteria_profile")
+      const parsed = existing ? JSON.parse(existing) : {}
+      localStorage.setItem("asteria_profile", JSON.stringify({
+        ...parsed,
+        id: p.id,
+        display_name: p.display_name,
+        birth_place_name: p.birth_place_name,
+        birth_timezone: p.birth_timezone,
+        mbti_type: p.mbti_type,
+      }))
+    }
+  }, [profiles])
+
   const abbreviatedPlace = profile ? (() => {
     const parts = (profile.birth_place_name || "").split(",").map(p => p.trim()).filter(Boolean)
     while (parts.length > 0) {
