@@ -1,5 +1,5 @@
 "use client"
-import { useEffect, useState } from "react"
+import { Suspense, useEffect, useState } from "react"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
 import { Stars } from "@/components/ui/Stars"
@@ -7,7 +7,32 @@ import { authApi } from "@/lib/api"
 
 type Status = "verifying" | "success" | "error"
 
+function VerifyFallback() {
+  return (
+    <div className="relative min-h-screen flex flex-col items-center justify-center px-5">
+      <Stars />
+      <div className="relative z-10 w-full max-w-sm">
+        <div className="text-center mb-8">
+          <span className="font-serif text-[15px] tracking-widest shimmer-gold">✦ ASTERIA ✦</span>
+        </div>
+        <div className="card p-6 text-center">
+          <div className="w-10 h-10 mx-auto mb-4 border-2 border-gold/25 border-t-gold rounded-full animate-spin" />
+          <p className="text-[13px] text-white/70">読み込み中…</p>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export default function VerifyEmailPage() {
+  return (
+    <Suspense fallback={<VerifyFallback />}>
+      <VerifyContent />
+    </Suspense>
+  )
+}
+
+function VerifyContent() {
   const params = useSearchParams()
   const [status,  setStatus]  = useState<Status>("verifying")
   const [email,   setEmail]   = useState<string | null>(null)
