@@ -6,7 +6,8 @@ import { Stars } from "@/components/ui/Stars"
 import { BottomNav } from "@/components/layout/BottomNav"
 import AstrologyLoading from "@/components/ui/AstrologyLoading"
 import { XShareButton } from "@/components/ui/XShareButton"
-import { isLoggedIn, clearTokens, guestPersonalityApi, type GuestPersonalityResult } from "@/lib/api"
+import { isLoggedIn, clearTokens, guestPersonalityApi, homeApi, readingApi, type GuestPersonalityResult, type DailyHome } from "@/lib/api"
+import type { Reading } from "@/types"
 
 const FEATURES = [
   { icon:"🔭", title:"天体計算",  desc:"Swiss Ephemerisによる正確な計算" },
@@ -106,8 +107,30 @@ export default function HomePage() {
   )
 }
 
+const THEME_LABEL_HOME: Record<string, string> = {
+  general:      "総合運",
+  work:         "仕事運",
+  love:         "恋愛運",
+  health:       "健康運",
+  money:        "金運",
+  relationship: "人間関係",
+}
+
 function LoggedInHome({ onLogout }: { onLogout: () => void }) {
   const [partnerLoading, setPartnerLoading] = useState(false)
+  const [daily,    setDaily]    = useState<DailyHome | null>(null)
+  const [readings, setReadings] = useState<Reading[]>([])
+
+  useEffect(() => {
+    let cancelled = false
+    homeApi.daily()
+      .then(d => { if (!cancelled) setDaily(d) })
+      .catch(() => { /* graceful */ })
+    readingApi.list({ limit: 3 })
+      .then(res => { if (!cancelled) setReadings(res.readings ?? []) })
+      .catch(() => { /* graceful */ })
+    return () => { cancelled = true }
+  }, [])
 
   return (
     <div className="relative min-h-screen pb-24">
@@ -140,8 +163,84 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
             ✦ 新しい鑑定を始める
           </Link>
 
+          {/* 今日の星の流れ */}
+          {daily && (
+            <div className="card p-4" style={{ borderLeft: "3px solid rgba(201,165,84,.6)" }}>
+              <div className="flex items-center gap-1.5 mb-2">
+                <span className="text-gold text-xs">✦</span>
+                <span className="text-[12px] font-bold text-[#F0F0F8]">今日の星の流れ</span>
+              </div>
+              <p className="font-serif text-[13px] leading-7 text-[#C0C0D8] font-light">
+                {daily.flow}
+              </p>
+            </div>
+          )}
+
+          {/* 今日の星メモ */}
+          {daily && (
+            <div className="card p-4">
+              <div className="flex items-center gap-1.5 mb-3">
+                <span className="text-gold text-xs">✦</span>
+                <span className="text-[12px] font-bold text-[#F0F0F8]">今日の星メモ</span>
+              </div>
+              <div className="grid grid-cols-2 gap-2 text-[11px]">
+                {[
+                  { label: "月相",         value: daily.moon_phase,  color: "#F0F0F8" },
+                  { label: "テーマ",       value: daily.theme,        color: "#C9A554" },
+                  { label: "ラッキーカラー", value: daily.lucky_color,  color: "#F0F0F8" },
+                  { label: "ラッキー星座",   value: daily.lucky_sign,   color: "#F0F0F8" },
+                ].map(({ label, value, color }) => (
+                  <div key={label} className="px-2.5 py-2 rounded-md"
+                    style={{ background: "rgba(255,255,255,.03)", border: "1px solid rgba(255,255,255,.06)" }}>
+                    <div className="text-white/45 mb-0.5 tracking-wider">{label}</div>
+                    <div className="text-[12px]" style={{ color }}>{value}</div>
+                  </div>
+                ))}
+              </div>
+              {daily.keywords?.length > 0 && (
+                <div className="flex flex-wrap gap-1.5 mt-3">
+                  {daily.keywords.map((k, i) => (
+                    <span key={i} className="px-2.5 py-0.5 rounded-full text-[10px]"
+                      style={{ background: "rgba(201,165,84,.10)", color: "#C9A554", border: "1px solid rgba(201,165,84,.25)" }}>
+                      #{k}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* 最近の鑑定 */}
+          {readings.length > 0 ? (
+            <div className="card overflow-hidden">
+              <div className="px-4 pt-3.5 pb-2 flex items-center gap-1.5">
+                <span className="text-gold text-xs">✦</span>
+                <span className="text-[12px] font-bold text-[#F0F0F8]">最近の鑑定</span>
+              </div>
+              {readings.slice(0, 3).map((r, i) => (
+                <Link key={r.reading_id} href={`/reading/${r.reading_id}`}
+                  className={`flex items-center gap-2.5 px-4 py-3 hover:bg-white/[0.02] transition-colors ${i > 0 ? "border-t border-white/[0.04]" : ""}`}>
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center text-gold shrink-0 text-[12px]"
+                    style={{ background: "rgba(201,165,84,.1)", border: "1px solid rgba(201,165,84,.25)" }}>
+                    ✦
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-[12px] text-[#F0F0F8]">{THEME_LABEL_HOME[r.theme] ?? r.theme}</div>
+                    <div className="text-[10px] text-white/40">{new Date(r.created_at).toLocaleDateString("ja-JP")}</div>
+                  </div>
+                  <span className="text-white/30 text-sm">›</span>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <div className="card p-5 text-center">
+              <div className="text-gold/50 text-xl mb-1">✦</div>
+              <p className="text-[12px] text-white/45">まだ星は記録されていません</p>
+            </div>
+          )}
+
           <Link href="/guide"
-            className="block text-center text-[12px] text-gold/60 hover:text-gold transition-colors py-1 -mt-1">
+            className="block text-center text-[12px] text-gold/60 hover:text-gold transition-colors py-1">
             ✦ 今日の星を学ぶ ›
           </Link>
 
@@ -150,13 +249,13 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
               className="card flex flex-col items-center justify-center px-4 py-5 text-center">
               <span className="text-2xl mb-2">♡</span>
               <div className="text-[13px] text-[#F0F0F8] font-bold mb-0.5">相性診断</div>
-              <div className="text-[10px] text-white/40">ふたりの星を読む</div>
+              <div className="text-[10px] text-white/40 leading-relaxed">ふたりの星が響き合う場所を読む</div>
             </Link>
             <Link href="/guide"
               className="card flex flex-col items-center justify-center px-4 py-5 text-center">
               <span className="text-2xl mb-2">✦</span>
               <div className="text-[13px] text-[#F0F0F8] font-bold mb-0.5">星ガイド</div>
-              <div className="text-[10px] text-white/40">天体・星座を学ぶ</div>
+              <div className="text-[10px] text-white/40 leading-relaxed">天体・星座・ハウスの意味を学ぶ</div>
             </Link>
           </div>
 
@@ -251,7 +350,7 @@ function PartnerPersonalityCard({ onLoadingChange }: { onLoadingChange?: (loadin
           <div className="text-[13px] text-[#F0F0F8] font-bold mb-0.5">
             <span className="mr-1">👤</span>相手の性格を分析する
           </div>
-          <div className="text-[11px] text-white/40">生年月日から性格を読み解く</div>
+          <div className="text-[11px] text-white/40">生年月日から本質と傾向を読み解く</div>
         </div>
         <span className={`text-white/30 transition-transform ${open ? "rotate-90" : ""}`}>›</span>
       </button>

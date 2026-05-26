@@ -122,6 +122,23 @@ export const profileApi = {
     api.delete(`/profiles/${profileId}`).then(r => r.data),
 }
 
+// ── Home (今日の星の流れ) ─────────────────────────────────────
+export interface DailyHome {
+  flow:        string
+  moon_phase:  string
+  theme:       string
+  lucky_color: string
+  lucky_sign:  string
+  keywords:    string[]
+}
+
+export const homeApi = {
+  daily: () =>
+    api.get<DailyHome>("/home/daily", { timeout: 60_000 })
+      .then((r: AxiosResponse<DailyHome>) => r.data),
+}
+
+
 // ── Readings ──────────────────────────────────────────────────
 export const readingApi = {
   create: (input: ReadingCreateInput) =>
