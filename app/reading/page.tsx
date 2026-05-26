@@ -1,6 +1,7 @@
 "use client"
 import { useState, useMemo, useEffect } from "react"
 import { useRouter } from "next/navigation"
+import { mutate as globalMutate } from "swr"
 import { Stars } from "@/components/ui/Stars"
 import AstrologyLoading from "@/components/ui/AstrologyLoading"
 import { BottomNav } from "@/components/layout/BottomNav"
@@ -163,6 +164,8 @@ export default function ReadingInputPage() {
               birth_time_unknown: useExisting ? otherNoTime : noTime,
               birth_place_name: effectivePlace,
             }))
+            // mypage 等の SWR キャッシュを更新して、次回訪問時に最新プロフィールが取れるようにする
+            globalMutate("profiles")
           } else {
             // 既存のプロフィールがある場合は、別の人を占う際に保存済みプロフィールを上書きしない
           }

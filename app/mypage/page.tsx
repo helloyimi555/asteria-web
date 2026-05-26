@@ -73,15 +73,16 @@ export default function MyPage() {
       const p = profiles[0] as any
       const existing = localStorage.getItem("asteria_profile")
       const parsed = existing ? JSON.parse(existing) : {}
+      // API レスポンスに null/undefined が混ざってもローカル既存値を保持する
       localStorage.setItem("asteria_profile", JSON.stringify({
         ...parsed,
-        id: p.id,
-        display_name: p.display_name,
-        birth_date: p.birth_date ?? parsed.birth_date,
-        birth_time: p.birth_time ?? parsed.birth_time,
-        birth_place_name: p.birth_place_name,
-        birth_timezone: p.birth_timezone,
-        mbti_type: p.mbti_type,
+        id:               p.id ?? parsed.id,
+        display_name:     p.display_name ?? parsed.display_name,
+        birth_date:       p.birth_date ?? parsed.birth_date,
+        birth_time:       p.birth_time ?? parsed.birth_time,
+        birth_place_name: p.birth_place_name ?? parsed.birth_place_name,
+        birth_timezone:   p.birth_timezone ?? parsed.birth_timezone,
+        mbti_type:        p.mbti_type ?? parsed.mbti_type,
       }))
     }
   }, [profiles])
@@ -359,7 +360,7 @@ export default function MyPage() {
           <button
             type="button"
             onClick={handleFetchPersonality}
-            disabled={!profile || loadingPersonality}
+            disabled={!profile?.id || loadingPersonality}
             className="btn-gold w-full py-3.5 text-[15px] mb-4"
           >
             {loadingPersonality ? "分析中..." : profile?.mbti_type ? "✦ 星とMBTIで読むあなたの性格分析" : "✦ あなたの星の性格分析"}
