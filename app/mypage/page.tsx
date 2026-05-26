@@ -307,9 +307,9 @@ export default function MyPage() {
                   <span className="text-[11px] w-16 shrink-0" style={{ color: ELEMENT_INFO[el].color }}>
                     {ELEMENT_INFO[el].ja}（{ELEMENT_INFO[el].desc.split("・")[0]}）
                   </span>
-                  <div className="flex-1 h-2 rounded-full bg-white/[0.05] overflow-hidden">
-                    <div className="h-full rounded-full transition-all"
-                      style={{ width: `${elementPct[el]}%`, background: `linear-gradient(90deg, ${ELEMENT_INFO[el].color}, #C9A554)` }} />
+                  <div className="flex-1 h-2 rounded-full bg-white/[.08] overflow-hidden">
+                    <div className="h-full rounded-full"
+                      style={{ width: `${elementPct[el]}%`, background: ELEMENT_INFO[el].color }} />
                   </div>
                   <span className="text-[10px] text-white/55 w-10 text-right tabular-nums">{elementPct[el]}%</span>
                 </div>

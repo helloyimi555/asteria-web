@@ -348,13 +348,9 @@ export default function CompatResultPage() {
                         <span className="text-[10px] w-4 shrink-0" style={{ color: ELEMENT_INFO[el].color }}>
                           {ELEMENT_INFO[el].ja}
                         </span>
-                        <div className="flex-1 h-3 rounded-full bg-white/[0.05] overflow-hidden">
+                        <div className="flex-1 h-2 rounded-full bg-white/[.08] overflow-hidden">
                           <div className="h-full rounded-full"
-                            style={{
-                              width: `${Math.max(pct[el], 4)}%`,
-                              minWidth: 2,
-                              background: `linear-gradient(90deg, ${ELEMENT_INFO[el].color}, #C9A554)`,
-                            }} />
+                            style={{ width: `${pct[el]}%`, background: ELEMENT_INFO[el].color }} />
                         </div>
                         <span className="text-[10px] text-white/55 w-8 text-right tabular-nums">{pct[el]}%</span>
                       </div>
