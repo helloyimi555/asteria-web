@@ -1,5 +1,6 @@
 "use client"
 import { useState, useEffect } from "react"
+import { mutate as globalMutate } from "swr"
 import { useAuth } from "@/lib/auth-context"
 import { useProfiles, useReadingHistory } from "@/hooks/useReading"
 import { profileApi } from "@/lib/api"
@@ -134,28 +135,49 @@ export default function MyPage() {
     }
 
     const formattedDate = `${editForm.year}-${String(editForm.month).padStart(2, "0")}-${String(editForm.day).padStart(2, "0")}`
-    const updatedProfile = {
-      ...profile,
-      birth_date: formattedDate,
-      birth_time: editForm.time,
-      birth_place_name: editForm.place,
-      mbti_type: editForm.mbti || null,
-    }
     try {
-      if (profile?.id) {
-        await profileApi.update(profile.id, {
+      let savedId: string | undefined = profile?.id
+
+      if (savedId) {
+        // 既存プロフィール更新
+        await profileApi.update(savedId, {
           birth_date:       formattedDate || undefined,
           birth_time:       editForm.time || undefined,
           birth_place_name: editForm.place || undefined,
           mbti_type:        editForm.mbti || null,
         })
-        setMbtiType(editForm.mbti || "")
+      } else {
+        // プロフィール未作成 → バックエンドに新規作成
+        const created = await profileApi.create({
+          display_name:       "メイン",
+          birth_date:         formattedDate,
+          birth_time:         editForm.time || undefined,
+          birth_time_unknown: !editForm.time,
+          birth_place_name:   editForm.place,
+          mbti_type:          editForm.mbti || null,
+        })
+        savedId = created.id
+      }
+
+      setMbtiType(editForm.mbti || "")
+
+      const updatedProfile = {
+        ...profile,
+        id:               savedId,
+        birth_date:       formattedDate,
+        birth_time:       editForm.time,
+        birth_place_name: editForm.place,
+        mbti_type:        editForm.mbti || null,
       }
       localStorage.setItem("asteria_profile", JSON.stringify(updatedProfile))
       setLocalProfile(updatedProfile)
       setIsEditingProfile(false)
+
+      // SWR の profiles キャッシュを再取得（他コンポーネントが最新を見られるように）
+      await globalMutate("profiles")
     } catch (error) {
       console.error("Failed to save profile", error)
+      alert("プロフィールの保存に失敗しました。出生地が見つからない可能性があります。")
     }
   }
 
@@ -164,7 +186,14 @@ export default function MyPage() {
   }
 
   const handleFetchPersonality = async () => {
-    if (!profile) return
+    if (!profile) {
+      alert("プロフィールを保存してから性格分析を行ってください")
+      return
+    }
+    if (!profile.id) {
+      alert("プロフィールがバックエンドに保存されていません。編集画面から保存し直してください。")
+      return
+    }
     if (!profile.birth_date) {
       alert("生年月日を登録してから性格分析を行ってください")
       return
@@ -173,8 +202,10 @@ export default function MyPage() {
     try {
       const data = await profileApi.getPersonality(profile.id, profile.mbti_type || undefined)
       setPersonalityResult(data)
-    } catch (error) {
-      console.error(error)
+    } catch (error: any) {
+      console.error("Personality fetch failed:", error)
+      const detail = error?.response?.data?.detail
+      alert(detail ?? "性格分析の取得に失敗しました。時間をおいて再度お試しください。")
     } finally {
       setLoadingPersonality(false)
     }
