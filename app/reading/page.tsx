@@ -83,7 +83,9 @@ export default function ReadingInputPage() {
 
   const sunSign = useMemo(() => getSunSign(activeDateStr), [activeDateStr])
   const activePlace = actualUseExisting ? place : otherPlace
-  const ok = !!activeDateStr && !!activePlace.trim()
+  const ok = actualUseExisting
+    ? (!!activeDateStr && !!activePlace.trim())
+    : (!!otherYear && !!otherMonth && !!otherDay && !!otherPlace.trim())
 
   const handleSubmit = async () => {
     if (!ok) return
