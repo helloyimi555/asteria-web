@@ -11,8 +11,8 @@ const PLANET_COLORS: Record<string, string> = {
   Neptune: "#9B59B6", Pluto: "#E74C3C",
 }
 
-// 円上の天体配置半径（コンテナ幅の % で表現。黄道輪リングの内側に配置）
-const PLANET_RADIUS_PCT = 30
+// 円上の天体配置半径（コンテナ幅の % で表現。黄道輪リングのすぐ内側に配置）
+const PLANET_RADIUS_PCT = 36
 
 interface PlanetPosition {
   planet: string
@@ -58,11 +58,11 @@ export default function NatalChart({ positions, meanings }: NatalChartProps) {
         <div className="pointer-events-none absolute inset-0"
           style={{ background:"radial-gradient(circle at center, rgba(201,165,84,.10), transparent 55%)" }} />
 
-        {/* 黄道輪（静止・天体アイコンのすぐ外側に来るよう縮小） */}
+        {/* 黄道輪（静止） */}
         <img
           src="/asteria/loading/zodiac-ring-transparent.png"
           alt=""
-          className="absolute inset-0 h-full w-full object-contain opacity-90 pointer-events-none select-none scale-75"
+          className="absolute inset-0 h-full w-full object-contain opacity-90 pointer-events-none select-none"
           draggable={false}
         />
 
