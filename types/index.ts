@@ -84,12 +84,21 @@ export interface ReadingCreateInput {
   period_end:   string
 }
 
+export interface ReadingSection {
+  tag?:     string  // "🌟 絶好調" | "✨ 好調" | "⚠️ 注意" | "😶 低調"
+  summary?: string  // 20字以内
+  content:  string
+}
+
+// 旧データは string のまま返ってくる可能性があるので union で受ける
+export type ReadingSectionData = string | ReadingSection
+
 export interface ReadingOutputs {
-  overall?:      string
-  work?:         string
-  love?:         string
-  health?:       string
-  caution?:      string
+  overall?:      ReadingSectionData
+  work?:         ReadingSectionData
+  love?:         ReadingSectionData
+  health?:       ReadingSectionData
+  caution?:      ReadingSectionData
   advice?:       string
   lucky_action?: string
   keywords?:     string[]

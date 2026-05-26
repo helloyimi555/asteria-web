@@ -1,5 +1,5 @@
 "use client"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { mutate as globalMutate } from "swr"
 import { useAuth } from "@/lib/auth-context"
 import { useProfiles, useReadingHistory } from "@/hooks/useReading"
@@ -29,6 +29,10 @@ export default function MyPage() {
   const [natalPositions, setNatalPositions] = useState<Array<{ planet: string; sign: string }>>([])
 
   const profile = localProfile ?? profiles?.[0]
+  // ハンドラ closure が古い profile を掴まないよう、最新値を ref に常に同期する
+  const profileRef = useRef(profile)
+  useEffect(() => { profileRef.current = profile }, [profile])
+
   const { data: history } = useReadingHistory(profile?.id)
   const readings = Array.isArray(history) ? history : history?.readings ?? []
 
@@ -187,21 +191,17 @@ export default function MyPage() {
   }
 
   const handleFetchPersonality = async () => {
-    if (!profile) {
-      alert("プロフィールを保存してから性格分析を行ってください")
-      return
-    }
-    if (!profile.id) {
-      alert("プロフィールがバックエンドに保存されていません。編集画面から保存し直してください。")
-      return
-    }
-    if (!profile.birth_date) {
-      alert("生年月日を登録してから性格分析を行ってください")
+    // ref から最新 profile を取得（closure 経由だと初回クリック時に
+    // 非同期で読み込まれた localStorage / SWR の値を取り逃す可能性がある）
+    const current = profileRef.current
+    if (!current?.id || !current?.birth_date) {
+      // disabled 条件で UI 上は防いでいるが、ハイドレーション直後の極短時間や
+      // キーボード操作等で抜けた場合のサイレントガード
       return
     }
     setLoadingPersonality(true)
     try {
-      const data = await profileApi.getPersonality(profile.id, profile.mbti_type || undefined)
+      const data = await profileApi.getPersonality(current.id, current.mbti_type || undefined)
       setPersonalityResult(data)
     } catch (error: any) {
       console.error("Personality fetch failed:", error)
@@ -360,7 +360,7 @@ export default function MyPage() {
           <button
             type="button"
             onClick={handleFetchPersonality}
-            disabled={!profile?.id || loadingPersonality}
+            disabled={!profile?.id || !profile?.birth_date || loadingPersonality}
             className="btn-gold w-full py-3.5 text-[15px] mb-4"
           >
             {loadingPersonality ? "分析中..." : profile?.mbti_type ? "✦ 星とMBTIで読むあなたの性格分析" : "✦ あなたの星の性格分析"}

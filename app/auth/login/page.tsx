@@ -70,6 +70,11 @@ export default function LoginPage() {
             新規登録
           </Link>
         </p>
+        <p className="text-center text-[11px] text-white/30 mt-3">
+          <Link href="/terms" className="hover:text-gold/80 underline underline-offset-2">
+            利用規約・プライバシーポリシー
+          </Link>
+        </p>
       </div>
     </div>
   )

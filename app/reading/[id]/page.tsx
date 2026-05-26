@@ -26,6 +26,46 @@ const THEME_LABEL: Record<string, string> = {
   relationship: "人間関係",
 }
 
+// セクションのタグ色（バックエンドが返す4種）
+const TAG_STYLES: Record<string, { bg: string; color: string }> = {
+  "🌟 絶好調": { bg: "#1a2e00", color: "#8bc34a" },
+  "✨ 好調":   { bg: "#002233", color: "#4fc3f7" },
+  "⚠️ 注意":  { bg: "#3d2200", color: "#f5a623" },
+  "😶 低調":  { bg: "#2a1a1a", color: "#ef9f9f" },
+}
+
+// 旧データ(string) と新データ({tag,summary,content}) の両対応ヘルパー
+function getContent(section: any): string {
+  if (!section) return ""
+  if (typeof section === "string") return section
+  return section.content ?? ""
+}
+function getTag(section: any): string | undefined {
+  if (!section || typeof section === "string") return undefined
+  return section.tag
+}
+function getSummary(section: any): string | undefined {
+  if (!section || typeof section === "string") return undefined
+  return section.summary
+}
+
+function TagPill({ tag }: { tag: string }) {
+  const style = TAG_STYLES[tag] ?? { bg: "rgba(255,255,255,.06)", color: "#C9A554" }
+  return (
+    <span style={{
+      background:   style.bg,
+      color:        style.color,
+      borderRadius: 20,
+      padding:      "3px 10px",
+      fontSize:     12,
+      whiteSpace:   "nowrap",
+      lineHeight:   1.2,
+    }}>
+      {tag}
+    </span>
+  )
+}
+
 export default function ReadingResultPage() {
   const { id }  = useParams<{ id: string }>()
   const router  = useRouter()
@@ -84,15 +124,24 @@ export default function ReadingResultPage() {
         )}
 
         {/* メインテーマ */}
-        {outputs?.overall && (
-          <div className="card mt-3 p-4" style={{ borderLeft:"3px solid rgba(201,165,84,.6)" }}>
-            <div className="flex items-center gap-1.5 mb-3">
-              <span className="text-gold text-sm">✦</span>
-              <span className="font-sans text-[13px] font-bold text-[#F0F0F8]">{themeLabel}</span>
+        {outputs?.overall && (() => {
+          const overallTag     = getTag(outputs.overall)
+          const overallSummary = getSummary(outputs.overall)
+          const overallContent = getContent(outputs.overall)
+          return (
+            <div className="card mt-3 p-4" style={{ borderLeft:"3px solid rgba(201,165,84,.6)" }}>
+              <div className="flex items-center gap-2 mb-3 flex-wrap">
+                <span className="text-gold text-sm">✦</span>
+                <span className="font-sans text-[13px] font-bold text-[#F0F0F8]">{themeLabel}</span>
+                {overallTag && <TagPill tag={overallTag} />}
+                {overallSummary && (
+                  <span className="text-[13px] text-white/55 leading-tight">{overallSummary}</span>
+                )}
+              </div>
+              <OverallText text={overallContent} isGuest={isGuest} />
             </div>
-            <OverallText text={outputs.overall} isGuest={isGuest} />
-          </div>
-        )}
+          )
+        })()}
 
         {/* 根拠 toggle */}
         {!isGuest && (
@@ -124,16 +173,25 @@ export default function ReadingResultPage() {
         {!isGuest && (
           <div className="grid grid-cols-2 gap-2.5 mt-2.5">
             {THEME_CARDS.map(({ key, label, icon, c, bg }) => {
-              const text = (outputs as any)?.[key]
-              if (!text) return null
+              const section = (outputs as any)?.[key]
+              const content = getContent(section)
+              if (!content) return null
+              const tag     = getTag(section)
+              const summary = getSummary(section)
               return (
                 <div key={key} className="card p-3.5">
-                  <div className="w-11 h-11 rounded-full flex items-center justify-center mb-2 text-lg"
-                    style={{ background:bg, border:`1px solid ${c}30`, color:c }}>
-                    {icon}
+                  <div className="flex items-start justify-between gap-2 mb-2">
+                    <div className="w-11 h-11 rounded-full flex items-center justify-center text-lg shrink-0"
+                      style={{ background:bg, border:`1px solid ${c}30`, color:c }}>
+                      {icon}
+                    </div>
+                    {tag && <TagPill tag={tag} />}
                   </div>
-                  <div className="text-[12px] font-bold mb-1.5" style={{ color:c }}>{label}</div>
-                  <p className="font-sans text-[11px] leading-[1.75] text-[#A0A0C0] font-light">{text}</p>
+                  <div className="text-[12px] font-bold mb-1" style={{ color:c }}>{label}</div>
+                  {summary && (
+                    <div className="text-[11px] text-white/55 leading-relaxed mb-1.5">{summary}</div>
+                  )}
+                  <p className="font-sans text-[11px] leading-[1.75] text-[#A0A0C0] font-light">{content}</p>
                 </div>
               )
             })}

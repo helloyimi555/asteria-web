@@ -96,8 +96,10 @@ export default function RegisterPage() {
           すでにアカウントをお持ちの方は{" "}
           <Link href="/auth/login" className="text-gold underline">ログイン</Link>
         </p>
-        <p className="text-center text-[10px] text-white/25 mt-2 leading-relaxed px-4">
-          登録することで利用規約とプライバシーポリシーに同意したものとみなされます。
+        <p className="text-center text-[11px] mt-2 leading-relaxed px-4">
+          <Link href="/terms" className="text-gold/75 hover:text-gold underline underline-offset-2">
+            利用規約・プライバシーポリシーに同意して登録する
+          </Link>
         </p>
       </div>
     </div>
