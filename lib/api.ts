@@ -169,7 +169,7 @@ export interface GuestPersonalityResult {
 }
 
 export const guestPersonalityApi = {
-  create: (input: {
+  analyze: (input: {
     birth_date:        string
     birth_place_name?: string
     mbti_type?:        string

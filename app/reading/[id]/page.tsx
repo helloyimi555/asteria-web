@@ -8,6 +8,7 @@ import { isLoggedIn } from "@/lib/api"
 import clsx from "clsx"
 import { useState, useEffect } from "react"
 import NatalChart from "@/components/ui/NatalChart"
+import { XShareButton } from "@/components/ui/XShareButton"
 
 const THEME_CARDS = [
   { key:"work",    label:"仕事運",  icon:"💼", c:"#70B4FF", bg:"rgba(112,180,255,.15)" },
@@ -186,12 +187,24 @@ export default function ReadingResultPage() {
         )}
 
         {/* Back */}
-        {!isGuest && (
-          <button onClick={() => router.push("/reading")}
-            className="btn-gold-outline w-full py-3.5 mt-4 flex items-center justify-center gap-2">
-            <span>←</span><span>別の鑑定を行う</span>
-          </button>
-        )}
+        {!isGuest && (() => {
+          const sunSignJa = reading.natal_positions?.find((p: any) => p.planet === "Sun")?.sign_ja ?? ""
+          const signLabel = sunSignJa.replace(/座$/, "")
+          const shareText = signLabel
+            ? `✦ ${signLabel}座の今週の運勢を占いました。#ASTERIA #占星術`
+            : `✦ 今週の運勢を占いました。#ASTERIA #占星術`
+          return (
+            <>
+              <div className="mt-4">
+                <XShareButton text={shareText} />
+              </div>
+              <button onClick={() => router.push("/reading")}
+                className="btn-gold-outline w-full py-3.5 mt-3 flex items-center justify-center gap-2">
+                <span>←</span><span>別の鑑定を行う</span>
+              </button>
+            </>
+          )
+        })()}
       </div>
 
       <div className="md:hidden"><BottomNav /></div>

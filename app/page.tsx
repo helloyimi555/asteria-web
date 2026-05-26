@@ -207,7 +207,7 @@ function PartnerPersonalityCard() {
     setLoading(true)
     setError(null)
     try {
-      const data = await guestPersonalityApi.create({
+      const data = await guestPersonalityApi.analyze({
         birth_date:       birthDate,
         birth_place_name: birthPlace || undefined,
         mbti_type:        mbti || undefined,

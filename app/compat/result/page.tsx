@@ -5,6 +5,7 @@ import { Stars } from "@/components/ui/Stars"
 import NatalChart from "@/components/ui/NatalChart"
 import { BottomNav } from "@/components/layout/BottomNav"
 import { TONE_COLOR } from "@/lib/zodiac"
+import { XShareButton } from "@/components/ui/XShareButton"
 import clsx from "clsx"
 
 const EVAL: Record<string, { c:string; bg:string; bc:string }> = {
@@ -357,8 +358,12 @@ export default function CompatResultPage() {
           </div>
         )}
 
+        <div className="mt-4">
+          <XShareButton text={`✦ ${my_sign}×${their_sign}の相性を診断しました。#ASTERIA #相性診断`} />
+        </div>
+
         <button onClick={() => router.push("/compat")}
-          className="btn-gold-outline w-full py-3.5 mt-4 rounded-full flex items-center justify-center gap-2">
+          className="btn-gold-outline w-full py-3.5 mt-3 rounded-full flex items-center justify-center gap-2">
           <span>←</span><span>別の相性を診断する</span>
         </button>
       </div>

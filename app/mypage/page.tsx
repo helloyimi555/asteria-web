@@ -6,6 +6,7 @@ import { profileApi } from "@/lib/api"
 import { Stars } from "@/components/ui/Stars"
 import AstrologyLoading from "@/components/ui/AstrologyLoading"
 import { BottomNav } from "@/components/layout/BottomNav"
+import { XShareButton } from "@/components/ui/XShareButton"
 import Link from "next/link"
 
 const YEARS = Array.from({ length: 75 }, (_, i) => 2008 - i)
@@ -401,6 +402,13 @@ export default function MyPage() {
                   {personalityResult.relationships}
                 </div>
               </div>
+              {personalityResult.type_name && (
+                <div className="pt-2">
+                  <XShareButton
+                    text={`✦ 私は「${personalityResult.type_name}」タイプ。星とMBTIで性格分析しました。#ASTERIA #占星術`}
+                  />
+                </div>
+              )}
             </div>
           )}
         </div>
