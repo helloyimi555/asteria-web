@@ -1,61 +1,49 @@
 "use client"
 import { useEffect, useState } from "react"
 import Link from "next/link"
+import { useSearchParams } from "next/navigation"
 import { Stars } from "@/components/ui/Stars"
-import { getSupabase } from "@/lib/supabase"
 import { authApi } from "@/lib/api"
 
 type Status = "verifying" | "success" | "error"
 
 export default function VerifyEmailPage() {
+  const params = useSearchParams()
   const [status,  setStatus]  = useState<Status>("verifying")
   const [email,   setEmail]   = useState<string | null>(null)
   const [message, setMessage] = useState<string>("メール確認を完了しています…")
 
   useEffect(() => {
-    const run = async () => {
-      // 1. URL hash から Supabase の access_token を取り出す
-      //    形式: #access_token=xxx&refresh_token=yyy&type=signup&...
-      let accessToken: string | null = null
+    const token = params.get("token")
+    if (!token) {
+      setStatus("error")
+      setMessage("確認トークンが見つかりませんでした。メールのリンクから開きなおしてください。")
+      return
+    }
 
-      const hash = typeof window !== "undefined" ? window.location.hash.slice(1) : ""
-      if (hash) {
-        const params = new URLSearchParams(hash)
-        accessToken = params.get("access_token")
-      }
-
-      // 2. fallback: Supabase JS が自動でセッションを検出している場合はそこから取得
-      if (!accessToken) {
-        const supa = getSupabase()
-        if (supa) {
-          const { data } = await supa.auth.getSession()
-          accessToken = data.session?.access_token ?? null
-        }
-      }
-
-      if (!accessToken) {
-        setStatus("error")
-        setMessage("確認トークンが見つかりませんでした。メールのリンクから開きなおしてください。")
-        return
-      }
-
-      // 3. バックエンドに送信して is_email_verified を立てる
-      try {
-        const res = await authApi.verifyEmail(accessToken)
+    let cancelled = false
+    authApi.verifyEmail(token)
+      .then(res => {
+        if (cancelled) return
         setEmail(res.email)
         setStatus("success")
         setMessage("メール認証が完了しました")
-        // URL hash をクリア（トークン漏洩防止）
-        if (typeof window !== "undefined" && window.history.replaceState) {
-          window.history.replaceState(null, "", window.location.pathname)
-        }
-      } catch (e: any) {
+      })
+      .catch((e: any) => {
+        if (cancelled) return
         setStatus("error")
-        setMessage(e?.response?.data?.detail ?? "メール認証に失敗しました。お手数ですが再度お試しください。")
-      }
-    }
-    run()
-  }, [])
+        const detail = e?.response?.data?.detail
+        const code   = e?.response?.status
+        if (code === 410) {
+          setMessage("確認リンクの有効期限が切れています。お手数ですが再度登録してください。")
+        } else if (code === 404) {
+          setMessage("このリンクは既に使用済みか無効です。")
+        } else {
+          setMessage(detail ?? "メール認証に失敗しました。お手数ですが再度お試しください。")
+        }
+      })
+    return () => { cancelled = true }
+  }, [params])
 
   return (
     <div className="relative min-h-screen flex flex-col items-center justify-center px-5">

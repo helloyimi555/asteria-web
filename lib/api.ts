@@ -71,8 +71,8 @@ export const authApi = {
   login: (email: string, password: string) =>
     api.post<AuthTokens>("/auth/login", { email, password }).then(r => r.data),
 
-  verifyEmail: (access_token: string) =>
-    api.post<{ verified: boolean; email: string }>("/auth/verify-email", { access_token })
+  verifyEmail: (token: string) =>
+    api.post<{ verified: boolean; email: string }>("/auth/verify-email", { token })
       .then((r: AxiosResponse<{ verified: boolean; email: string }>) => r.data),
 
   deleteAccount: () =>
