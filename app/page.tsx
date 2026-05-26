@@ -4,6 +4,7 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Stars } from "@/components/ui/Stars"
 import { BottomNav } from "@/components/layout/BottomNav"
+import AstrologyLoading from "@/components/ui/AstrologyLoading"
 import { isLoggedIn, clearTokens, guestPersonalityApi, type GuestPersonalityResult } from "@/lib/api"
 
 const FEATURES = [

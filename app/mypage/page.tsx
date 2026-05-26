@@ -405,7 +405,7 @@ export default function MyPage() {
               {personalityResult.type_name && (
                 <div className="pt-2">
                   <XShareButton
-                    text={`✦ 私は「${personalityResult.type_name}」タイプ。星とMBTIで性格分析しました。#ASTERIA #占星術`}
+                    text={`✦ 私は「${personalityResult.type_name}」タイプ。#ASTERIA #占星術`}
                   />
                 </div>
               )}

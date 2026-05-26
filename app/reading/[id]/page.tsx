@@ -189,10 +189,10 @@ export default function ReadingResultPage() {
         {/* Back */}
         {!isGuest && (() => {
           const sunSignJa = reading.natal_positions?.find((p: any) => p.planet === "Sun")?.sign_ja ?? ""
-          const signLabel = sunSignJa.replace(/座$/, "")
-          const shareText = signLabel
-            ? `✦ ${signLabel}座の今週の運勢を占いました。#ASTERIA #占星術`
-            : `✦ 今週の運勢を占いました。#ASTERIA #占星術`
+          const sunSign   = sunSignJa.replace(/座$/, "")
+          const shareText = sunSign
+            ? `✦ ${sunSign}座の運勢を占いました。#ASTERIA #占星術`
+            : `✦ 運勢を占いました。#ASTERIA #占星術`
           return (
             <>
               <div className="mt-4">
