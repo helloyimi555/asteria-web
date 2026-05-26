@@ -133,6 +133,8 @@ export default function ReadingInputPage() {
               birth_time_unknown: useExisting ? otherNoTime : noTime,
               birth_place_name: activePlace,
             }))
+          } else {
+            // 既存のプロフィールがある場合は、別の人を占う際に保存済みプロフィールを上書きしない
           }
           const result = await readingApi.pollUntilDone(
             (await readingApi.create({
@@ -140,7 +142,7 @@ export default function ReadingInputPage() {
               theme:        theme as any,
               period_start: ps,
               period_end:   pe,
-              mbti_type:    (useExisting ? otherMbti : mbti) || undefined,
+              mbti_type:    (useExisting ? mbti : otherMbti) || undefined,
             })).reading_id
           )
           router.push(`/reading/${result.reading_id}`)

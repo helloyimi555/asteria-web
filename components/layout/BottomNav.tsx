@@ -6,7 +6,7 @@ import clsx from "clsx"
 const NAV_ITEMS = [
   { href:"/",        label:"ホーム",   icon:"⌂" },
   { href:"/reading", label:"鑑定する", icon:"⊕" },
-  { href:"/reading/result", label:"結果を見る", icon:"✦" },
+  { href:"/reading/results", label:"結果を見る", icon:"✦" },
   { href:"/compat",  label:"相性診断", icon:"♡" },
   { href:"/mypage",  label:"マイページ",icon:"◯" },
 ] as const
