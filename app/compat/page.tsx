@@ -51,7 +51,7 @@ function PersonPanel({ title, form, setForm, sign, mbti, setMbti }) {
         <input type="time" value={form.time} onChange={e=>update("time",e.target.value)} className="input-field" />
       </div>
       <div>
-        <label className="text-[11px] text-white/50 tracking-widest uppercase block mb-2">出生地 *</label>
+        <label className="text-[11px] text-white/50 tracking-widest uppercase block mb-2">出生地（任意）</label>
         <input type="text" value={form.place} placeholder={title.includes("あなた")?"東京都":"大阪府"}
           onChange={e=>update("place",e.target.value)} className="input-field" />
       </div>
@@ -122,7 +122,7 @@ export default function CompatInputPage() {
   const theirDate = useMemo(() => toDate(theirForm), [theirForm])
   const mySign    = useMemo(() => getSunSign(myDate),    [myDate])
   const theirSign = useMemo(() => getSunSign(theirDate), [theirDate])
-  const ok = !!myDate && !!myForm.place.trim() && !!theirDate && !!theirForm.place.trim()
+  const ok = !!myDate && !!theirDate
 
 const handleSubmit = async () => {
     if (!ok) return
@@ -130,11 +130,11 @@ const handleSubmit = async () => {
     try {
       const result = await compatApi.create({
         my_birth_date:         myDate,
-        my_birth_place_name:   myForm.place,
+        my_birth_place_name:   myForm.place || "東京都",
         my_birth_time:         myForm.time || undefined,
         my_mbti_type:          myMbti || undefined,
         their_birth_date:      theirDate,
-        their_birth_place_name: theirForm.place,
+        their_birth_place_name: theirForm.place || "東京都",
         their_birth_time:      theirForm.time || undefined,
         their_mbti_type:       theirMbti || undefined,
         relationship_type:     relType,
