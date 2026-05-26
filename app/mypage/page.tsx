@@ -86,9 +86,13 @@ export default function MyPage() {
   }
 
   const handleSaveProfile = async () => {
-    const formattedDate = editForm.year && editForm.month && editForm.day
-      ? `${editForm.year}-${String(editForm.month).padStart(2, "0")}-${String(editForm.day).padStart(2, "0")}`
-      : ""
+    // Validation: require birth date and place
+    if (!(editForm.year && editForm.month && editForm.day && editForm.place && editForm.place.trim())) {
+      alert("生年月日と出生地を入力してください")
+      return
+    }
+
+    const formattedDate = `${editForm.year}-${String(editForm.month).padStart(2, "0")}-${String(editForm.day).padStart(2, "0")}`
     const updatedProfile = {
       ...profile,
       birth_date: formattedDate,
