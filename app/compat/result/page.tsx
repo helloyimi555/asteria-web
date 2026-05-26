@@ -349,7 +349,7 @@ export default function CompatResultPage() {
                           {ELEMENT_INFO[el].ja}
                         </span>
                         <div className="flex-1 h-2 rounded-full bg-white/[.08] overflow-hidden">
-                          <div className="h-full rounded-full"
+                          <div className="h-full rounded-full transition-all"
                             style={{ width: `${pct[el]}%`, background: ELEMENT_INFO[el].color }} />
                         </div>
                         <span className="text-[10px] text-white/55 w-8 text-right tabular-nums">{pct[el]}%</span>
