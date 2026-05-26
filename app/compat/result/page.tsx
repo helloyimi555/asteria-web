@@ -342,17 +342,19 @@ export default function CompatResultPage() {
                       {getElementTitle(balance)}
                     </span>
                   </div>
-                  <div className="space-y-1.5">
+                  <div className="grid gap-3">
                     {ELEMENTS.map(el => (
-                      <div key={el} className="flex items-center gap-2">
-                        <span className="text-[10px] w-4 shrink-0" style={{ color: ELEMENT_INFO[el].color }}>
-                          {ELEMENT_INFO[el].ja}
-                        </span>
-                        <div className="flex-1 h-2 rounded-full bg-white/[.08] overflow-hidden">
+                      <div key={el}>
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-[12px]" style={{ color: ELEMENT_INFO[el].color }}>
+                            {ELEMENT_INFO[el].ja}
+                          </span>
+                          <span className="text-[12px] text-white/60 tabular-nums">{pct[el]}%</span>
+                        </div>
+                        <div className="h-2 rounded-full bg-white/[.08] overflow-hidden">
                           <div className="h-full rounded-full transition-all"
                             style={{ width: `${pct[el]}%`, background: ELEMENT_INFO[el].color }} />
                         </div>
-                        <span className="text-[10px] text-white/55 w-8 text-right tabular-nums">{pct[el]}%</span>
                       </div>
                     ))}
                   </div>
