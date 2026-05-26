@@ -284,7 +284,7 @@ export default function ReadingInputPage() {
 
               <div className="mb-4">
                 <label className="text-[11px] text-white/50 tracking-widest uppercase block mb-2">
-                  出生地 *
+                  出生地（任意）
                 </label>
                 <input type="text" value={otherPlace} placeholder="例：神奈川県横浜市"
                   onChange={e => setOtherPlace(e.target.value)} className="input-field" />

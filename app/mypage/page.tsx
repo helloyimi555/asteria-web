@@ -263,50 +263,7 @@ export default function MyPage() {
           <span className="text-white/30 text-sm">✦✦</span>
         </div>
 
-        {/* History */}
-        <div className="flex items-center gap-2.5 mb-3.5">
-          <span className="text-gold text-sm">✦</span>
-          <h2 className="font-serif text-[15px] text-[#F0F0F8]">鑑定履歴</h2>
-          <div className="flex-1 h-px bg-gradient-to-r from-gold/30 to-transparent" />
-          <span className="text-gold text-sm">✦</span>
-        </div>
-
-        {readings.length === 0 ? (
-          <div className="card p-10 text-center mb-4">
-            <div className="text-5xl text-gold/60 mb-4">✦</div>
-            <div className="font-serif text-[15px] text-[#F0F0F8] mb-2">
-              まだ鑑定履歴がありません
-            </div>
-            <div className="text-[12px] text-white/50">最初の鑑定を始めてみましょう</div>
-          </div>
-        ) : (
-          <div className="flex flex-col gap-2 mb-4">
-            {readings.map(r => (
-              <Link key={r.reading_id} href={`/reading/${r.reading_id}`}
-                className="card p-3.5 flex items-center gap-3 hover:border-gold/20 transition-colors">
-                <div className="w-11 h-11 rounded-full flex-shrink-0 flex items-center justify-center
-                                text-gold text-lg"
-                  style={{ background:"rgba(201,165,84,.12)", border:"1px solid rgba(201,165,84,.3)" }}>
-                  ✦
-                </div>
-                <div className="flex-1">
-                  <div className="text-[14px] text-[#F0F0F8] font-medium mb-0.5">
-                    {r.theme} / 鑑定
-                  </div>
-                  <div className="text-[11px] text-white/40 flex items-center gap-1">
-                    <span>📅</span>
-                    <span>{new Date(r.created_at).toLocaleDateString("ja-JP")}</span>
-                  </div>
-                </div>
-                <div className="flex items-center gap-1 text-gold">
-                  <span className="text-[12px]">結果を見る</span>
-                  <span className="text-sm">→</span>
-                </div>
-              </Link>
-            ))}
-          </div>
-        )}
-
+        {/* Personality */}
         <div className="flex items-center gap-2.5 mb-3.5">
           <span className="text-gold text-sm">✦</span>
           <h2 className="font-serif text-[15px] text-[#F0F0F8]">星の性格分析</h2>
@@ -433,6 +390,50 @@ export default function MyPage() {
             </div>
           )}
         </div>
+
+        {/* History */}
+        <div className="flex items-center gap-2.5 mb-3.5">
+          <span className="text-gold text-sm">✦</span>
+          <h2 className="font-serif text-[15px] text-[#F0F0F8]">鑑定履歴</h2>
+          <div className="flex-1 h-px bg-gradient-to-r from-gold/30 to-transparent" />
+          <span className="text-gold text-sm">✦</span>
+        </div>
+
+        {readings.length === 0 ? (
+          <div className="card p-10 text-center mb-4">
+            <div className="text-5xl text-gold/60 mb-4">✦</div>
+            <div className="font-serif text-[15px] text-[#F0F0F8] mb-2">
+              まだ鑑定履歴がありません
+            </div>
+            <div className="text-[12px] text-white/50">最初の鑑定を始めてみましょう</div>
+          </div>
+        ) : (
+          <div className="flex flex-col gap-2 mb-4">
+            {readings.map(r => (
+              <Link key={r.reading_id} href={`/reading/${r.reading_id}`}
+                className="card p-3.5 flex items-center gap-3 hover:border-gold/20 transition-colors">
+                <div className="w-11 h-11 rounded-full flex-shrink-0 flex items-center justify-center
+                                text-gold text-lg"
+                  style={{ background:"rgba(201,165,84,.12)", border:"1px solid rgba(201,165,84,.3)" }}>
+                  ✦
+                </div>
+                <div className="flex-1">
+                  <div className="text-[14px] text-[#F0F0F8] font-medium mb-0.5">
+                    {r.theme} / 鑑定
+                  </div>
+                  <div className="text-[11px] text-white/40 flex items-center gap-1">
+                    <span>📅</span>
+                    <span>{new Date(r.created_at).toLocaleDateString("ja-JP")}</span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-1 text-gold">
+                  <span className="text-[12px]">結果を見る</span>
+                  <span className="text-sm">→</span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        )}
 
         {/* CTA */}
         <Link href="/reading"
