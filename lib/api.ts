@@ -163,7 +163,7 @@ export interface GuestPersonalityResult {
     sign_ja:     string
     degree:      number
     sign_degree: number
-    house:       number
+    house:       number | null
     retrograde:  boolean
   }>
 }

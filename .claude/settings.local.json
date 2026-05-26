@@ -3,7 +3,9 @@
     "allow": [
       "Bash(npx tsc *)",
       "Bash(./node_modules/.bin/tsc --noEmit -p .)",
-      "PowerShell(npx --no-install tsc --noEmit -p . 2>&1)"
+      "PowerShell(npx --no-install tsc --noEmit -p . 2>&1)",
+      "PowerShell(try { \\(Invoke-WebRequest -Uri \"http://localhost:8000/health\" -TimeoutSec 3 -UseBasicParsing\\).Content } catch { \"NOT_RUNNING: $\\($_.Exception.Message\\)\" })",
+      "Read(//c/Users/hello/Documents/�肢�A�v��/�萯�p_Asteria/asteria-api/**)"
     ]
   }
 }

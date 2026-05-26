@@ -1,4 +1,4 @@
-"use client"
+﻿"use client"
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
@@ -174,9 +174,26 @@ function PartnerPersonalityCard() {
   const [error, setError]           = useState<string | null>(null)
   const [result, setResult]         = useState<GuestPersonalityResult | null>(null)
 
+  const handleDateChange = (v: string) => {
+    setBirthDate(v)
+    setError(null)
+  }
+
+  const reset = () => {
+    setResult(null)
+    setBirthDate("")
+    setBirthPlace("")
+    setMbti("")
+    setError(null)
+  }
+
   const submit = async () => {
     if (!birthDate) {
       setError("生年月日を入力してください")
+      return
+    }
+    if (new Date(birthDate) > new Date()) {
+      setError("未来の日付は入力できません")
       return
     }
     setLoading(true)
@@ -211,59 +228,17 @@ function PartnerPersonalityCard() {
       </button>
 
       {open && (
-        <div className="px-5 pb-5 space-y-3 border-t border-white/[0.06]">
-          <div className="pt-4">
-            <label className="block text-[11px] text-white/50 mb-1.5">生年月日 <span className="text-gold">*</span></label>
-            <input
-              type="date"
-              value={birthDate}
-              onChange={e => setBirthDate(e.target.value)}
-              className="w-full bg-white/[0.04] border border-white/10 rounded-md px-3 py-2 text-[13px] text-white focus:outline-none focus:border-gold/50" />
-          </div>
-          <div>
-            <label className="block text-[11px] text-white/50 mb-1.5">出生地（任意）</label>
-            <input
-              type="text"
-              value={birthPlace}
-              onChange={e => setBirthPlace(e.target.value)}
-              placeholder="例：東京都"
-              className="w-full bg-white/[0.04] border border-white/10 rounded-md px-3 py-2 text-[13px] text-white placeholder-white/25 focus:outline-none focus:border-gold/50" />
-          </div>
-          <div>
-            <label className="block text-[11px] text-white/50 mb-1.5">MBTI（任意）</label>
-            <input
-              type="text"
-              value={mbti}
-              onChange={e => setMbti(e.target.value.toUpperCase())}
-              placeholder="例：INFJ"
-              maxLength={4}
-              className="w-full bg-white/[0.04] border border-white/10 rounded-md px-3 py-2 text-[13px] text-white placeholder-white/25 focus:outline-none focus:border-gold/50" />
-          </div>
-
-          {error && (
-            <div className="text-[12px] text-red-300/90">{error}</div>
-          )}
-
-          <button
-            type="button"
-            onClick={submit}
-            disabled={loading}
-            className="btn-gold w-full py-3 text-[14px] disabled:opacity-50">
-            {loading ? "分析中…" : "✦ 性格を分析する"}
-          </button>
-
-          {result && (
-            <div className="mt-4 space-y-3 pt-3 border-t border-white/[0.06]">
+        <div className="px-5 pb-5 border-t border-white/[0.06]">
+          {result ? (
+            <div className="pt-4 space-y-3">
               <div className="text-center">
                 <div className="text-[11px] text-gold/70 mb-1">タイプ</div>
                 <div className="font-serif text-[16px] text-[#F0F0F8]">{result.type_name}</div>
               </div>
-
               <div>
                 <div className="text-[11px] text-gold/70 mb-1">性格</div>
                 <p className="text-[12px] text-white/75 leading-relaxed whitespace-pre-line">{result.personality}</p>
               </div>
-
               {result.strengths?.length > 0 && (
                 <div>
                   <div className="text-[11px] text-gold/70 mb-1">強み</div>
@@ -276,7 +251,6 @@ function PartnerPersonalityCard() {
                   </ul>
                 </div>
               )}
-
               {result.challenges?.length > 0 && (
                 <div>
                   <div className="text-[11px] text-gold/70 mb-1">課題</div>
@@ -289,6 +263,59 @@ function PartnerPersonalityCard() {
                   </ul>
                 </div>
               )}
+              <button
+                type="button"
+                onClick={reset}
+                className="btn-gold-outline w-full py-2.5 text-[13px] mt-1">
+                別の人を分析する
+              </button>
+            </div>
+          ) : (
+            <div className="pt-4 space-y-3">
+              <div>
+                <label className="block text-[11px] text-white/50 mb-1.5">
+                  生年月日 <span className="text-gold">*</span>
+                </label>
+                <input
+                  type="date"
+                  value={birthDate}
+                  max={new Date().toISOString().split("T")[0]}
+                  onChange={e => handleDateChange(e.target.value)}
+                  className="w-full bg-white/[0.04] border border-white/10 rounded-md px-3 py-2 text-[13px] text-white focus:outline-none focus:border-gold/50" />
+              </div>
+              <div>
+                <label className="block text-[11px] text-white/50 mb-1.5">出生地（任意）</label>
+                <input
+                  type="text"
+                  value={birthPlace}
+                  onChange={e => setBirthPlace(e.target.value)}
+                  placeholder="例：東京都"
+                  className="w-full bg-white/[0.04] border border-white/10 rounded-md px-3 py-2 text-[13px] text-white placeholder-white/25 focus:outline-none focus:border-gold/50" />
+              </div>
+              <div>
+                <label className="block text-[11px] text-white/50 mb-1.5">MBTI（任意）</label>
+                <select
+                  value={mbti}
+                  onChange={e => setMbti(e.target.value)}
+                  style={{ backgroundColor: "#0d0d1a" }}
+                  className="w-full border border-white/10 rounded-md px-3 py-2 text-[13px] text-white focus:outline-none focus:border-gold/50">
+                  <option value="">選択しない</option>
+                  {["INTJ","INTP","ENTJ","ENTP","INFJ","INFP","ENFJ","ENFP",
+                    "ISTJ","ISFJ","ESTJ","ESFJ","ISTP","ISFP","ESTP","ESFP"].map(t => (
+                    <option key={t} value={t}>{t}</option>
+                  ))}
+                </select>
+              </div>
+              {error && (
+                <div className="text-[12px] text-red-300/90">{error}</div>
+              )}
+              <button
+                type="button"
+                onClick={submit}
+                disabled={loading}
+                className="btn-gold w-full py-3 text-[14px] disabled:opacity-50">
+                {loading ? "分析中…" : "✦ 性格を分析する"}
+              </button>
             </div>
           )}
         </div>
