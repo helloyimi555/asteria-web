@@ -15,7 +15,6 @@ const DAYS = Array.from({ length: 31 }, (_, i) => i + 1)
 export default function MyPage() {
   const { isAuthenticated, logout } = useAuth()
   const { data: profiles } = useProfiles()
-  const { data: history  } = useReadingHistory()
   const [personalityResult, setPersonalityResult] = useState<any | null>(null)
   const [loadingPersonality, setLoadingPersonality] = useState(false)
   const [mbtiType, setMbtiType] = useState<string>("")
@@ -32,7 +31,8 @@ export default function MyPage() {
   const [editForm, setEditForm] = useState({ year: "", month: "", day: "", time: "", place: "", mbti: "" })
 
   const profile = localProfile ?? profiles?.[0]
-  const readings = history?.readings ?? []
+  const { data: history } = useReadingHistory(profile?.id)
+  const readings = Array.isArray(history) ? history : history?.readings ?? []
 
   useEffect(() => {
     if (!profile) return
