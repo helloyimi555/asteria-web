@@ -308,7 +308,7 @@ export default function MyPage() {
                     {ELEMENT_INFO[el].ja}（{ELEMENT_INFO[el].desc.split("・")[0]}）
                   </span>
                   <div className="flex-1 h-2 rounded-full bg-white/[.08] overflow-hidden">
-                    <div className="h-full rounded-full"
+                    <div className="h-full rounded-full transition-all"
                       style={{ width: `${elementPct[el]}%`, background: ELEMENT_INFO[el].color }} />
                   </div>
                   <span className="text-[10px] text-white/55 w-10 text-right tabular-nums">{elementPct[el]}%</span>
