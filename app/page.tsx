@@ -109,17 +109,16 @@ export default function HomePage() {
 function LoggedInHome({ onLogout }: { onLogout: () => void }) {
   const [partnerLoading, setPartnerLoading] = useState(false)
 
-  if (partnerLoading) {
-    return (
-      <AstrologyLoading
-        message="星の配置を読み解いています..."
-        subMessage="あなたの本質的な才能と課題を紡いでいます"
-      />
-    )
-  }
-
   return (
     <div className="relative min-h-screen pb-24">
+      {partnerLoading && (
+        <div className="fixed inset-0 z-50">
+          <AstrologyLoading
+            message="星の配置を読み解いています..."
+            subMessage="あなたの本質的な才能と課題を紡いでいます"
+          />
+        </div>
+      )}
       <Stars />
       <div className="relative z-10 max-w-app mx-auto px-5">
         <div className="pt-9 pb-5 flex justify-between items-center">
