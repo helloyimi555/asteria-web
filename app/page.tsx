@@ -154,7 +154,7 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
         <div className="text-center mb-8">
           <ZodiacWheelSVG />
           <h1 className="font-serif text-[22px] text-white mb-2">おかえりなさい</h1>
-          <p className="text-[13px] text-white/50">今日の天体はあなたに何を語りますか</p>
+          <p className="text-[13px] text-white/50">星の暦から、今日を静かに読み解く</p>
         </div>
 
 <div className="space-y-3">
@@ -163,32 +163,37 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
             ✦ 新しい鑑定を始める
           </Link>
 
-          {/* 今日の星の流れ */}
+          {/* 本日の星模様 */}
           {daily && (
-            <div className="card p-4" style={{ borderLeft: "3px solid rgba(201,165,84,.6)" }}>
-              <div className="flex items-center gap-1.5 mb-2">
-                <span className="text-gold text-xs">✦</span>
-                <span className="text-[12px] font-bold text-[#F0F0F8]">今日の星の流れ</span>
+            <div>
+              <div className="card p-4" style={{ borderLeft: "3px solid rgba(201,165,84,.6)" }}>
+                <div className="flex items-center gap-1.5 mb-2">
+                  <span className="text-gold text-xs">✦</span>
+                  <span className="text-[12px] font-bold text-[#F0F0F8]">本日の星模様</span>
+                </div>
+                <p className="font-serif text-[13px] leading-7 text-[#C0C0D8] font-light">
+                  {daily.flow}
+                </p>
               </div>
-              <p className="font-serif text-[13px] leading-7 text-[#C0C0D8] font-light">
-                {daily.flow}
+              <p className="text-center text-[10px] text-white/30 mt-1.5 tracking-wider">
+                全ユーザー共通の星空情報
               </p>
             </div>
           )}
 
-          {/* 今日の星メモ */}
+          {/* 本日の天体観測 */}
           {daily && (
             <div className="card p-4">
               <div className="flex items-center gap-1.5 mb-3">
                 <span className="text-gold text-xs">✦</span>
-                <span className="text-[12px] font-bold text-[#F0F0F8]">今日の星メモ</span>
+                <span className="text-[12px] font-bold text-[#F0F0F8]">本日の天体観測</span>
               </div>
               <div className="grid grid-cols-2 gap-2 text-[11px]">
                 {[
-                  { label: "月相",         value: daily.moon_phase,  color: "#F0F0F8" },
-                  { label: "テーマ",       value: daily.theme,        color: "#C9A554" },
-                  { label: "ラッキーカラー", value: daily.lucky_color,  color: "#F0F0F8" },
-                  { label: "ラッキー星座",   value: daily.lucky_sign,   color: "#F0F0F8" },
+                  { label: "月相",       value: daily.moon_phase, color: "#F0F0F8" },
+                  { label: "主なテーマ",  value: daily.main_theme, color: "#C9A554" },
+                  { label: "空のムード",  value: daily.mood,        color: "#F0F0F8" },
+                  { label: "月のサイン",  value: daily.moon_sign,   color: "#F0F0F8" },
                 ].map(({ label, value, color }) => (
                   <div key={label} className="px-2.5 py-2 rounded-md"
                     style={{ background: "rgba(255,255,255,.03)", border: "1px solid rgba(255,255,255,.06)" }}>
@@ -197,6 +202,13 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
                   </div>
                 ))}
               </div>
+              {daily.observation_point && (
+                <div className="mt-2 px-2.5 py-2 rounded-md"
+                  style={{ background: "rgba(255,255,255,.03)", border: "1px solid rgba(255,255,255,.06)" }}>
+                  <div className="text-[11px] text-white/45 mb-0.5 tracking-wider">観測ポイント</div>
+                  <div className="text-[12px] text-[#F0F0F8] leading-relaxed">{daily.observation_point}</div>
+                </div>
+              )}
               {daily.keywords?.length > 0 && (
                 <div className="flex flex-wrap gap-1.5 mt-3">
                   {daily.keywords.map((k, i) => (
