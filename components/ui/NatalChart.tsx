@@ -58,11 +58,11 @@ export default function NatalChart({ positions, meanings }: NatalChartProps) {
         <div className="pointer-events-none absolute inset-0"
           style={{ background:"radial-gradient(circle at center, rgba(201,165,84,.10), transparent 55%)" }} />
 
-        {/* 黄道輪（静止） */}
+        {/* 黄道輪（静止・天体アイコンのすぐ外側に来るよう縮小） */}
         <img
           src="/asteria/loading/zodiac-ring-transparent.png"
           alt=""
-          className="absolute inset-0 h-full w-full object-contain opacity-90 pointer-events-none select-none"
+          className="absolute inset-0 h-full w-full object-contain opacity-90 pointer-events-none select-none scale-75"
           draggable={false}
         />
 
