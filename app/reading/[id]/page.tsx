@@ -172,10 +172,28 @@ export default function ReadingResultPage() {
           )
         })}
 
-        {/* 鑑定本文 → 天体データ・補足の区切り */}
-        {!isGuest && <SectionDivider label="天体データ" />}
+        {/* 06 ラッキーアクション（ネイタルチャートの前） */}
+        {!isGuest && outputs?.lucky_action && (
+          <>
+            <ChapterHeading number={luckyChapterNo} title="ラッキーアクション"
+              subtitle="運気を引き寄せるヒント" color="#C9A554" />
+            <div className="p-4 rounded-2xl"
+              style={{ background:"linear-gradient(135deg,rgba(20,44,32,.9),rgba(14,30,22,.9))", border:"1px solid rgba(112,221,168,.28)" }}>
+              <div className="flex items-center gap-1.5 mb-1.5">
+                <span style={{ color:"#8BC34A" }}>✸</span>
+                <span className="text-[11px] tracking-wider" style={{ color:"#A8E08F" }}>今日のラッキーアクション</span>
+              </div>
+              <div className="font-serif text-[15px] italic leading-relaxed" style={{ color:"#D8E8D0" }}>
+                {outputs.lucky_action}
+              </div>
+            </div>
+          </>
+        )}
 
-        {/* 根拠 toggle */}
+        {/* 鑑定本文 → ネイタルチャートの区切り */}
+        {!isGuest && <SectionDivider label="ネイタルチャート" />}
+
+        {/* 根拠 toggle（ネイタルチャートの直上）*/}
         {!isGuest && (
           <div className="mt-2.5">
             <button onClick={() => setOpen(o => !o)}
@@ -220,35 +238,17 @@ export default function ReadingResultPage() {
           </div>
         )}
 
-        {/* ラッキーアクション - ゲストには非表示 */}
-        {!isGuest && outputs?.lucky_action && (
+        {/* 07 アドバイス - ゲストには非表示 */}
+        {!isGuest && outputs?.advice && (
           <>
-            <ChapterHeading number={luckyChapterNo} title="ラッキーアクション"
-              subtitle="運気を引き寄せるヒント" color="#C9A554" />
-            <div className="p-4 rounded-2xl"
-              style={{ background:"linear-gradient(135deg,rgba(20,44,32,.9),rgba(14,30,22,.9))", border:"1px solid rgba(112,221,168,.28)" }}>
-              <div className="flex items-center gap-1.5 mb-1.5">
-                <span style={{ color:"#8BC34A" }}>✸</span>
-                <span className="text-[11px] tracking-wider" style={{ color:"#A8E08F" }}>今日のラッキーアクション</span>
-              </div>
-              <div className="font-serif text-[15px] italic leading-relaxed" style={{ color:"#D8E8D0" }}>
-                {outputs.lucky_action}
-              </div>
+            <ChapterHeading number={7} title="アドバイス"
+              subtitle="今日を生きるための羅針盤" color="#C9A554" />
+            <div className="card p-4" style={{ borderLeft: "3px solid #C9A554" }}>
+              <p className="font-serif text-[13px] leading-8 text-[#C0C0D8] font-light">
+                {outputs.advice}
+              </p>
             </div>
           </>
-        )}
-
-        {/* アドバイス - ゲストには非表示 */}
-        {!isGuest && outputs?.advice && (
-          <div className="card mt-2.5 p-4">
-            <div className="flex items-center gap-1.5 mb-2">
-              <span className="text-gold text-xs">✦</span>
-              <span className="text-[12px] font-bold text-[#F0F0F8]">アドバイス</span>
-            </div>
-            <p className="font-serif text-[13px] leading-8 text-[#C0C0D8] font-light">
-              {outputs.advice}
-            </p>
-          </div>
         )}
 
         {/* ゲストのペイウォール */}
