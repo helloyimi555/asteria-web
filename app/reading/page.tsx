@@ -182,7 +182,8 @@ export default function ReadingInputPage() {
         }
       }
     } catch (e: any) {
-      setError(e?.response?.data?.detail ?? "エラーが発生しました。もう一度お試しください。")
+      // バックエンドの detail → ポーリングが投げた Error.message → 汎用文 の順でフォールバック
+      setError(e?.response?.data?.detail ?? e?.message ?? "エラーが発生しました。もう一度お試しください。")
       setLoading(false)
     }
   }

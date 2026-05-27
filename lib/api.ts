@@ -173,16 +173,38 @@ export const readingApi = {
   list: (params?: { profile_id?: string; limit?: number; offset?: number }) =>
     api.get<{ total: number; readings: Reading[] }>("/readings", { params }).then(r => r.data),
 
-  /** ポーリングで completed になるまで待機（最大 timeoutMs） */
-  pollUntilDone: async (readingId: string, timeoutMs = 30_000): Promise<Reading> => {
-    const interval = 2_000
+  /** ポーリングで completed/failed になるまで待機。
+   *  最大 maxAttempts 回 かつ 最大 timeoutMs（どちらか早い方）でタイムアウト。
+   *  - 200 で completed/failed → 正常終了（呼び出し側に reading を返す）
+   *  - 401/403 → 認証エラーとして即中止（interceptor がリフレッシュ済みでも失敗しているため）
+   *  - その他 4xx/5xx → 取得エラーとして即中止
+   */
+  pollUntilDone: async (
+    readingId: string,
+    { timeoutMs = 60_000, maxAttempts = 20, interval = 3_000 } = {},
+  ): Promise<Reading> => {
     const deadline = Date.now() + timeoutMs
-    while (Date.now() < deadline) {
-      const reading = await readingApi.get(readingId)
-      if (reading.status === "completed" || reading.status === "failed") return reading
+    let attempts = 0
+    while (attempts < maxAttempts && Date.now() < deadline) {
+      attempts++
+      let reading: Reading
+      try {
+        reading = await readingApi.get(readingId)
+      } catch (err: any) {
+        const status = err?.response?.status
+        if (status === 401 || status === 403) {
+          // interceptor で1度リフレッシュを試みた後の失敗なので、ここでポーリングを止める
+          throw new Error("認証の有効期限が切れました。再度ログインしてください。")
+        }
+        // 4xx/5xx・ネットワークエラーはリトライせず中止
+        throw new Error("鑑定結果の取得に失敗しました。もう一度お試しください。")
+      }
+      if (reading.status === "completed" || reading.status === "failed") {
+        return reading
+      }
       await new Promise(r => setTimeout(r, interval))
     }
-    throw new Error("Reading timed out")
+    throw new Error("鑑定の生成に時間がかかっています。しばらくしてから履歴をご確認ください。")
   },
 }
 
