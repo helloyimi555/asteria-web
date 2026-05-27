@@ -149,11 +149,13 @@ export default function ReadingResultPage() {
   const overallContent = getContent((outputs as any)?.overall)
   const coverDate    = asStr(formatReadingDate(reading.created_at))
   const coverTitle   = asStr(formatReadingTitle(reading.theme, inferPeriodId(reading.period_start, reading.period_end), reading.created_at))
-  // テーマ：headline → summary先頭文 → overall先頭文(20字以内) → テーマラベル
-  const coverTheme   =
+  // テーマ：headline → 「{テーマ名}の{タグ}」（例：人間関係の好調）→ テーマラベル
+  // ※ outputs.summary / overall の本文は使わない（長文化を防ぐ）
+  const rawTag   = asStr(getTag((outputs as any)?.overall))
+  const tagLabel = rawTag.includes(" ") ? rawTag.split(" ").slice(1).join(" ").trim() : rawTag  // 絵文字prefixを除去
+  const coverTheme =
        asStr(outputs?.headline)
-    || firstSentences((outputs as any)?.summary, 1)
-    || firstSentences(overallContent, 1).slice(0, 20)
+    || (tagLabel ? `${asStr(themeLabel)}の${tagLabel}` : "")
     || asStr(themeLabel)
   const coverKeywords = Array.isArray(outputs?.keywords)
     ? outputs!.keywords!.filter((k): k is string => typeof k === "string").slice(0, 5)

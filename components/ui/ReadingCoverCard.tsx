@@ -17,8 +17,10 @@ export function ReadingCoverCard({ date, title, theme, keywords = [], message }:
     <div
       className="relative mx-auto mt-3 w-full max-w-[390px] overflow-hidden rounded-[28px]"
       style={{
+        backgroundColor: "#04060F",
         backgroundImage: "url('/assets/reading-cover-bg.png')",
-        backgroundSize: "cover",
+        backgroundSize: "100% 100%",
+        backgroundRepeat: "no-repeat",
         backgroundPosition: "center",
       }}
     >
@@ -76,7 +78,8 @@ export function ReadingCoverCard({ date, title, theme, keywords = [], message }:
             className="relative mt-2 rounded-2xl px-8 py-10 text-center"
             style={{
               backgroundImage: "url('/assets/reading-message-box.png')",
-              backgroundSize: "cover",
+              backgroundSize: "100% 100%",
+              backgroundRepeat: "no-repeat",
               backgroundPosition: "center",
             }}
           >
