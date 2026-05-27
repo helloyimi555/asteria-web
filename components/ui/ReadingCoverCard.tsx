@@ -16,7 +16,7 @@ interface ReadingCoverCardProps {
 export function ReadingCoverCard({ date, title, theme, keywords = [], message }: ReadingCoverCardProps) {
   return (
     <div
-      className="relative mx-auto mt-2 w-full overflow-hidden rounded-[28px]"
+      className="relative mt-2 w-full overflow-hidden rounded-[28px]"
       style={{
         maxHeight: "85vh",
         backgroundImage: "url('/asteria/assets/cover-bg-wide.png')",
@@ -26,7 +26,7 @@ export function ReadingCoverCard({ date, title, theme, keywords = [], message }:
       }}
     >
       {/* コンテンツ（高さはこの要素が決める。背景は外側 div に伸縮適用） */}
-      <div className="relative z-10 flex flex-col items-center px-8 pb-6 pt-14 text-center">
+      <div className="relative z-10 flex flex-col items-center px-8 pb-6 pt-20 text-center">
         {/* ヘッダー */}
         <div className="flex items-center justify-center gap-2.5 text-gold/90">
           <span className="text-[10px]">✦</span>
@@ -88,12 +88,12 @@ export function ReadingCoverCard({ date, title, theme, keywords = [], message }:
                 backgroundRepeat: "no-repeat",
               }}
             >
-              <p className="whitespace-pre-line px-6 py-4 text-center font-serif text-sm leading-7 text-white">
+              <p className="whitespace-pre-line px-6 py-2 text-center font-serif text-sm leading-7 text-white">
                 {message}
               </p>
             </div>
             {/* 下部画像 */}
-            <img src="/asteria/assets/message-box-bottom.png" alt="" aria-hidden className="-mt-px block w-full" />
+            <img src="/asteria/assets/message-box-bottom.png" alt="" aria-hidden className="-mt-2 block w-full" />
           </div>
         )}
       </div>
