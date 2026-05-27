@@ -45,9 +45,10 @@ function getSummary(section: any): string | undefined {
   return section.summary
 }
 
-/** 文章の先頭から count 文（。！？区切り）を取り出す。カバーカードのテーマ・一言用。 */
-function firstSentences(raw: string | undefined, count: number): string {
-  if (!raw) return ""
+/** 文章の先頭から count 文（。！？区切り）を取り出す。カバーカードのテーマ・一言用。
+ *  実行時に文字列以外（オブジェクト等）が渡ってもクラッシュしないよう型ガードする。 */
+function firstSentences(raw: unknown, count: number): string {
+  if (typeof raw !== "string" || !raw) return ""
   const clean = raw.replace(/【.*?】/g, "").trim()
   const parts = clean.match(/[^。！？]+[。！？]?/g) ?? [clean]
   return parts.slice(0, count).join("").trim()
@@ -143,16 +144,20 @@ export default function ReadingResultPage() {
   )
   const luckyChapterNo = presentChapters.length + 1
 
-  // カバーカード用データ（既存 outputs から導出）
+  // カバーカード用データ（既存 outputs から導出。実行時データの型崩れでも落ちないよう全て文字列/配列に正規化）
+  const asStr = (v: unknown): string => (typeof v === "string" ? v : "")
   const overallContent = getContent((outputs as any)?.overall)
-  const coverDate    = formatReadingDate(reading.created_at)
-  const coverTitle   = formatReadingTitle(reading.theme, inferPeriodId(reading.period_start, reading.period_end), reading.created_at)
-  const coverTheme   = (outputs as any)?.tag
+  const coverDate    = asStr(formatReadingDate(reading.created_at))
+  const coverTitle   = asStr(formatReadingTitle(reading.theme, inferPeriodId(reading.period_start, reading.period_end), reading.created_at))
+  const coverTheme   =
+       asStr((outputs as any)?.tag)
     || firstSentences((outputs as any)?.summary, 1)
-    || outputs?.headline
-    || getTag((outputs as any)?.overall)
-    || themeLabel
-  const coverKeywords = (((outputs as any)?.keywords as string[]) ?? []).slice(0, 5)
+    || asStr(outputs?.headline)
+    || asStr(getTag((outputs as any)?.overall))
+    || asStr(themeLabel)
+  const coverKeywords = Array.isArray(outputs?.keywords)
+    ? outputs!.keywords!.filter((k): k is string => typeof k === "string").slice(0, 5)
+    : []
   const coverMessage  = firstSentences(overallContent, 2)
 
   return (
