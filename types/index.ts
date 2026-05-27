@@ -121,6 +121,8 @@ export interface Reading {
   highlights:        ReadingHighlight[] | null
   natal_positions?:  PlanetPosition[]
   birth_profile_id?: string | null
+  period_start?:     string | null
+  period_end?:       string | null
   created_at:        string
 }
 

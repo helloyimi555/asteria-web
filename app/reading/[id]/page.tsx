@@ -49,6 +49,34 @@ function getSummary(section: any): string | undefined {
   return section.summary
 }
 
+// 鑑定実行日時を「2026年5月27日 14:32」形式に
+function formatReadingDateTime(iso?: string): string {
+  if (!iso) return ""
+  const d = new Date(iso)
+  if (isNaN(d.getTime())) return ""
+  const pad = (n: number) => String(n).padStart(2, "0")
+  return `${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日 ${pad(d.getHours())}:${pad(d.getMinutes())}`
+}
+
+// 対象期間を表示用ラベルに（単日は今日/明日/昨日を判定、範囲は M月D日〜M月D日）
+function formatReadingPeriod(start?: string | null, end?: string | null): string {
+  if (!start) return ""
+  const md = (s: string) => {
+    const d = new Date(s)
+    return `${d.getMonth() + 1}月${d.getDate()}日`
+  }
+  if (!end || start === end) {
+    const today = new Date(); today.setHours(0, 0, 0, 0)
+    const d = new Date(start); d.setHours(0, 0, 0, 0)
+    const diff = Math.round((d.getTime() - today.getTime()) / 86_400_000)
+    if (diff === 0)  return "今日"
+    if (diff === 1)  return "明日"
+    if (diff === -1) return "昨日"
+    return md(start)
+  }
+  return `${md(start)} 〜 ${md(end)}`
+}
+
 function TagPill({ tag }: { tag: string }) {
   const style = TAG_STYLES[tag] ?? { bg: "rgba(255,255,255,.06)", color: "#C9A554" }
   return (
@@ -114,6 +142,26 @@ export default function ReadingResultPage() {
         {/* Nav (モバイル: ブランドのみ。ナビゲーションは BottomNav が担当) */}
         <div className="flex justify-center items-center pt-4 pb-0 md:hidden">
           <span className="font-serif text-[13px] tracking-wider shimmer-gold">ASTERIA</span>
+        </div>
+
+        {/* 鑑定メタ情報（テーマ・対象期間・実行日時） */}
+        <div className="mt-3">
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold"
+              style={{ background:"rgba(201,165,84,.1)", border:"1px solid rgba(201,165,84,.3)", color:"#C9A554" }}>
+              ✦ {themeLabel}
+            </span>
+            {formatReadingPeriod(reading.period_start, reading.period_end) && (
+              <span className="text-[11px] text-white/55">
+                {formatReadingPeriod(reading.period_start, reading.period_end)}の運勢
+              </span>
+            )}
+          </div>
+          {reading.created_at && (
+            <div className="text-[10px] text-white/35 mt-1.5 tracking-wider">
+              鑑定日時：{formatReadingDateTime(reading.created_at)}
+            </div>
+          )}
         </div>
 
         {/* Headline */}
