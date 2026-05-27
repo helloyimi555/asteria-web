@@ -149,15 +149,16 @@ export default function ReadingResultPage() {
   const overallContent = getContent((outputs as any)?.overall)
   const coverDate    = asStr(formatReadingDate(reading.created_at))
   const coverTitle   = asStr(formatReadingTitle(reading.theme, inferPeriodId(reading.period_start, reading.period_end), reading.created_at))
+  // テーマ：headline → summary先頭文 → overall先頭文(20字以内) → テーマラベル
   const coverTheme   =
-       asStr((outputs as any)?.tag)
+       asStr(outputs?.headline)
     || firstSentences((outputs as any)?.summary, 1)
-    || asStr(outputs?.headline)
-    || asStr(getTag((outputs as any)?.overall))
+    || firstSentences(overallContent, 1).slice(0, 20)
     || asStr(themeLabel)
   const coverKeywords = Array.isArray(outputs?.keywords)
     ? outputs!.keywords!.filter((k): k is string => typeof k === "string").slice(0, 5)
     : []
+  // 星からの一言：句点で区切って最初の2文のみ
   const coverMessage  = firstSentences(overallContent, 2)
 
   return (
