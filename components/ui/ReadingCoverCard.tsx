@@ -23,8 +23,7 @@ export function ReadingCoverCard({ date, title, theme, keywords = [], message }:
       <img
         src="/asteria/assets/cover-bg-wide.png"
         alt=""
-        aria-hidden
-        className="pointer-events-none absolute inset-0 h-full w-full object-cover"
+        className="pointer-events-none absolute inset-0 w-full h-full object-cover"
       />
 
       {/* コンテンツ（背景上に重ねる。高さはこの要素が決める） */}
