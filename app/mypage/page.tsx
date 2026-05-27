@@ -12,6 +12,7 @@ import Link from "next/link"
 import {
   calcElementBalance, elementPercents, getElementTitle, ELEMENTS, ELEMENT_INFO,
 } from "@/lib/elements"
+import { formatReadingTitle, formatReadingPeriodText } from "@/utils/dateUtils"
 
 const YEARS = Array.from({ length: 75 }, (_, i) => 2008 - i)
 const MONTHS = Array.from({ length: 12 }, (_, i) => i + 1)
@@ -488,11 +489,11 @@ export default function MyPage() {
                 </div>
                 <div className="flex-1">
                   <div className="text-[14px] text-[#F0F0F8] font-medium mb-0.5">
-                    {r.theme} / 鑑定
+                    {formatReadingTitle(r.theme, "", r.created_at)}
                   </div>
                   <div className="text-[11px] text-white/40 flex items-center gap-1">
                     <span>📅</span>
-                    <span>{new Date(r.created_at).toLocaleDateString("ja-JP")}</span>
+                    <span>{formatReadingPeriodText("", r.period_start, r.period_end)}</span>
                   </div>
                 </div>
                 <div className="flex items-center gap-1 text-gold">

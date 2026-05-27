@@ -9,6 +9,7 @@ import clsx from "clsx"
 import { useState, useEffect } from "react"
 import NatalChart from "@/components/ui/NatalChart"
 import { XShareButton } from "@/components/ui/XShareButton"
+import { formatReadingDateTime, formatReadingPeriodText, themeLabel as resolveThemeLabel } from "@/utils/dateUtils"
 
 const THEME_CARDS = [
   { key:"work",    label:"仕事運",  icon:"💼", c:"#70B4FF", bg:"rgba(112,180,255,.15)" },
@@ -16,15 +17,6 @@ const THEME_CARDS = [
   { key:"health",  label:"健康運",  icon:"◎",  c:"#70DDA8", bg:"rgba(112,221,168,.15)" },
   { key:"caution", label:"注意点",  icon:"△",  c:"#FFC96E", bg:"rgba(255,201,110,.15)" },
 ]
-
-const THEME_LABEL: Record<string, string> = {
-  general:      "総合運",
-  work:         "仕事運",
-  love:         "恋愛運",
-  health:       "健康運",
-  money:        "金運",
-  relationship: "人間関係",
-}
 
 // セクションのタグ色（バックエンドが返す4種）
 const TAG_STYLES: Record<string, { bg: string; color: string }> = {
@@ -47,34 +39,6 @@ function getTag(section: any): string | undefined {
 function getSummary(section: any): string | undefined {
   if (!section || typeof section === "string") return undefined
   return section.summary
-}
-
-// 鑑定実行日時を「2026年5月27日 14:32」形式に
-function formatReadingDateTime(iso?: string): string {
-  if (!iso) return ""
-  const d = new Date(iso)
-  if (isNaN(d.getTime())) return ""
-  const pad = (n: number) => String(n).padStart(2, "0")
-  return `${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日 ${pad(d.getHours())}:${pad(d.getMinutes())}`
-}
-
-// 対象期間を表示用ラベルに（単日は今日/明日/昨日を判定、範囲は M月D日〜M月D日）
-function formatReadingPeriod(start?: string | null, end?: string | null): string {
-  if (!start) return ""
-  const md = (s: string) => {
-    const d = new Date(s)
-    return `${d.getMonth() + 1}月${d.getDate()}日`
-  }
-  if (!end || start === end) {
-    const today = new Date(); today.setHours(0, 0, 0, 0)
-    const d = new Date(start); d.setHours(0, 0, 0, 0)
-    const diff = Math.round((d.getTime() - today.getTime()) / 86_400_000)
-    if (diff === 0)  return "今日"
-    if (diff === 1)  return "明日"
-    if (diff === -1) return "昨日"
-    return md(start)
-  }
-  return `${md(start)} 〜 ${md(end)}`
 }
 
 function TagPill({ tag }: { tag: string }) {
@@ -131,7 +95,7 @@ export default function ReadingResultPage() {
   }
 
   const { outputs } = reading
-  const themeLabel = THEME_LABEL[reading.theme] ?? "鑑定結果"
+  const themeLabel = resolveThemeLabel(reading.theme)
 
   return (
     <div className="relative min-h-screen pb-28">
@@ -151,9 +115,9 @@ export default function ReadingResultPage() {
               style={{ background:"rgba(201,165,84,.1)", border:"1px solid rgba(201,165,84,.3)", color:"#C9A554" }}>
               ✦ {themeLabel}
             </span>
-            {formatReadingPeriod(reading.period_start, reading.period_end) && (
+            {reading.period_start && (
               <span className="text-[11px] text-white/55">
-                {formatReadingPeriod(reading.period_start, reading.period_end)}の運勢
+                {formatReadingPeriodText("", reading.period_start, reading.period_end)}
               </span>
             )}
           </div>

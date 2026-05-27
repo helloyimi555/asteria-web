@@ -5,19 +5,13 @@ import { Stars } from "@/components/ui/Stars"
 import { BottomNav } from "@/components/layout/BottomNav"
 import { readingApi } from "@/lib/api"
 import type { Reading } from "@/types"
+import { formatReadingTitle, formatReadingPeriodText, formatReadingDate } from "@/utils/dateUtils"
 
-const THEME_LABEL: Record<string, string> = {
-  general:      "総合運",
-  work:         "仕事運",
-  love:         "恋愛運",
-  health:       "健康運",
-  money:        "金運",
-  relationship: "人間関係",
-}
-
-const PERIOD_LABEL = (r: Reading) => {
-  if (!r.period_start || !r.period_end) return ""
-  return `${r.period_start} 〜 ${r.period_end}`
+// outputs.overall は string か {tag,summary,content} のどちらでも来うる
+function overallText(overall: any): string {
+  if (!overall) return ""
+  if (typeof overall === "string") return overall
+  return overall.content ?? ""
 }
 
 export default function ReadingResultsPage() {
@@ -63,19 +57,19 @@ useEffect(() => {
               className="card w-full p-4 text-left hover:border-gold/30 transition-colors">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-[13px] font-bold text-[#F0F0F8]">
-                  {THEME_LABEL[r.theme] ?? r.theme}
+                  {formatReadingTitle(r.theme, "", r.created_at)}
                 </span>
                 <span className="text-[11px] text-white/30">
-                  {new Date(r.created_at).toLocaleDateString("ja-JP")}
+                  {formatReadingDate(r.created_at)}
                 </span>
               </div>
-              {r.outputs?.overall && (
+              {overallText(r.outputs?.overall) && (
                 <p className="text-[12px] text-white/50 leading-relaxed line-clamp-2">
-                  {r.outputs.overall}
+                  {overallText(r.outputs?.overall)}
                 </p>
               )}
               <div className="text-[11px] text-gold/60 mt-2">
-                {PERIOD_LABEL(r)}
+                {formatReadingPeriodText("", r.period_start, r.period_end)}
               </div>
             </button>
           ))}

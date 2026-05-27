@@ -8,6 +8,7 @@ import AstrologyLoading from "@/components/ui/AstrologyLoading"
 import { XShareButton } from "@/components/ui/XShareButton"
 import { isLoggedIn, clearTokens, guestPersonalityApi, homeApi, readingApi, type GuestPersonalityResult, type DailyHome } from "@/lib/api"
 import type { Reading } from "@/types"
+import { formatReadingTitle, formatReadingPeriodText } from "@/utils/dateUtils"
 
 const FEATURES = [
   { icon:"🔭", title:"天体計算",  desc:"Swiss Ephemerisによる正確な計算" },
@@ -105,15 +106,6 @@ export default function HomePage() {
       </section>
     </div>
   )
-}
-
-const THEME_LABEL_HOME: Record<string, string> = {
-  general:      "総合運",
-  work:         "仕事運",
-  love:         "恋愛運",
-  health:       "健康運",
-  money:        "金運",
-  relationship: "人間関係",
 }
 
 function LoggedInHome({ onLogout }: { onLogout: () => void }) {
@@ -237,8 +229,8 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
                     ✦
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="text-[12px] text-[#F0F0F8]">{THEME_LABEL_HOME[r.theme] ?? r.theme}</div>
-                    <div className="text-[10px] text-white/40">{new Date(r.created_at).toLocaleDateString("ja-JP")}</div>
+                    <div className="text-[12px] text-[#F0F0F8]">{formatReadingTitle(r.theme, "", r.created_at)}</div>
+                    <div className="text-[10px] text-white/40">{formatReadingPeriodText("", r.period_start, r.period_end)}</div>
                   </div>
                   <span className="text-white/30 text-sm">›</span>
                 </Link>

@@ -3,15 +3,7 @@ import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { Stars } from "@/components/ui/Stars"
 import { BottomNav } from "@/components/layout/BottomNav"
-
-const THEME_LABEL: Record<string, string> = {
-  general:      "総合運",
-  work:         "仕事運",
-  love:         "恋愛運",
-  health:       "健康運",
-  money:        "金運",
-  relationship: "人間関係",
-}
+import { themeLabel as resolveThemeLabel } from "@/utils/dateUtils"
 
 export default function GuestResultPage() {
   const router = useRouter()
@@ -33,7 +25,7 @@ export default function GuestResultPage() {
   if (!reading) return null
 
   const { outputs, theme } = reading
-  const themeLabel = THEME_LABEL[theme] ?? "鑑定結果"
+  const themeLabel = resolveThemeLabel(theme)
 
   return (
     <div className="relative min-h-screen pb-28">
