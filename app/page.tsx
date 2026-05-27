@@ -10,6 +10,7 @@ import { isLoggedIn, clearTokens, guestPersonalityApi, homeApi, readingApi, type
 import type { Reading } from "@/types"
 import { formatReadingTitle, formatReadingDate, inferPeriodId } from "@/utils/dateUtils"
 import { getThemeConfig } from "@/utils/themeConfig"
+import { BaseCard } from "@/components/asteria-ui"
 
 const FEATURES = [
   { icon:"🔭", title:"天体計算",  desc:"Swiss Ephemerisによる正確な計算" },
@@ -159,7 +160,7 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
           {/* 本日の星模様 */}
           {daily && (
             <div>
-              <div className="card p-4" style={{ borderLeft: "3px solid rgba(201,165,84,.6)" }}>
+              <BaseCard variant="summary">
                 <div className="flex items-center gap-1.5 mb-2">
                   <span className="text-gold text-xs">✦</span>
                   <span className="text-[12px] font-bold text-[#F0F0F8]">本日の星模様</span>
@@ -167,7 +168,7 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
                 <p className="font-serif text-[13px] leading-7 text-[#C0C0D8] font-light">
                   {daily.flow}
                 </p>
-              </div>
+              </BaseCard>
               <p className="text-center text-[10px] text-white/30 mt-1.5 tracking-wider">
                 全ユーザー共通の星空情報
               </p>

@@ -13,6 +13,7 @@ import {
   calcElementBalance, elementPercents, getElementTitle, ELEMENTS, ELEMENT_INFO,
 } from "@/lib/elements"
 import { ReadingHistoryCard } from "@/components/ui/ReadingHistoryCard"
+import { PremiumCard } from "@/components/asteria-ui"
 
 const YEARS = Array.from({ length: 75 }, (_, i) => 2008 - i)
 const MONTHS = Array.from({ length: 12 }, (_, i) => i + 1)
@@ -310,14 +311,9 @@ export default function MyPage() {
           </div>
         )}
 
-        {/* Premium badge */}
-        <div className="card mb-4 p-3.5 flex items-center justify-between cursor-pointer"
-          style={{ border:"1px solid rgba(201,165,84,.4)" }}>
-          <div className="flex items-center gap-2">
-            <span className="text-gold text-sm">✦</span>
-            <span className="font-serif text-[14px] text-gold tracking-wide">プレミアムプラン</span>
-          </div>
-          <span className="text-white/30 text-sm">✦✦</span>
+        {/* プレミアムプラン */}
+        <div className="mb-4">
+          <PremiumCard />
         </div>
 
         {/* Personality */}
