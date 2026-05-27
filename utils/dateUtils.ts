@@ -88,12 +88,41 @@ export function formatPeriodLabel(period: string): string {
   return PERIOD_LABELS[period] ?? period
 }
 
-/** 「今日の総合運」「今週の総合運」「今月の恋愛運」形式（ホーム・マイページ・履歴一覧で使う）
- *  period が既知の ID/別名なら「{期間}の{テーマ}」、未知なら createdAt の日付で代替 */
-export function formatReadingTitle(theme: string, period: string, createdAt: string): string {
+/** 対象期間の日付括弧サフィックスを生成（「5月27日分」「5月20日〜27日分」「7月1日〜12月31日分」）
+ *  同月内なら終端の「M月」を省略する。start が無ければ空文字。 */
+function periodDateSuffix(start?: string | null, end?: string | null): string {
+  if (!start) return ""
+  const s = new Date(start)
+  if (isNaN(s.getTime())) return ""
+  const sm = s.getMonth() + 1, sd = s.getDate()
+  if (!end || start === end) {
+    return `${sm}月${sd}日分`
+  }
+  const e = new Date(end)
+  if (isNaN(e.getTime())) return `${sm}月${sd}日分`
+  const em = e.getMonth() + 1, ed = e.getDate()
+  if (sm === em) return `${sm}月${sd}日〜${ed}日分`        // 同月: 終端の月を省略
+  return `${sm}月${sd}日〜${em}月${ed}日分`
+}
+
+/** 「今日の総合運（5月27日分）」「今週の総合運（5月20日〜27日分）」形式
+ *  - period が既知 → 「{期間}の{テーマ}」。start/end があれば「（日付分）」を付与
+ *  - period が未知 → createdAt の日付ベース「{M月D日}の{テーマ}」（括弧なし）
+ *  ホーム・マイページ・履歴一覧で使う */
+export function formatReadingTitle(
+  theme: string,
+  period: string,
+  createdAt: string,
+  start?: string | null,
+  end?: string | null,
+): string {
   const periodLabel = period ? PERIOD_LABELS[period] : undefined
-  if (periodLabel) return `${periodLabel}の${themeLabel(theme)}`
-  return `${formatReadingDate(createdAt)}の${themeLabel(theme)}`
+  const name = themeLabel(theme)
+  if (periodLabel) {
+    const suffix = periodDateSuffix(start, end)
+    return suffix ? `${periodLabel}の${name}（${suffix}）` : `${periodLabel}の${name}`
+  }
+  return `${formatReadingDate(createdAt)}の${name}`
 }
 
 /** 「今日の運勢」「5月27日〜6月2日の運勢」など（結果ページ上部サブテキストで使う）

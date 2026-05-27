@@ -1,27 +1,21 @@
 "use client"
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
+import Link from "next/link"
 import { Stars } from "@/components/ui/Stars"
 import { BottomNav } from "@/components/layout/BottomNav"
+import { ReadingHistoryCard } from "@/components/ui/ReadingHistoryCard"
 import { readingApi } from "@/lib/api"
 import type { Reading } from "@/types"
-import { formatReadingTitle, formatReadingDate, inferPeriodId } from "@/utils/dateUtils"
-import { getThemeConfig } from "@/utils/themeConfig"
-
-// outputs.overall は string か {tag,summary,content} のどちらでも来うる
-function overallText(overall: any): string {
-  if (!overall) return ""
-  if (typeof overall === "string") return overall
-  return overall.content ?? ""
-}
 
 export default function ReadingResultsPage() {
   const router = useRouter()
   const [readings, setReadings] = useState<Reading[]>([])
   const [loading, setLoading] = useState(true)
 
-useEffect(() => {
-    readingApi.list({ limit: 20 }).then((res: any) => {
+  useEffect(() => {
+    // 全件表示（ページネーション不要のため大きめの上限）
+    readingApi.list({ limit: 100 }).then((res: any) => {
       const list = Array.isArray(res) ? res : (res.readings ?? [])
       setReadings(list.filter((r: any) => r.status === "completed"))
     }).catch(() => {}).finally(() => setLoading(false))
@@ -31,11 +25,17 @@ useEffect(() => {
     <div className="relative min-h-screen pb-24">
       <Stars />
       <div className="relative z-10 max-w-app mx-auto px-5">
-        <div className="pt-9 pb-5 flex items-center gap-3">
-          <button onClick={() => router.back()} className="text-white/40 hover:text-white/70">
-            ←
-          </button>
-          <h1 className="font-serif text-xl text-[#F0F0F8]">過去の鑑定</h1>
+        <div className="pt-9 pb-2">
+          <Link href="/mypage"
+            className="text-[12px] text-white/45 hover:text-white/75 transition-colors inline-flex items-center gap-1">
+            ← マイページに戻る
+          </Link>
+        </div>
+        <div className="pb-5 flex items-center gap-2.5">
+          <span className="text-gold text-sm">✦</span>
+          <h1 className="font-serif text-xl text-[#F0F0F8]">鑑定履歴</h1>
+          <div className="flex-1 h-px bg-gradient-to-r from-gold/30 to-transparent" />
+          <span className="text-gold text-sm">✦</span>
         </div>
 
         {loading && (
@@ -52,31 +52,10 @@ useEffect(() => {
           </div>
         )}
 
-        <div className="space-y-3">
-          {readings.map(r => {
-            const cfg = getThemeConfig(r.theme)
-            const period = inferPeriodId(r.period_start, r.period_end)
-            return (
-              <button key={r.reading_id} onClick={() => router.push(`/reading/${r.reading_id}`)}
-                className="card w-full p-4 text-left hover:border-gold/30 transition-colors"
-                style={{ borderLeft: `3px solid ${cfg.color}` }}>
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-[13px] font-bold text-[#F0F0F8] flex items-center gap-1.5">
-                    <span style={{ color: cfg.color }}>{cfg.icon}</span>
-                    {formatReadingTitle(r.theme, period, r.created_at)}
-                  </span>
-                  <span className="text-[11px] text-white/30">
-                    {formatReadingDate(r.created_at)}に鑑定
-                  </span>
-                </div>
-                {overallText(r.outputs?.overall) && (
-                  <p className="text-[12px] text-white/50 leading-relaxed line-clamp-2">
-                    {overallText(r.outputs?.overall)}
-                  </p>
-                )}
-              </button>
-            )
-          })}
+        <div className="flex flex-col gap-2">
+          {readings.map(r => (
+            <ReadingHistoryCard key={r.reading_id} reading={r} />
+          ))}
         </div>
       </div>
       <BottomNav />

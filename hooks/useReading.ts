@@ -37,10 +37,10 @@ export function useReading(readingId: string | null) {
 }
 
 // ── 鑑定履歴 ─────────────────────────────────────────────────
-export function useReadingHistory(profileId?: string) {
+export function useReadingHistory(profileId?: string, limit = 20) {
   return useSWR(
-    profileId ? `readings/history/${profileId}` : "readings/history",
-    () => readingApi.list({ profile_id: profileId, limit: 20 }),
+    `readings/history/${profileId ?? "all"}/${limit}`,
+    () => readingApi.list({ profile_id: profileId, limit }),
     { revalidateOnFocus: false }
   )
 }
