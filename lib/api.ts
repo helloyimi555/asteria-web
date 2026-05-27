@@ -22,28 +22,48 @@ api.interceptors.request.use((config) => {
   return config
 })
 
-// 401 でリフレッシュを試み、失敗したらログアウト
+// 401/403 で1回だけトークンリフレッシュを試み、失敗したらログアウト
+// 同時多発の失敗でもリフレッシュは1回だけ実行する（in-flight promise を共有）
+let refreshPromise: Promise<string> | null = null
+
+async function refreshAccessToken(): Promise<string> {
+  const refresh = Cookies.get("refresh_token")
+  if (!refresh) throw new Error("no refresh token")
+  // ※ リフレッシュ自体は素の axios を使う（api インスタンスを使うと
+  //    リフレッシュが失敗した時に再びこの interceptor が走り無限ループになるため）
+  const { data } = await axios.post<AuthTokens>(`${BASE_URL}/auth/refresh`, {
+    refresh_token: refresh,
+  })
+  saveTokens(data)
+  return data.access_token
+}
+
 api.interceptors.response.use(
   (res) => res,
   async (err: AxiosError) => {
-    const original = err.config as typeof err.config & { _retry?: boolean }
-    if (err.response?.status === 401 && !original._retry) {
-      original._retry = true
+    const original = err.config as (typeof err.config & { _retry?: boolean }) | undefined
+    const status = err.response?.status
+
+    if (original && !original._retry && (status === 401 || status === 403)) {
+      original._retry = true   // この元リクエストは2回目以降リフレッシュしない（無限ループ防止）
       try {
-        const refresh = Cookies.get("refresh_token")
-        if (!refresh) throw new Error("no refresh token")
-        const { data } = await axios.post<AuthTokens>(`${BASE_URL}/auth/refresh`, {
-          refresh_token: refresh,
-        })
-        saveTokens(data)
-        original.headers!.Authorization = `Bearer ${data.access_token}`
-        return api(original)
-        } catch {
+        // 同時に複数リクエストが 401/403 になっても、リフレッシュは1回だけ
+        if (!refreshPromise) {
+          refreshPromise = refreshAccessToken().finally(() => { refreshPromise = null })
+        }
+        const newToken = await refreshPromise
+
+        original.headers = original.headers ?? {}
+        ;(original.headers as Record<string, string>).Authorization = `Bearer ${newToken}`
+        return api(original)   // 新トークンで元リクエストをリトライ
+      } catch {
         clearTokens()
-        if (typeof window !== 'undefined') {
+        if (typeof window !== "undefined") {
           window.location.href = "/asteria/auth/login"
         }
-      }    }
+        return Promise.reject(err)
+      }
+    }
     return Promise.reject(err)
   }
 )
