@@ -444,7 +444,7 @@ export default function CompatResultPage() {
         </button>
       </div>
 
-      <div className="md:hidden"><BottomNav /></div>
+      <BottomNav />
     </div>
   )
 }
