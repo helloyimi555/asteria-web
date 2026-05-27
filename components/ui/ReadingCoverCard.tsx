@@ -51,7 +51,7 @@ export function ReadingCoverCard({ date, title, theme, keywords = [], message }:
         </span>
       ))}
 
-      <div className="relative z-10 flex flex-col items-center px-6 pb-32 pt-8 text-center">
+      <div className="relative z-10 flex flex-col items-center px-6 pb-10 pt-8 text-center">
         {/* ヘッダー */}
         <div className="flex items-center justify-center gap-2.5 text-gold/90">
           <span className="text-[10px]">✦</span>
@@ -59,8 +59,9 @@ export function ReadingCoverCard({ date, title, theme, keywords = [], message }:
           <span className="text-[10px]">✦</span>
         </div>
 
-        {/* スターバースト */}
-        <Starburst className="mx-auto mt-3" />
+        {/* エンブレム（コンパスローズ。ヘッダー直下） */}
+        <img src="/asteria/assets/cover-seal.png" alt="" aria-hidden
+          className="pointer-events-none mx-auto mt-2 w-24 brightness-110 saturate-[.92]" />
 
         {/* 日付 */}
         {date && <p className="mb-1 mt-2 font-serif text-[14px] text-[#E8E8F0]/85">{date}</p>}
@@ -127,40 +128,7 @@ export function ReadingCoverCard({ date, title, theme, keywords = [], message }:
         )}
 
       </div>
-
-      {/* 下部のエンブレム（バナー底の線を下辺の細線に乗せる。bottom 値で上下微調整） */}
-      <img src="/asteria/assets/cover-seal.png" alt="" aria-hidden
-        className="pointer-events-none absolute bottom-0 left-1/2 w-28 -translate-x-1/2 brightness-110 saturate-[.92]" />
     </div>
-  )
-}
-
-function Starburst({ className = "" }: { className?: string }) {
-  const rays = [0, 45, 90, 135, 180, 225, 270, 315]
-  return (
-    <svg width="56" height="56" viewBox="0 0 56 56" className={className} fill="none">
-      <defs>
-        <filter id="coverBurstGlow" x="-50%" y="-50%" width="200%" height="200%">
-          <feGaussianBlur stdDeviation="1.4" result="b" />
-          <feMerge>
-            <feMergeNode in="b" />
-            <feMergeNode in="SourceGraphic" />
-          </feMerge>
-        </filter>
-      </defs>
-      <g stroke="#C9A554" strokeWidth="1" filter="url(#coverBurstGlow)">
-        {rays.map((deg, i) => {
-          const a = (deg * Math.PI) / 180
-          const r2 = i % 2 === 0 ? 24 : 13
-          return (
-            <line key={i}
-              x1={28 + 5 * Math.cos(a)} y1={28 + 5 * Math.sin(a)}
-              x2={28 + r2 * Math.cos(a)} y2={28 + r2 * Math.sin(a)} />
-          )
-        })}
-      </g>
-      <circle cx="28" cy="28" r="3.2" fill="#C9A554" filter="url(#coverBurstGlow)" />
-    </svg>
   )
 }
 
