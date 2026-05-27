@@ -37,8 +37,8 @@ export function getSunSign(dateStr: string): ZodiacSign | null {
 
 export const READING_THEMES = [
   { id:"general",      label:"総合運",   icon:"✦", desc:"全体的な運勢の流れ" },
-  { id:"work",         label:"仕事運",   icon:"⬡", desc:"キャリアと仕事の機会" },
-  { id:"love",         label:"恋愛運",   icon:"♡", desc:"恋愛と感情のつながり" },
+  { id:"work",         label:"仕事運",   icon:"⚡", desc:"キャリアと仕事の機会" },
+  { id:"love",         label:"恋愛運",   icon:"♥", desc:"恋愛と感情のつながり" },
   { id:"health",       label:"健康運",   icon:"◎", desc:"心身のバランスと活力" },
   { id:"money",        label:"金運",     icon:"¥", desc:"財務と豊かさの流れ" },
   { id:"relationship", label:"人間関係", icon:"✿", desc:"人脈と対人関係" },
