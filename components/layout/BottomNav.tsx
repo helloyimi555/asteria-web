@@ -15,9 +15,15 @@ export function BottomNav() {
   const pathname = usePathname()
 
   // 複数項目が prefix マッチする場合は最も具体的（href が長い）な項目だけを active にする
-  const activeHref = [...NAV_ITEMS]
+  let activeHref = [...NAV_ITEMS]
     .filter(item => pathname === item.href || pathname.startsWith(item.href + "/"))
     .sort((a, b) => b.href.length - a.href.length)[0]?.href
+
+  // /reading/{id} などの個別結果ページは「結果を見る」をアクティブにする
+  // （/reading 単体は「鑑定する」のまま。サブパスはすべて結果系とみなす）
+  if (pathname.startsWith("/reading/")) {
+    activeHref = "/reading/results"
+  }
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-white/[0.08]"

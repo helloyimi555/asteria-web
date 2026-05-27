@@ -3,7 +3,6 @@ import { useParams, useRouter } from "next/navigation"
 import { useReading } from "@/hooks/useReading"
 import { Stars } from "@/components/ui/Stars"
 import { BottomNav } from "@/components/layout/BottomNav"
-import { TopNav } from "@/components/layout/TopNav"
 import { isLoggedIn, profileApi, type DegreeMeaning } from "@/lib/api"
 import clsx from "clsx"
 import { useState, useEffect } from "react"
@@ -100,12 +99,11 @@ export default function ReadingResultPage() {
   return (
     <div className="relative min-h-screen pb-28">
       <Stars />
-      <div className="hidden md:block"><TopNav /></div>
 
       <div className="relative z-10 max-w-app mx-auto px-[18px]">
-        {/* Nav (モバイル: ブランドのみ。ナビゲーションは BottomNav が担当) */}
-        <div className="flex justify-center items-center pt-4 pb-0 md:hidden">
-          <span className="font-serif text-[13px] tracking-wider shimmer-gold">ASTERIA</span>
+        {/* ブランド（ナビゲーションは下部 BottomNav が担当） */}
+        <div className="flex justify-center items-center pt-5 pb-0">
+          <span className="font-serif text-[13px] tracking-wider shimmer-gold">✦ ASTERIA ✦</span>
         </div>
 
         {/* 鑑定メタ情報（テーマ・対象期間・実行日時） */}
@@ -294,7 +292,7 @@ export default function ReadingResultPage() {
         })()}
       </div>
 
-      <div className="md:hidden"><BottomNav /></div>
+      <BottomNav />
     </div>
   )
 }
