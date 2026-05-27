@@ -11,7 +11,7 @@ import { XShareButton } from "@/components/ui/XShareButton"
 import { ChapterHeading } from "@/components/ui/ChapterHeading"
 import { SectionDivider } from "@/components/ui/SectionDivider"
 import { ReadingCoverCard } from "@/components/ui/ReadingCoverCard"
-import { formatReadingDateTime, formatReadingPeriodText, formatReadingDate, formatReadingTitle, inferPeriodId, themeLabel as resolveThemeLabel } from "@/utils/dateUtils"
+import { formatReadingDateTime, formatReadingPeriodText, formatReadingDateWithYear, formatReadingTitle, inferPeriodId, themeLabel as resolveThemeLabel } from "@/utils/dateUtils"
 
 // 鑑定書の章立て定義（存在するセクションだけ順に Chapter 番号を振る）
 const CHAPTER_DEFS = [
@@ -147,7 +147,7 @@ export default function ReadingResultPage() {
   // カバーカード用データ（既存 outputs から導出。実行時データの型崩れでも落ちないよう全て文字列/配列に正規化）
   const asStr = (v: unknown): string => (typeof v === "string" ? v : "")
   const overallContent = getContent((outputs as any)?.overall)
-  const coverDate    = asStr(formatReadingDate(reading.created_at))
+  const coverDate    = asStr(formatReadingDateWithYear(reading.created_at))
   const coverTitle   = asStr(formatReadingTitle(reading.theme, inferPeriodId(reading.period_start, reading.period_end), reading.created_at))
   // テーマ：headline → 「{テーマ名}の{タグ}」（例：人間関係の好調）→ テーマラベル
   // ※ outputs.summary / overall の本文は使わない（長文化を防ぐ）

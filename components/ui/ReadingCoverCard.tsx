@@ -80,7 +80,7 @@ export function ReadingCoverCard({ date, title, theme, keywords = [], message }:
           {/* 星からの一言（本文欄。テキスト量に応じて高さ可変、背景画像を枠として伸縮） */}
           {message && (
             <div
-              className="relative mt-1 w-full rounded-2xl px-6 py-8 text-center"
+              className="relative mt-1 w-full rounded-2xl px-7 pb-10 pt-14 text-center"
               style={{
                 backgroundImage: "url('/asteria/assets/reading-message-box.png')",
                 backgroundSize: "100% 100%",
@@ -88,13 +88,7 @@ export function ReadingCoverCard({ date, title, theme, keywords = [], message }:
                 backgroundPosition: "center",
               }}
             >
-              <div className="mb-4 flex items-center justify-center gap-2 text-gold/85">
-                <span className="h-px w-8 bg-gradient-to-r from-transparent to-gold/45" />
-                <span className="text-[11px]">✦</span>
-                <span className="text-[12px] tracking-wider">星からの一言</span>
-                <span className="text-[11px]">✦</span>
-                <span className="h-px w-8 bg-gradient-to-l from-transparent to-gold/45" />
-              </div>
+              {/* ラベル「星からの一言」は背景画像に含まれるためテキストのみ配置 */}
               <p className="whitespace-pre-line font-serif text-[14px] leading-8 text-[#E8E8F0]/90">
                 {message}
               </p>

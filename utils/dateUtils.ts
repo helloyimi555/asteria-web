@@ -73,6 +73,14 @@ export function formatReadingDate(isoString: string): string {
   return d.getFullYear() === new Date().getFullYear() ? md : `${d.getFullYear()}年${md}`
 }
 
+/** 「2026年5月27日」形式（常に年付き） */
+export function formatReadingDateWithYear(isoString: string): string {
+  if (!isoString) return ""
+  const d = new Date(isoString)
+  if (isNaN(d.getTime())) return ""
+  return `${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日`
+}
+
 /** 「5月27日 14:32」形式（年の扱いは formatReadingDate に準拠） */
 export function formatReadingDateTime(isoString: string): string {
   if (!isoString) return ""
