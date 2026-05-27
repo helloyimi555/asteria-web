@@ -126,8 +126,8 @@ export function ReadingCoverCard({ date, title, theme, keywords = [], message }:
           </div>
         )}
 
-        {/* 下部の印章バッジ */}
-        <Seal className="mx-auto mt-7" />
+        {/* 下部のエンブレム（コンパスローズ。サイズは w-40＝160px で調整可） */}
+        <img src="/asteria/assets/cover-seal.png" alt="" aria-hidden className="mx-auto mt-6 w-40" />
       </div>
     </div>
   )
@@ -189,23 +189,3 @@ function OrnateDivider({ className = "" }: { className?: string }) {
   )
 }
 
-function Seal({ className = "" }: { className?: string }) {
-  const rays = [0, 30, 60, 90, 120, 150]
-  return (
-    <svg width="48" height="48" viewBox="0 0 48 48" className={className} fill="none">
-      <circle cx="24" cy="24" r="20" stroke="#C9A554" strokeWidth="1.5" fill="rgba(201,165,84,.08)" />
-      <circle cx="24" cy="24" r="14.5" stroke="#C9A554" strokeWidth="0.7" opacity="0.55" />
-      <g stroke="#C9A554" strokeWidth="0.9">
-        {rays.map((deg, i) => {
-          const a = (deg * Math.PI) / 180
-          return (
-            <line key={i}
-              x1={24 - 12.5 * Math.cos(a)} y1={24 - 12.5 * Math.sin(a)}
-              x2={24 + 12.5 * Math.cos(a)} y2={24 + 12.5 * Math.sin(a)} />
-          )
-        })}
-      </g>
-      <circle cx="24" cy="24" r="2.3" fill="#C9A554" />
-    </svg>
-  )
-}
