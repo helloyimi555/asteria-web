@@ -22,7 +22,8 @@ export function SectionDivider({
   // 装飾ライン画像
   return (
     <div className={`my-4 flex justify-center ${className}`}>
-      <img src="/asteria/assets/divider-star.png" alt="" className="w-full max-w-[320px] opacity-80" />
+      <img src="/asteria/assets/divider-star.png" alt="" className="w-full max-w-[320px] opacity-80"
+        style={{ mixBlendMode: "screen" }} />
     </div>
   )
 }

@@ -77,32 +77,27 @@ export function ReadingCoverCard({ date, title, theme, keywords = [], message }:
             </div>
           )}
 
-          {/* 星からの一言（背景画像の本文欄。画像比率に固定して歪みなく表示） */}
+          {/* 星からの一言（本文欄。テキスト量に応じて高さ可変、背景画像を枠として伸縮） */}
           {message && (
             <div
-              className="relative mt-2 w-full overflow-hidden rounded-2xl"
-              style={{ aspectRatio: "1122 / 1402" }}
+              className="relative mt-2 w-full rounded-2xl px-8 py-12 text-center"
+              style={{
+                backgroundImage: "url('/asteria/assets/reading-message-box.png')",
+                backgroundSize: "100% 100%",
+                backgroundRepeat: "no-repeat",
+                backgroundPosition: "center",
+              }}
             >
-              <img
-                src="/asteria/assets/reading-message-box.png"
-                alt=""
-                aria-hidden
-                className="pointer-events-none absolute inset-0 h-full w-full object-cover"
-              />
-              <div className="absolute inset-0 z-10 overflow-y-auto">
-                <div className="flex min-h-full flex-col items-center justify-center px-7 py-8 text-center">
-                  <div className="mb-4 flex items-center justify-center gap-2 text-gold/85">
-                    <span className="h-px w-8 bg-gradient-to-r from-transparent to-gold/45" />
-                    <span className="text-[11px]">✦</span>
-                    <span className="text-[12px] tracking-wider">星からの一言</span>
-                    <span className="text-[11px]">✦</span>
-                    <span className="h-px w-8 bg-gradient-to-l from-transparent to-gold/45" />
-                  </div>
-                  <p className="whitespace-pre-line font-serif text-[14px] leading-8 text-[#E8E8F0]/90">
-                    {message}
-                  </p>
-                </div>
+              <div className="mb-4 flex items-center justify-center gap-2 text-gold/85">
+                <span className="h-px w-8 bg-gradient-to-r from-transparent to-gold/45" />
+                <span className="text-[11px]">✦</span>
+                <span className="text-[12px] tracking-wider">星からの一言</span>
+                <span className="text-[11px]">✦</span>
+                <span className="h-px w-8 bg-gradient-to-l from-transparent to-gold/45" />
               </div>
+              <p className="whitespace-pre-line font-serif text-[14px] leading-8 text-[#E8E8F0]/90">
+                {message}
+              </p>
             </div>
           )}
         </div>
