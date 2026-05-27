@@ -54,7 +54,7 @@ export function BaseCard({
     summary: {
       borderColor: "rgba(201,165,84,0.35)",
       background:
-        "radial-gradient(circle at top, rgba(201,165,84,0.16), rgba(255,255,255,0.045) 42%, rgba(255,255,255,0.025))",
+        "radial-gradient(circle at top, rgba(201,165,84,0.16), rgba(255,255,255,0.045))",
       boxShadow: "0 0 42px rgba(201,165,84,0.14)",
     },
     premium: {
