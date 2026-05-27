@@ -10,7 +10,8 @@ import NatalChart from "@/components/ui/NatalChart"
 import { XShareButton } from "@/components/ui/XShareButton"
 import { ChapterHeading } from "@/components/ui/ChapterHeading"
 import { SectionDivider } from "@/components/ui/SectionDivider"
-import { formatReadingDateTime, formatReadingPeriodText, themeLabel as resolveThemeLabel } from "@/utils/dateUtils"
+import { ReadingCoverCard } from "@/components/ui/ReadingCoverCard"
+import { formatReadingDateTime, formatReadingPeriodText, formatReadingDate, formatReadingTitle, inferPeriodId, themeLabel as resolveThemeLabel } from "@/utils/dateUtils"
 
 // 鑑定書の章立て定義（存在するセクションだけ順に Chapter 番号を振る）
 const CHAPTER_DEFS = [
@@ -42,6 +43,14 @@ function getTag(section: any): string | undefined {
 function getSummary(section: any): string | undefined {
   if (!section || typeof section === "string") return undefined
   return section.summary
+}
+
+/** 文章の先頭から count 文（。！？区切り）を取り出す。カバーカードのテーマ・一言用。 */
+function firstSentences(raw: string | undefined, count: number): string {
+  if (!raw) return ""
+  const clean = raw.replace(/【.*?】/g, "").trim()
+  const parts = clean.match(/[^。！？]+[。！？]?/g) ?? [clean]
+  return parts.slice(0, count).join("").trim()
 }
 
 /** 総合メッセージのティザー用に、target 文字数の前後で
@@ -134,6 +143,18 @@ export default function ReadingResultPage() {
   )
   const luckyChapterNo = presentChapters.length + 1
 
+  // カバーカード用データ（既存 outputs から導出）
+  const overallContent = getContent((outputs as any)?.overall)
+  const coverDate    = formatReadingDate(reading.created_at)
+  const coverTitle   = formatReadingTitle(reading.theme, inferPeriodId(reading.period_start, reading.period_end), reading.created_at)
+  const coverTheme   = (outputs as any)?.tag
+    || firstSentences((outputs as any)?.summary, 1)
+    || outputs?.headline
+    || getTag((outputs as any)?.overall)
+    || themeLabel
+  const coverKeywords = (((outputs as any)?.keywords as string[]) ?? []).slice(0, 5)
+  const coverMessage  = firstSentences(overallContent, 2)
+
   return (
     <div className="relative min-h-screen pb-28">
       <Stars />
@@ -163,6 +184,15 @@ export default function ReadingResultPage() {
             </div>
           )}
         </div>
+
+        {/* 鑑定書カバーカード（メタ情報の直下・Chapter 01 の前） */}
+        <ReadingCoverCard
+          date={coverDate}
+          title={coverTitle}
+          theme={coverTheme}
+          keywords={coverKeywords}
+          message={coverMessage}
+        />
 
         {/* Headline */}
         {outputs?.headline && (
