@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react"
 import { Stars } from "@/components/ui/Stars"
 import { BottomNav } from "@/components/layout/BottomNav"
+import { OrnamentalDivider } from "@/components/asteria-ui"
 
 const PLANETS = [
   { planet:"Sun",     name_ja:"太陽",   symbol:"☉", color:"#C9A554", kw:["自己表現","アイデンティティ","生命力"], desc:"あなたの中心にある「自分らしさ」を表します。人生の目的や目指す方向、意志力や創造性の源となる天体です。" },
@@ -36,9 +37,17 @@ const SIGNS = [
   { sign:"水瓶座", sym:"♒", el:"air",   kw:"革新・独自性・未来" },
   { sign:"魚座",   sym:"♓", el:"water", kw:"直感・霊性・共感" },
 ]
-const EL_COLOR = { fire:"#FF8A70", earth:"#C9A554", air:"#70B4FF", water:"#70DDD8" }
+const EL_COLOR: Record<string, string> = { fire:"#FF8A70", earth:"#C9A554", air:"#70B4FF", water:"#70DDD8" }
 
-function OrbitSVG({ symbol, color }) {
+// 12星座タブのエレメントタグ（日本語・色分け）
+const EL_TAG: Record<string, { ja: string; cls: string }> = {
+  fire:  { ja:"火", cls:"text-red-300 bg-red-900/20 border-red-400/30" },
+  earth: { ja:"地", cls:"text-emerald-300 bg-emerald-900/20 border-emerald-400/30" },
+  air:   { ja:"風", cls:"text-sky-300 bg-sky-900/20 border-sky-400/30" },
+  water: { ja:"水", cls:"text-violet-300 bg-violet-900/20 border-violet-400/30" },
+}
+
+function OrbitSVG({ symbol, color }: { symbol: string; color: string }) {
   const cx=44, cy=44, R=38, ri=24
   const dots = [0,120,240].map(deg => {
     const a = (deg - 90) * Math.PI / 180
@@ -95,7 +104,8 @@ export default function GuidePage() {
         {tab===0 && (
           <div className="px-4 flex flex-col gap-3">
             {PLANETS.map(p => (
-              <div key={p.planet} id={p.planet.toLowerCase()} className="card p-4 flex gap-3 scroll-mt-24">
+              <div key={p.planet} id={p.planet.toLowerCase()} className="card p-4 flex gap-3 scroll-mt-24"
+                style={{ borderLeft:`2px solid ${p.color}` }}>
                 <OrbitSVG symbol={p.symbol} color={p.color} />
                 <div className="flex-1 min-w-0">
                   <div className="flex items-baseline gap-2 mb-2">
@@ -104,8 +114,7 @@ export default function GuidePage() {
                   </div>
                   <div className="flex flex-wrap gap-1.5 mb-2">
                     {p.kw.map((k,i) => (
-                      <span key={i} className="px-2.5 py-0.5 rounded-md text-[10px]"
-                        style={{ background:p.color+"15", border:"1px solid "+p.color+"30", color:p.color }}>{k}</span>
+                      <span key={i} className="px-2.5 py-0.5 rounded-md text-[10px] border border-[#C9A554]/30 bg-[#C9A554]/10 text-[#C9A554]">{k}</span>
                     ))}
                   </div>
                   <p className="font-sans text-[12px] text-white/55 leading-relaxed font-light">{p.desc}</p>
@@ -120,14 +129,17 @@ export default function GuidePage() {
             <p className="text-center text-[12px] text-white/55 leading-7 mb-1">
               アスペクト（角度）は、天体同士の関係性を表します。<br/>角度によって、エネルギーの質が変わります。
             </p>
-            {ASPECTS.map(a => (
-              <div key={a.name} className="card p-4">
-                <div className="font-serif text-[18px] text-[#F0F0F8] mb-1">{a.name}</div>
-                <div className="text-[11px] text-gold flex items-center gap-1.5 mb-2">
-                  <span>✦</span><span>{a.rel}</span><span>✦</span>
+            {ASPECTS.map((a,i) => (
+              <div key={a.name}>
+                {i > 0 && <OrnamentalDivider />}
+                <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+                  <div className="font-serif text-[18px] text-[#F0F0F8] mb-1">{a.name}</div>
+                  <div className="text-[11px] text-gold flex items-center gap-1.5 mb-2">
+                    <span>✦</span><span>{a.rel}</span><span>✦</span>
+                  </div>
+                  <div className="font-serif text-6xl leading-none mb-3" style={{ color:a.c }}>{a.deg}</div>
+                  <p className="font-sans text-[12px] text-white/55 leading-relaxed">{a.desc}</p>
                 </div>
-                <div className="font-serif text-[28px] mb-2" style={{ color:a.c }}>{a.deg}</div>
-                <p className="font-sans text-[12px] text-white/55 leading-relaxed">{a.desc}</p>
               </div>
             ))}
           </div>
@@ -138,14 +150,16 @@ export default function GuidePage() {
             <div className="grid grid-cols-2 gap-2.5">
               {SIGNS.map(s => {
                 const c = EL_COLOR[s.el] ?? "#C9A554"
+                const tag = EL_TAG[s.el]
                 return (
                   <div key={s.sign} className="card p-3.5" style={{ borderColor:c+"20" }}>
                     <div className="flex items-center gap-2 mb-2">
                       <span style={{ color:c, fontSize:"20px" }}>{s.sym}</span>
                       <span className="font-serif text-[14px] text-[#F0F0F8]">{s.sign}</span>
                     </div>
-                    <div className="text-[10px] px-2 py-0.5 rounded-md inline-block mb-1.5"
-                      style={{ background:c+"15", color:c, border:"1px solid "+c+"25" }}>{s.el}</div>
+                    <div className={`text-sm px-3 py-1 rounded-md inline-block mb-1.5 border ${tag?.cls ?? ""}`}>
+                      {tag?.ja ?? s.el}
+                    </div>
                     <p className="text-[11px] text-white/50 leading-relaxed">{s.kw}</p>
                   </div>
                 )
