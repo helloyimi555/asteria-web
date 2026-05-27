@@ -43,7 +43,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               right: "-15%",
               width: 600,
               height: 600,
-              opacity: 0.07,
+              opacity: 0.04,
               backgroundImage: "url(/loading/zodiac-ring-transparent.png)",
               backgroundSize: "contain",
               backgroundRepeat: "no-repeat",
