@@ -35,15 +35,15 @@ export function ReadingCoverCard({ date, title, theme, keywords = [], message }:
       {/* 辺の二重ゴールドライン（内側の細線。辺はCSSで描画） */}
       <span className="pointer-events-none absolute inset-2 rounded-xl border border-gold/20" />
 
-      {/* 四隅のコーナー装飾（1枚を反転・回転で4箇所に配置。サイズは w-20/h-20＝80px で調整可） */}
+      {/* 四隅のコーナー装飾（1枚を反転・回転で4箇所に配置。サイズは w-28/h-28＝112px で調整可） */}
       <img src="/asteria/assets/corner-ornament.png" alt="" aria-hidden
-        className="pointer-events-none absolute left-1 top-1 h-20 w-20" />
+        className="pointer-events-none absolute left-1 top-1 h-28 w-28" />
       <img src="/asteria/assets/corner-ornament.png" alt="" aria-hidden
-        className="pointer-events-none absolute right-1 top-1 h-20 w-20 -scale-x-100" />
+        className="pointer-events-none absolute right-1 top-1 h-28 w-28 -scale-x-100" />
       <img src="/asteria/assets/corner-ornament.png" alt="" aria-hidden
-        className="pointer-events-none absolute bottom-1 left-1 h-20 w-20 -scale-y-100" />
+        className="pointer-events-none absolute bottom-1 left-1 h-28 w-28 -scale-y-100" />
       <img src="/asteria/assets/corner-ornament.png" alt="" aria-hidden
-        className="pointer-events-none absolute bottom-1 right-1 h-20 w-20 -scale-100" />
+        className="pointer-events-none absolute bottom-1 right-1 h-28 w-28 -scale-100" />
 
       {/* 星屑（装飾） */}
       {SCATTER.map((cls, i) => (
