@@ -33,6 +33,8 @@ export function ReadingCoverCard({ date, title, theme, keywords = [], message }:
     >
       {/* C案：辺をつなぐゴールド線（コーナーの2本目の線に太さ・位置を合わせる。2px・中心≈9px） */}
       <span className="pointer-events-none absolute inset-[8px] rounded-md border-2 border-gold/40" />
+      {/* 下辺のみ：エンブレムの表示ゴールド(#E3AE59)に完全一致させて接続をシームレスに */}
+      <span className="pointer-events-none absolute bottom-2 left-2 right-2 h-0.5" style={{ background: "#E3AE59" }} />
 
       {/* 四隅に corner-ornament.png を反転・回転で配置（細い辺線の上に重なる） */}
       <img src="/asteria/assets/corner-ornament.png" alt="" aria-hidden
