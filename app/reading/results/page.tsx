@@ -8,18 +8,35 @@ import { ReadingHistoryCard } from "@/components/ui/ReadingHistoryCard"
 import { readingApi } from "@/lib/api"
 import type { Reading } from "@/types"
 
+const PAGE_SIZE = 20
+
 export default function ReadingResultsPage() {
   const router = useRouter()
   const [readings, setReadings] = useState<Reading[]>([])
+  const [total, setTotal] = useState(0)
+  const [page, setPage] = useState(1)   // 1 始まり
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    // 全件表示（ページネーション不要のため大きめの上限）
-    readingApi.list({ limit: 100 }).then((res: any) => {
+    setLoading(true)
+    const offset = (page - 1) * PAGE_SIZE
+    // TODO(課金): 無料プランは直近10件まで、プレミアムは全件表示の制限をここに追加予定
+    //   例) free プランは offset/limit を clamp、または total を 10 でキャップして導線を出す
+    readingApi.list({ status: "completed", limit: PAGE_SIZE, offset }).then((res: any) => {
       const list = Array.isArray(res) ? res : (res.readings ?? [])
-      setReadings(list.filter((r: any) => r.status === "completed"))
-    }).catch(() => {}).finally(() => setLoading(false))
-  }, [])
+      setReadings(list)
+      // total が無い API の場合は「取得件数が PAGE_SIZE 未満なら最終ページ」とみなす
+      setTotal(typeof res?.total === "number" ? res.total : offset + list.length)
+    }).catch(() => {
+      setReadings([])
+    }).finally(() => setLoading(false))
+    // ページ切替時は先頭へスクロール
+    if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" })
+  }, [page])
+
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE))
+  const hasPrev = page > 1
+  const hasNext = page < totalPages
 
   return (
     <div className="relative min-h-screen pb-24">
@@ -52,11 +69,48 @@ export default function ReadingResultsPage() {
           </div>
         )}
 
-        <div className="flex flex-col gap-2">
-          {readings.map(r => (
-            <ReadingHistoryCard key={r.reading_id} reading={r} />
-          ))}
-        </div>
+        {!loading && readings.length > 0 && (
+          <>
+            <div className="flex flex-col gap-2">
+              {readings.map(r => (
+                <ReadingHistoryCard key={r.reading_id} reading={r} />
+              ))}
+            </div>
+
+            {/* ページネーション */}
+            <div className="flex items-center justify-between gap-3 mt-6">
+              <div className="w-24">
+                {hasPrev && (
+                  <button
+                    type="button"
+                    onClick={() => setPage(p => Math.max(1, p - 1))}
+                    className="w-full py-2.5 rounded-full text-[13px] transition-colors"
+                    style={{ border: "1px solid rgba(201,165,84,.4)", color: "#C9A554", background: "rgba(201,165,84,.06)" }}>
+                    ← 前へ
+                  </button>
+                )}
+              </div>
+
+              <div className="text-[12px] text-white/55 tabular-nums">
+                <span className="text-gold font-bold">{page}</span>
+                <span className="mx-1 text-white/30">/</span>
+                {totalPages}ページ
+              </div>
+
+              <div className="w-24">
+                {hasNext && (
+                  <button
+                    type="button"
+                    onClick={() => setPage(p => p + 1)}
+                    className="w-full py-2.5 rounded-full text-[13px] transition-colors"
+                    style={{ border: "1px solid rgba(201,165,84,.4)", color: "#C9A554", background: "rgba(201,165,84,.06)" }}>
+                    次へ →
+                  </button>
+                )}
+              </div>
+            </div>
+          </>
+        )}
       </div>
       <BottomNav />
     </div>

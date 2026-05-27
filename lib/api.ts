@@ -170,7 +170,7 @@ export const readingApi = {
   get: (readingId: string) =>
     api.get<Reading>(`/readings/${readingId}`).then(r => r.data),
 
-  list: (params?: { profile_id?: string; limit?: number; offset?: number }) =>
+  list: (params?: { profile_id?: string; status?: string; limit?: number; offset?: number }) =>
     api.get<{ total: number; readings: Reading[] }>("/readings", { params }).then(r => r.data),
 
   /** ポーリングで completed/failed になるまで待機。
