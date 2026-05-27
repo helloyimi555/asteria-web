@@ -38,7 +38,7 @@ export function ReadingCoverCard({ date, title, theme, keywords = [], message }:
           </div>
 
           {/* 日付 */}
-          {date && <p className="mb-1 mt-4 text-[14px] text-[#E8E8F0]/85">{date}</p>}
+          {date && <p className="mb-1 mt-4 font-serif text-[14px] text-[#E8E8F0]/85">{date}</p>}
 
           {/* タイトル（主役） */}
           <h1 className="font-serif text-3xl font-normal leading-tight text-gold"
@@ -80,7 +80,7 @@ export function ReadingCoverCard({ date, title, theme, keywords = [], message }:
           {/* 星からの一言（本文欄。テキスト量に応じて高さ可変、背景画像を枠として伸縮） */}
           {message && (
             <div
-              className="relative mt-1 w-full rounded-2xl px-7 pb-10 pt-14 text-center"
+              className="relative mt-1 w-full rounded-2xl px-7 pb-6 pt-8 text-center"
               style={{
                 backgroundImage: "url('/asteria/assets/reading-message-box.png')",
                 backgroundSize: "100% 100%",
@@ -89,7 +89,7 @@ export function ReadingCoverCard({ date, title, theme, keywords = [], message }:
               }}
             >
               {/* ラベル「星からの一言」は背景画像に含まれるためテキストのみ配置 */}
-              <p className="whitespace-pre-line font-serif text-[14px] leading-8 text-[#E8E8F0]/90">
+              <p className="whitespace-pre-line font-serif text-xs leading-6 text-[#E8E8F0]/90">
                 {message}
               </p>
             </div>
