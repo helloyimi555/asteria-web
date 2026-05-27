@@ -26,7 +26,7 @@ export function ReadingCoverCard({ date, title, theme, keywords = [], message }:
       }}
     >
       {/* コンテンツ（高さはこの要素が決める。背景は外側 div に伸縮適用） */}
-      <div className="relative z-10 flex flex-col items-center px-8 pb-8 pt-10 text-center">
+      <div className="relative z-10 flex flex-col items-center px-8 pb-6 pt-14 text-center">
         {/* ヘッダー */}
         <div className="flex items-center justify-center gap-2.5 text-gold/90">
           <span className="text-[10px]">✦</span>
@@ -88,7 +88,7 @@ export function ReadingCoverCard({ date, title, theme, keywords = [], message }:
                 backgroundRepeat: "no-repeat",
               }}
             >
-              <p className="whitespace-pre-line px-6 py-4 text-center font-serif text-sm leading-7 text-white/90">
+              <p className="whitespace-pre-line px-6 py-4 text-center font-serif text-sm leading-7 text-white">
                 {message}
               </p>
             </div>
