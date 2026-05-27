@@ -1,5 +1,5 @@
 "use client"
-import { useEffect, useState } from "react"
+import { useEffect, useState, type CSSProperties } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { Stars } from "@/components/ui/Stars"
@@ -7,11 +7,21 @@ import NatalChart from "@/components/ui/NatalChart"
 import { BottomNav } from "@/components/layout/BottomNav"
 import { TONE_COLOR } from "@/lib/zodiac"
 import { XShareButton } from "@/components/ui/XShareButton"
+import { ChapterHeading } from "@/components/ui/ChapterHeading"
+import { AlertCard, LuckyCard } from "@/components/ui/cards"
+import { OrnamentalDivider } from "@/components/asteria-ui"
 import {
   calcElementBalance, elementPercents, getDominantElement, getElementCompatibility,
   getElementTitle, ELEMENTS, ELEMENT_INFO,
 } from "@/lib/elements"
 import clsx from "clsx"
+
+// ゴールドグラデカード（シンクロスコア・合言葉用）
+const GOLD_CARD_STYLE: CSSProperties = {
+  background: "radial-gradient(circle at top, rgba(201,165,84,0.16), rgba(255,255,255,0.045) 42%, rgba(255,255,255,0.025))",
+  border: "1px solid rgba(201,165,84,0.35)",
+  boxShadow: "0 0 42px rgba(201,165,84,0.14)",
+}
 
 const EVAL: Record<string, { c:string; bg:string; bc:string }> = {
   "◎": { c:"#70DDA8", bg:"rgba(112,221,168,.12)", bc:"rgba(112,221,168,.3)" },
@@ -131,84 +141,91 @@ export default function CompatResultPage() {
           </p>
         )}
 
+        {/* 【1】 星のシンクロスコア（ゴールドグラデ・大きな数字） */}
         {outputs?.scores && (
-          <div className="card mt-3 p-4" style={{ borderLeft:"3px solid rgba(201,165,84,.6)" }}>
-            <div className="flex items-center gap-1.5 mb-4">
+          <div className="relative overflow-hidden rounded-2xl p-5 mt-3 backdrop-blur-sm" style={GOLD_CARD_STYLE}>
+            <div className="flex items-center justify-center gap-1.5 mb-3">
               <span className="text-gold text-sm">✦</span>
               <span className="font-sans text-[13px] font-bold text-[#F0F0F8]">星のシンクロスコア</span>
+              <span className="text-gold text-sm">✦</span>
             </div>
-            <div className="grid gap-4">
-              <div className="text-center">
-                <div className="text-[44px] font-bold text-[#F0F0F8]">{outputs.scores.overall ?? 0} / 100</div>
-                <div className="mt-2 text-[13px] font-semibold text-[#D0D0E8]">{overallLabel}</div>
-              </div>
-              <div className="grid gap-3">
-                {SCORE_FIELDS.map(({ key, label, color }) => {
-                  const score = outputs.scores?.[key] ?? 0
-                  return (
-                    <div key={key}>
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="text-[12px] text-[#E8E8FF]">{label}</span>
-                        <span className="text-[12px] text-white/60">{score} / 100</span>
-                      </div>
-                      <div className="h-1 rounded-full bg-white/[.08] overflow-hidden">
-                        <div className="h-full rounded-full transition-all" style={{ width:`${Math.max(0, Math.min(100, score))}%`, background: color }} />
-                      </div>
+            <div className="text-center">
+              <span
+                className="font-serif font-bold leading-none text-7xl"
+                style={{ color:"#C9A554", textShadow:"0 0 30px rgba(201,165,84,.6), 0 0 12px rgba(201,165,84,.45)" }}>
+                {outputs.scores.overall ?? 0}
+              </span>
+              <span className="font-serif text-2xl ml-1" style={{ color:"rgba(201,165,84,.7)" }}>/ 100</span>
+            </div>
+            {overallLabel && (
+              <p className="text-center text-[14px] font-bold text-gold mt-2.5"
+                style={{ textShadow:"0 0 16px rgba(201,165,84,.35)" }}>
+                {overallLabel}
+              </p>
+            )}
+            <div className="grid gap-3 mt-5">
+              {SCORE_FIELDS.map(({ key, label, color }) => {
+                const score = outputs.scores?.[key] ?? 0
+                return (
+                  <div key={key}>
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-[12px] text-[#E8E8FF]">{label}</span>
+                      <span className="text-[12px] text-white/60">{score} / 100</span>
                     </div>
-                  )
-                })}
-              </div>
-              <p className="text-[11px] text-white/40 leading-5 pt-3 border-t border-white/10">
-                スコアは良い・悪いの判定ではなく、ふたりの関係に表れやすいテーマの強さを示しています
+                    <div className="h-1 rounded-full bg-white/[.08] overflow-hidden">
+                      <div className="h-full rounded-full transition-all" style={{ width:`${Math.max(0, Math.min(100, score))}%`, background: color }} />
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+            <p className="text-[11px] text-white/40 leading-5 pt-3 mt-3 border-t border-white/10">
+              スコアは良い・悪いの判定ではなく、ふたりの関係に表れやすいテーマの強さを示しています
+            </p>
+          </div>
+        )}
+
+        {/* 01 ふたりの関係 */}
+        {outputs?.relationship && (
+          <>
+            <ChapterHeading number={1} title="ふたりの関係" color="#C9A554" />
+            <div className="card p-4" style={{ borderLeft:"3px solid rgba(201,165,84,.6)" }}>
+              <p className="font-serif text-[13px] leading-8 text-[#D0D0E8] font-light">
+                {outputs.relationship}
               </p>
             </div>
-          </div>
+          </>
         )}
 
-        {/* ふたりの関係 */}
-        {outputs?.relationship && (
-          <div className="card mt-3 p-4" style={{ borderLeft:"3px solid rgba(201,165,84,.6)" }}>
-            <div className="flex items-center gap-1.5 mb-2.5">
-              <span className="text-gold text-sm">✦</span>
-              <span className="font-sans text-[13px] font-bold text-[#F0F0F8]">ふたりの関係</span>
-            </div>
-            <p className="font-serif text-[13px] leading-8 text-[#D0D0E8] font-light">
-              {outputs.relationship}
-            </p>
-          </div>
-        )}
-
+        {/* 02 あなたから見たお相手 */}
         {outputs?.from_my_view && (
-          <div className="card mt-2.5 p-4" style={{ borderLeft:"3px solid #F07098" }}>
-            <div className="flex items-center gap-2 mb-3">
-              <span className="text-[#F07098] text-sm">✦</span>
-              <span className="text-[12px] font-bold text-[#F0F0F8]">あなたから見たお相手</span>
+          <>
+            <ChapterHeading number={2} title="あなたから見たお相手" color="#F07098" />
+            <div className="card p-4" style={{ borderLeft:"3px solid #F07098" }}>
+              <p className="font-serif text-[13px] leading-7 text-[#D0D0E8] font-light">
+                {outputs.from_my_view}
+              </p>
             </div>
-            <p className="font-serif text-[13px] leading-7 text-[#D0D0E8] font-light">
-              {outputs.from_my_view}
-            </p>
-          </div>
+          </>
         )}
 
+        {/* 03 お相手から見たあなた */}
         {outputs?.from_their_view && (
-          <div className="card mt-2.5 p-4" style={{ borderLeft:"3px solid #70B4FF" }}>
-            <div className="flex items-center gap-2 mb-3">
-              <span className="text-[#70B4FF] text-sm">☽</span>
-              <span className="text-[12px] font-bold text-[#F0F0F8]">お相手から見たあなた</span>
+          <>
+            <ChapterHeading number={3} title="お相手から見たあなた" color="#70B4FF" />
+            <div className="card p-4" style={{ borderLeft:"3px solid #70B4FF" }}>
+              <p className="font-serif text-[13px] leading-7 text-[#D0D0E8] font-light">
+                {outputs.from_their_view}
+              </p>
             </div>
-            <p className="font-serif text-[13px] leading-7 text-[#D0D0E8] font-light">
-              {outputs.from_their_view}
-            </p>
-          </div>
+          </>
         )}
 
-        {/* シナストリー TOP5 */}
+        {/* 04 シナストリー（天球の相性） */}
         {synastry?.length > 0 && (
-          <div className="card mt-2.5 p-4">
-            <div className="flex items-center gap-1.5 mb-3">
-              <span className="text-gold text-xs">✦</span>
-              <span className="text-[12px] font-bold text-[#F0F0F8]">シナストリー（天体の相性）</span>
-            </div>
+          <>
+            <ChapterHeading number={4} title="シナストリー（天球の相性）" color="#C9A554" />
+            <div className="card p-4">
             <div className="grid gap-2">
               {synastry.slice(0, 5).map((s: any, i: number) => (
                 <div key={i} className="p-3 rounded-[10px]"
@@ -233,7 +250,8 @@ export default function CompatResultPage() {
                 </div>
               ))}
             </div>
-          </div>
+            </div>
+          </>
         )}
 
         {/* 根拠 toggle */}
@@ -277,9 +295,9 @@ export default function CompatResultPage() {
           </div>
         )}
 
-        {/* テーマ別 2×2 */}
-        <div className="grid grid-cols-2 gap-2.5 mt-2.5">
-          {THEME_CARDS.map(({ key, label, icon, c }) => {
+        {/* テーマ別（注意以外をグリッド表示） */}
+        <div className="grid grid-cols-2 gap-2.5 mt-6">
+          {THEME_CARDS.filter(t => t.key !== "caution").map(({ key, label, icon, c }) => {
             const item = outputs?.[key]
             if (!item) return null
             const ev = EVAL[item.tag] ?? EVAL["○"]
@@ -303,6 +321,15 @@ export default function CompatResultPage() {
           })}
         </div>
 
+        {/* 【3】 注意が必要なこと → AlertCard */}
+        {outputs?.caution && (
+          <div className="mt-2.5">
+            <AlertCard title="注意が必要なこと" keyword={outputs.caution.tag ? `相性タグ ${outputs.caution.tag}` : undefined}>
+              {outputs.caution.text}
+            </AlertCard>
+          </div>
+        )}
+
         {/* キーワード */}
         {outputs?.keywords?.length > 0 && (
           <div className="card mt-2.5 p-4">
@@ -321,13 +348,11 @@ export default function CompatResultPage() {
           </div>
         )}
 
-        {/* ふたりのエレメント相性 */}
+        {/* 05 エレメント相性 */}
         {myPct && theirPct && myDominant && theirDominant && (
-          <div className="card mt-2.5 p-4">
-            <div className="flex items-center gap-1.5 mb-3">
-              <span className="text-gold text-xs">✦</span>
-              <span className="text-[12px] font-bold text-[#F0F0F8]">ふたりのエレメント相性</span>
-            </div>
+          <>
+            <ChapterHeading number={5} title="エレメント相性" color="#C9A554" />
+            <div className="card p-4">
 
             <div className="flex flex-col gap-2.5 mb-3">
               {[
@@ -378,64 +403,73 @@ export default function CompatResultPage() {
                 {elementCompat}
               </p>
             </div>
-          </div>
+            </div>
+          </>
         )}
 
-        {/* アドバイス */}
+        {/* 06 アドバイス → LuckyCard スタイル（グリーン） */}
         {outputs?.advice && (
-          <div className="card mt-2.5 p-4">
-            <div className="flex items-center gap-1.5 mb-2">
-              <span className="text-gold text-xs">✦</span>
-              <span className="text-[12px] font-bold text-[#F0F0F8]">アドバイス</span>
+          <>
+            <ChapterHeading number={6} title="アドバイス" color="#8BC34A" />
+            <div className="rounded-2xl p-4"
+              style={{ background:"linear-gradient(135deg,rgba(20,44,32,.9),rgba(14,30,22,.9))", border:"1px solid rgba(112,221,168,.28)" }}>
+              <div className="flex items-center gap-1.5 mb-2">
+                <span style={{ color:"#8BC34A" }}>✸</span>
+                <span className="font-serif text-[14px]" style={{ color:"#A8E08F" }}>ふたりへ贈る言葉</span>
+              </div>
+              <p className="font-serif text-[13px] leading-8 text-[#D8E8D0] font-light">
+                {adviceText}
+              </p>
             </div>
-            <p className="font-serif text-[13px] leading-8 text-[#C0C0D8] font-light">
-              {adviceText}
-            </p>
-          </div>
+          </>
         )}
 
-{/* 盛り上がりポイント */}
+        {/* 【3】 盛り上がりポイント → LuckyCard */}
         {outputs?.highlight && (
-          <div className="card mt-2.5 p-4">
-            <div className="flex items-center gap-1.5 mb-2">
-              <span className="text-gold text-xs">✦</span>
-              <span className="text-[12px] font-bold text-[#F0F0F8]">ふたりの盛り上がりポイント</span>
-            </div>
-            <p className="font-serif text-[13px] leading-8 text-[#C0C0D8] font-light">
+          <div className="mt-2.5">
+            <LuckyCard title="ふたりの盛り上がりポイント">
               {outputs.highlight}
-            </p>
+            </LuckyCard>
           </div>
         )}
 
-        {/* すれ違いシーン */}
+        {/* 07 すれ違いやすい場面と対処法 → AlertCard スタイル（レッド） */}
         {outputs?.conflict_scene && (
-          <div className="card mt-2.5 p-4">
-            <div className="flex items-center gap-1.5 mb-2">
-              <span className="text-[#FFC96E] text-xs">△</span>
-              <span className="text-[12px] font-bold text-[#F0F0F8]">すれ違いやすい場面と対処法</span>
+          <>
+            <ChapterHeading number={7} title="すれ違いやすい場面と対処法" color="#F5A623" />
+            <div className="rounded-2xl p-4"
+              style={{ background:"linear-gradient(135deg,rgba(48,20,26,.9),rgba(28,15,22,.9))", border:"1px solid rgba(240,150,120,.28)" }}>
+              <div className="flex items-center gap-1.5 mb-2">
+                <span style={{ color:"#F5A623" }}>⚠</span>
+                <span className="font-serif text-[14px]" style={{ color:"#F5C77E" }}>こんな時は気をつけて</span>
+              </div>
+              <p className="font-serif text-[13px] leading-8 text-[#E8D8C8] font-light">
+                {outputs.conflict_scene}
+              </p>
             </div>
-            <p className="font-serif text-[13px] leading-8 text-[#C0C0D8] font-light">
-              {outputs.conflict_scene}
-            </p>
-          </div>
+          </>
         )}
 
-        {/* 合言葉 */}
+        {/* 【4】 ふたりの合言葉 → ゴールドグラデ・装飾ライン・大きなイタリック */}
         {outputs?.magic_phrase && (
-          <div className="card mt-2.5 p-4 text-center">
-            <div className="flex items-center justify-center gap-1.5 mb-2">
+          <div className="relative overflow-hidden rounded-2xl p-6 mt-3 text-center backdrop-blur-sm" style={GOLD_CARD_STYLE}>
+            <div className="flex items-center justify-center gap-1.5">
               <span className="text-gold text-xs">✦</span>
-              <span className="text-[12px] font-bold text-[#F0F0F8]">ふたりの合言葉</span>
+              <span className="text-[12px] font-bold tracking-wider text-[#F0F0F8]">ふたりの合言葉</span>
               <span className="text-gold text-xs">✦</span>
             </div>
-            <p className="font-serif text-[16px] text-gold leading-8">
+            <OrnamentalDivider />
+            <p className="font-serif italic text-gold text-[22px] leading-9"
+              style={{ textShadow:"0 0 22px rgba(201,165,84,.45)" }}>
               「{outputs.magic_phrase}」
             </p>
+            <OrnamentalDivider />
           </div>
         )}
 
+        {/* 【5】 X でシェア（ゴールド CTA） */}
         <div className="mt-4">
-          <XShareButton text={`✦ ${my_sign}×${their_sign}の相性を診断しました。#ASTERIA #相性診断`} />
+          <XShareButton variant="gold" text={`✦ ${my_sign}×${their_sign}の相性を診断しました。#ASTERIA #相性診断`} />
         </div>
 
         <button onClick={() => router.push("/compat")}
