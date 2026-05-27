@@ -184,6 +184,7 @@ export default function ReadingResultPage() {
             : { borderLeft: `3px solid ${def.color}` }
           return (
             <div key={def.key}>
+              {i > 0 && <SectionDivider />}
               <ChapterHeading number={i + 1} title={def.title} subtitle={def.subtitle} color={def.color} />
               <div className={isAlert ? "rounded-2xl p-4" : "card p-4"} style={cardStyle}>
                 {(tag || summary) && (

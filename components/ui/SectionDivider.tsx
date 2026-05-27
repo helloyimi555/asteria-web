@@ -19,13 +19,16 @@ export function SectionDivider({
       </div>
     )
   }
+  // ✦ · · · ✦ · · · ✦ のゴールド装飾ライン
   return (
-    <div className={`flex items-center justify-center gap-2 my-5 ${className}`}>
-      <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/20 to-gold/40" />
-      <span className="text-gold/40 text-[8px]">✦</span>
-      <span className="text-gold/70 text-[11px]">◆</span>
-      <span className="text-gold/40 text-[8px]">✦</span>
-      <div className="flex-1 h-px bg-gradient-to-l from-transparent via-gold/20 to-gold/40" />
+    <div className={`flex items-center justify-center gap-1.5 my-6 ${className}`}>
+      <div className="flex-1 h-px bg-gradient-to-r from-transparent to-gold/30" />
+      <span className="text-gold/70 text-[10px]">✦</span>
+      <span className="text-gold/30 text-[7px] tracking-[0.3em]">···</span>
+      <span className="text-gold text-[13px]">✦</span>
+      <span className="text-gold/30 text-[7px] tracking-[0.3em]">···</span>
+      <span className="text-gold/70 text-[10px]">✦</span>
+      <div className="flex-1 h-px bg-gradient-to-l from-transparent to-gold/30" />
     </div>
   )
 }

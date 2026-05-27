@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation"
 import { Stars } from "@/components/ui/Stars"
 import AstrologyLoading from "@/components/ui/AstrologyLoading"
 import { BottomNav } from "@/components/layout/BottomNav"
+import { HintBox } from "@/components/ui/HintBox"
 import { getSunSign } from "@/lib/zodiac"
 import clsx from "clsx"
 import { compatApi, isLoggedIn } from "@/lib/api"
@@ -186,6 +187,14 @@ const handleSubmit = async () => {
               </button>
             ))}
           </div>
+        </div>
+        <div className="mt-3">
+          <HintBox items={[
+            "出生時刻が不明でも診断できます",
+            "出生地は市区町村までで問題ありません",
+            "MBTIは任意です",
+            "個人情報は暗号化され安全に保護されます",
+          ]} />
         </div>
         {error && <div className="mt-3 p-3 rounded-xl bg-red-500/10 border border-red-500/35 text-[12px] text-red-400 flex gap-2"><span>⚠</span><span>{error}</span></div>}
         <button onClick={handleSubmit} disabled={!ok||loading} className="btn-gold w-full py-4 text-[16px] mt-4">
