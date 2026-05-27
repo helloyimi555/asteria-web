@@ -8,13 +8,17 @@ import clsx from "clsx"
 import { useState, useEffect } from "react"
 import NatalChart from "@/components/ui/NatalChart"
 import { XShareButton } from "@/components/ui/XShareButton"
+import { ChapterHeading } from "@/components/ui/ChapterHeading"
+import { SectionDivider } from "@/components/ui/SectionDivider"
 import { formatReadingDateTime, formatReadingPeriodText, themeLabel as resolveThemeLabel } from "@/utils/dateUtils"
 
-const THEME_CARDS = [
-  { key:"work",    label:"仕事運",  icon:"💼", c:"#70B4FF", bg:"rgba(112,180,255,.15)" },
-  { key:"love",    label:"恋愛運",  icon:"♡",  c:"#F07098", bg:"rgba(240,112,152,.15)" },
-  { key:"health",  label:"健康運",  icon:"◎",  c:"#70DDA8", bg:"rgba(112,221,168,.15)" },
-  { key:"caution", label:"注意点",  icon:"△",  c:"#FFC96E", bg:"rgba(255,201,110,.15)" },
+// 鑑定書の章立て定義（存在するセクションだけ順に Chapter 番号を振る）
+const CHAPTER_DEFS = [
+  { key: "overall", title: "総合メッセージ",       subtitle: "星からの大切なメッセージ", color: "#C9A554" },
+  { key: "love",    title: "恋愛・人間関係",       subtitle: "心のつながりを星が照らす", color: "#F07098" },
+  { key: "work",    title: "仕事・行動指針",       subtitle: "あなたの可能性を広げる",   color: "#70B4FF" },
+  { key: "health",  title: "健康・コンディション", subtitle: "心身のバランスを整える",   color: "#70DDA8" },
+  { key: "caution", title: "注意点",               subtitle: "気をつけたいポイント",     color: "#FFC96E" },
 ]
 
 // セクションのタグ色（バックエンドが返す4種）
@@ -96,6 +100,12 @@ export default function ReadingResultPage() {
   const { outputs } = reading
   const themeLabel = resolveThemeLabel(reading.theme)
 
+  // 表示対象の章（ゲストは総合のみ）。ラッキーアクションの章番号算出にも使う
+  const presentChapters = CHAPTER_DEFS.filter(d =>
+    (d.key === "overall" || !isGuest) && !!getContent((outputs as any)?.[d.key])
+  )
+  const luckyChapterNo = presentChapters.length + 1
+
   return (
     <div className="relative min-h-screen pb-28">
       <Stars />
@@ -133,25 +143,37 @@ export default function ReadingResultPage() {
           </p>
         )}
 
-        {/* メインテーマ */}
-        {outputs?.overall && (() => {
-          const overallTag     = getTag(outputs.overall)
-          const overallSummary = getSummary(outputs.overall)
-          const overallContent = getContent(outputs.overall)
+        {/* 章立て（総合メッセージ・恋愛・仕事・健康・注意点） */}
+        {presentChapters.map((def, i) => {
+          const section = (outputs as any)?.[def.key]
+          const content = getContent(section)
+          const tag     = getTag(section)
+          const summary = getSummary(section)
+          // 注意点は注意カード（ダークレッド）配色にする
+          const isAlert = def.key === "caution"
+          const cardStyle = isAlert
+            ? { borderLeft: `3px solid ${def.color}`, background: "linear-gradient(135deg,rgba(48,20,26,.85),rgba(24,16,28,.9))", border: "1px solid rgba(240,150,120,.22)" }
+            : { borderLeft: `3px solid ${def.color}` }
           return (
-            <div className="card mt-3 p-4" style={{ borderLeft:"3px solid rgba(201,165,84,.6)" }}>
-              <div className="flex items-center gap-2 mb-3 flex-wrap">
-                <span className="text-gold text-sm">✦</span>
-                <span className="font-sans text-[13px] font-bold text-[#F0F0F8]">{themeLabel}</span>
-                {overallTag && <TagPill tag={overallTag} />}
-                {overallSummary && (
-                  <span className="text-[13px] text-white/55 leading-tight">{overallSummary}</span>
+            <div key={def.key}>
+              <ChapterHeading number={i + 1} title={def.title} subtitle={def.subtitle} color={def.color} />
+              <div className={isAlert ? "rounded-2xl p-4" : "card p-4"} style={cardStyle}>
+                {(tag || summary) && (
+                  <div className="flex items-center gap-2 mb-2.5 flex-wrap">
+                    {tag && <TagPill tag={tag} />}
+                    {summary && <span className="text-[12px] text-white/55 leading-tight">{summary}</span>}
+                  </div>
                 )}
+                {def.key === "overall"
+                  ? <OverallText text={content} isGuest={isGuest} />
+                  : <p className="font-sans text-[13px] leading-[1.9] text-[#C0C0D8] font-light whitespace-pre-line">{content}</p>}
               </div>
-              <OverallText text={overallContent} isGuest={isGuest} />
             </div>
           )
-        })()}
+        })}
+
+        {/* 鑑定本文 → 天体データ・補足の区切り */}
+        {!isGuest && <SectionDivider label="天体データ" />}
 
         {/* 根拠 toggle */}
         {!isGuest && (
@@ -179,35 +201,6 @@ export default function ReadingResultPage() {
           <NatalChart positions={reading.natal_positions} meanings={meanings} />
         )}
 
-        {/* テーマ別 2x2 - ゲストには非表示 */}
-        {!isGuest && (
-          <div className="grid grid-cols-2 gap-2.5 mt-2.5">
-            {THEME_CARDS.map(({ key, label, icon, c, bg }) => {
-              const section = (outputs as any)?.[key]
-              const content = getContent(section)
-              if (!content) return null
-              const tag     = getTag(section)
-              const summary = getSummary(section)
-              return (
-                <div key={key} className="card p-3.5">
-                  <div className="flex items-start justify-between gap-2 mb-2">
-                    <div className="w-11 h-11 rounded-full flex items-center justify-center text-lg shrink-0"
-                      style={{ background:bg, border:`1px solid ${c}30`, color:c }}>
-                      {icon}
-                    </div>
-                    {tag && <TagPill tag={tag} />}
-                  </div>
-                  <div className="text-[12px] font-bold mb-1" style={{ color:c }}>{label}</div>
-                  {summary && (
-                    <div className="text-[11px] text-white/55 leading-relaxed mb-1.5">{summary}</div>
-                  )}
-                  <p className="font-sans text-[11px] leading-[1.75] text-[#A0A0C0] font-light">{content}</p>
-                </div>
-              )
-            })}
-          </div>
-        )}
-
         {/* キーワード - ゲストには非表示 */}
         {!isGuest && (outputs?.keywords as any)?.length > 0 && (
           <div className="card mt-2.5 p-4">
@@ -229,13 +222,20 @@ export default function ReadingResultPage() {
 
         {/* ラッキーアクション - ゲストには非表示 */}
         {!isGuest && outputs?.lucky_action && (
-          <div className="mt-2.5 p-4 rounded-xl"
-            style={{ background:"linear-gradient(135deg,rgba(120,80,10,.85),rgba(80,50,5,.85))", border:"1px solid rgba(201,165,84,.3)" }}>
-            <div className="text-[11px] text-gold tracking-wider mb-1.5">✦ ラッキーアクション</div>
-            <div className="font-serif text-[15px] italic text-[#F0D880] leading-relaxed">
-              {outputs.lucky_action}
+          <>
+            <ChapterHeading number={luckyChapterNo} title="ラッキーアクション"
+              subtitle="運気を引き寄せるヒント" color="#C9A554" />
+            <div className="p-4 rounded-2xl"
+              style={{ background:"linear-gradient(135deg,rgba(20,44,32,.9),rgba(14,30,22,.9))", border:"1px solid rgba(112,221,168,.28)" }}>
+              <div className="flex items-center gap-1.5 mb-1.5">
+                <span style={{ color:"#8BC34A" }}>✸</span>
+                <span className="text-[11px] tracking-wider" style={{ color:"#A8E08F" }}>今日のラッキーアクション</span>
+              </div>
+              <div className="font-serif text-[15px] italic leading-relaxed" style={{ color:"#D8E8D0" }}>
+                {outputs.lucky_action}
+              </div>
             </div>
-          </div>
+          </>
         )}
 
         {/* アドバイス - ゲストには非表示 */}
@@ -280,7 +280,8 @@ export default function ReadingResultPage() {
             : `✦ 運勢を占いました。#ASTERIA #占星術`
           return (
             <>
-              <div className="mt-4">
+              <SectionDivider />
+              <div className="mt-1">
                 <XShareButton text={shareText} />
               </div>
               <button onClick={() => router.push("/reading")}

@@ -43,28 +43,47 @@
     border-radius: 16px;
   }
 
+  /* 02. ゴールド CTA ボタン（通常 / ホバー=明るく / 無効=くすんだゴールド）*/
   .btn-gold {
     background: linear-gradient(135deg, #C9A554 0%, #8A5820 50%, #C9A554 100%);
     background-size: 200% auto;
-    color: white;
+    color: #fff;
     border-radius: 12px;
     font-family: var(--font-serif);
     letter-spacing: 0.08em;
     transition: all 0.2s;
     box-shadow: 0 4px 28px rgba(201,165,84,0.35);
   }
-  .btn-gold:hover { background-position: right center; }
+  .btn-gold:hover:not(:disabled) {
+    background-position: right center;
+    filter: brightness(1.12);
+    box-shadow: 0 4px 34px rgba(201,165,84,0.55);
+  }
   .btn-gold:disabled {
-    background: rgba(255,255,255,0.06);
-    color: #505070;
+    background: linear-gradient(135deg, #6B5A30 0%, #4A3A1C 50%, #6B5A30 100%);
+    color: rgba(247,243,231,0.45);
     box-shadow: none;
+    cursor: not-allowed;
   }
 
+  /* 02. アウトラインボタン（通常 / ホバー / 無効）*/
   .btn-gold-outline {
     border: 1px solid rgba(201,165,84,0.4);
     color: #C9A554;
     border-radius: 50px;
     font-family: var(--font-serif);
+    background: transparent;
+    transition: all 0.2s;
+  }
+  .btn-gold-outline:hover:not(:disabled) {
+    border-color: rgba(201,165,84,0.8);
+    background: rgba(201,165,84,0.08);
+    color: #F0D880;
+  }
+  .btn-gold-outline:disabled {
+    border-color: rgba(201,165,84,0.15);
+    color: rgba(201,165,84,0.35);
+    cursor: not-allowed;
   }
 
   .shimmer-gold {
@@ -85,13 +104,30 @@
     font-family: var(--font-sans);
     font-size: 14px;
     width: 100%;
-    transition: border-color 0.2s;
+    transition: border-color 0.2s, box-shadow 0.2s;
   }
+  /* 03. フォーカス状態：ゴールドボーダー + 淡いリング */
   .input-field:focus {
     outline: none;
-    border-color: rgba(201,165,84,0.4);
+    border-color: rgba(201,165,84,0.7);
+    box-shadow: 0 0 0 3px rgba(201,165,84,0.12);
   }
   .input-field::placeholder { color: rgba(255,255,255,0.3); }
+
+  /* 03. エラー状態：レッドボーダー（.input-error クラス or aria-invalid）*/
+  .input-field.input-error,
+  .input-field[aria-invalid="true"] {
+    border-color: rgba(240,110,110,0.7);
+  }
+  .input-field.input-error:focus,
+  .input-field[aria-invalid="true"]:focus {
+    box-shadow: 0 0 0 3px rgba(240,110,110,0.14);
+  }
+  .input-error-text {
+    color: #F08080;
+    font-size: 11px;
+    margin-top: 4px;
+  }
 }
 
 @keyframes shimmer {

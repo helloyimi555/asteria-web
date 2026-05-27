@@ -5,6 +5,7 @@ import { mutate as globalMutate } from "swr"
 import { Stars } from "@/components/ui/Stars"
 import AstrologyLoading from "@/components/ui/AstrologyLoading"
 import { BottomNav } from "@/components/layout/BottomNav"
+import { HintBox } from "@/components/ui/HintBox"
 import { getSunSign, READING_THEMES, READING_PERIODS } from "@/lib/zodiac"
 import { profileApi, readingApi, guestReadingApi, isLoggedIn } from "@/lib/api"
 import clsx from "clsx"
@@ -422,21 +423,26 @@ export default function ReadingInputPage() {
           </div>
         </div>
 
+        <div className="mt-3">
+          <HintBox items={[
+            "出生時刻が不明でも鑑定できます",
+            "出生地は市区町村までで問題ありません",
+            "MBTIは任意です",
+            "個人情報は暗号化され安全に保護されます",
+          ]} />
+        </div>
+
         {error && (
           <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/35
-                          text-[12px] text-red-400 flex gap-2 mb-3">
+                          text-[12px] text-red-400 flex gap-2 mt-3">
             <span>⚠</span><span>{error}</span>
           </div>
         )}
 
         <button onClick={handleSubmit} disabled={!ok || loading}
-          className="btn-gold w-full py-3.5 text-[15px]">
+          className="btn-gold w-full py-3.5 text-[15px] mt-3">
           {loading ? "鑑定中..." : "✦ 鑑定を開始する ✦"}
         </button>
-
-        <p className="text-center text-[11px] text-white/30 mt-2.5 flex items-center justify-center gap-1">
-          <span>🔒</span><span>出生情報は暗号化して保存されます</span>
-        </p>
       </div>
       <BottomNav />
     </div>
