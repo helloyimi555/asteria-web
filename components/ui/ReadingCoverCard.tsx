@@ -130,7 +130,7 @@ export function ReadingCoverCard({ date, title, theme, keywords = [], message }:
 
       {/* 下部のエンブレム（バナー底の線を下辺の細線に乗せる。bottom 値で上下微調整） */}
       <img src="/asteria/assets/cover-seal.png" alt="" aria-hidden
-        className="pointer-events-none absolute bottom-[-7px] left-1/2 w-28 -translate-x-1/2 brightness-110 saturate-[.92]" />
+        className="pointer-events-none absolute bottom-0 left-1/2 w-28 -translate-x-1/2 brightness-110 saturate-[.92]" />
     </div>
   )
 }
