@@ -137,7 +137,7 @@ export default function GuidePage() {
                   <div className="text-[11px] text-gold flex items-center gap-1.5 mb-2">
                     <span>✦</span><span>{a.rel}</span><span>✦</span>
                   </div>
-                  <div className="font-serif text-6xl leading-none mb-3" style={{ color:a.c }}>{a.deg}</div>
+                  <div className="font-serif text-4xl leading-none mb-3" style={{ color:a.c }}>{a.deg}</div>
                   <p className="font-sans text-[12px] text-white/55 leading-relaxed">{a.desc}</p>
                 </div>
               </div>
