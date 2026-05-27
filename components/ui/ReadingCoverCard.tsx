@@ -17,16 +17,15 @@ export function ReadingCoverCard({ date, title, theme, keywords = [], message }:
   return (
     <div
       className="relative mx-auto mt-3 w-full overflow-hidden rounded-[28px]"
-      style={{ maxHeight: "85vh", backgroundColor: "#04060F" }}
+      style={{
+        maxHeight: "85vh",
+        backgroundImage: "url('/asteria/assets/cover-bg-wide.png')",
+        backgroundSize: "100% 100%",
+        backgroundRepeat: "no-repeat",
+        backgroundColor: "#04060F",
+      }}
     >
-      {/* 背景フレーム（全幅・コンテンツ高に合わせて被覆） */}
-      <img
-        src="/asteria/assets/cover-bg-wide.png"
-        alt=""
-        className="pointer-events-none absolute inset-0 w-full h-full object-cover"
-      />
-
-      {/* コンテンツ（背景上に重ねる。高さはこの要素が決める） */}
+      {/* コンテンツ（高さはこの要素が決める。背景は外側 div に伸縮適用） */}
       <div className="relative z-10 flex flex-col items-center px-8 pb-8 pt-4 text-center">
         {/* ヘッダー */}
         <div className="flex items-center justify-center gap-2.5 text-gold/90">
