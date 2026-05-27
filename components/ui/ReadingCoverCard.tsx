@@ -26,24 +26,20 @@ const SCATTER = [
 export function ReadingCoverCard({ date, title, theme, keywords = [], message }: ReadingCoverCardProps) {
   return (
     <div
-      className="relative mt-2 w-full overflow-hidden rounded-2xl"
+      className="relative mt-2 w-full overflow-hidden rounded-lg"
       style={{
         background: "radial-gradient(ellipse at 50% 8%, #15244E 0%, #0A1230 52%, #060B1F 100%)",
-        border: "1px solid rgba(201,165,84,0.5)",
       }}
     >
-      {/* 辺の二重ゴールドライン（内側の細線。辺はCSSで描画） */}
-      <span className="pointer-events-none absolute inset-2 rounded-xl border border-gold/20" />
-
-      {/* 四隅のコーナー装飾（1枚を反転・回転で4箇所に配置。サイズは w-28/h-28＝112px で調整可） */}
+      {/* B案プレビュー：辺のCSS線はオフ。四隅に corner-frame.png を反転・回転で配置（辺は線なし＝暫定） */}
       <img src="/asteria/assets/corner-ornament.png" alt="" aria-hidden
-        className="pointer-events-none absolute left-1 top-1 h-28 w-28" />
+        className="pointer-events-none absolute left-0 top-0 h-28 w-28" />
       <img src="/asteria/assets/corner-ornament.png" alt="" aria-hidden
-        className="pointer-events-none absolute right-1 top-1 h-28 w-28 -scale-x-100" />
+        className="pointer-events-none absolute right-0 top-0 h-28 w-28 -scale-x-100" />
       <img src="/asteria/assets/corner-ornament.png" alt="" aria-hidden
-        className="pointer-events-none absolute bottom-1 left-1 h-28 w-28 -scale-y-100" />
+        className="pointer-events-none absolute bottom-0 left-0 h-28 w-28 -scale-y-100" />
       <img src="/asteria/assets/corner-ornament.png" alt="" aria-hidden
-        className="pointer-events-none absolute bottom-1 right-1 h-28 w-28 -scale-100" />
+        className="pointer-events-none absolute bottom-0 right-0 h-28 w-28 -scale-100" />
 
       {/* 星屑（装飾） */}
       {SCATTER.map((cls, i) => (
