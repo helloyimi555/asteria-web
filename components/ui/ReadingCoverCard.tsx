@@ -31,8 +31,8 @@ export function ReadingCoverCard({ date, title, theme, keywords = [], message }:
         background: "radial-gradient(ellipse at 50% 8%, #15244E 0%, #0A1230 52%, #060B1F 100%)",
       }}
     >
-      {/* C案：辺をつなぐ細いゴールド線（コーナーの内側に沿わせて額縁を閉じる。inset値で位置調整） */}
-      <span className="pointer-events-none absolute inset-[14px] rounded-md border border-gold/30" />
+      {/* C案：辺をつなぐ細いゴールド線（コーナーの外側から2本目の線に合わせる。計測値: 表示≈8.6px） */}
+      <span className="pointer-events-none absolute inset-[9px] rounded-md border border-gold/30" />
 
       {/* 四隅に corner-ornament.png を反転・回転で配置（細い辺線の上に重なる） */}
       <img src="/asteria/assets/corner-ornament.png" alt="" aria-hidden
@@ -51,7 +51,7 @@ export function ReadingCoverCard({ date, title, theme, keywords = [], message }:
         </span>
       ))}
 
-      <div className="relative z-10 flex flex-col items-center px-6 pb-9 pt-8 text-center">
+      <div className="relative z-10 flex flex-col items-center px-6 pb-32 pt-8 text-center">
         {/* ヘッダー */}
         <div className="flex items-center justify-center gap-2.5 text-gold/90">
           <span className="text-[10px]">✦</span>
@@ -126,9 +126,11 @@ export function ReadingCoverCard({ date, title, theme, keywords = [], message }:
           </div>
         )}
 
-        {/* 下部のエンブレム（コンパスローズ。サイズは w-40＝160px で調整可） */}
-        <img src="/asteria/assets/cover-seal.png" alt="" aria-hidden className="mx-auto mt-6 w-40" />
       </div>
+
+      {/* 下部のエンブレム（下辺の線＝下の四隅に合わせて、絶対配置で下中央に） */}
+      <img src="/asteria/assets/cover-seal.png" alt="" aria-hidden
+        className="pointer-events-none absolute bottom-1 left-1/2 w-40 -translate-x-1/2" />
     </div>
   )
 }
