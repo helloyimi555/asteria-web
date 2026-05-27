@@ -5,7 +5,8 @@ import { Stars } from "@/components/ui/Stars"
 import { BottomNav } from "@/components/layout/BottomNav"
 import { readingApi } from "@/lib/api"
 import type { Reading } from "@/types"
-import { formatReadingTitle, formatReadingPeriodText, formatReadingDate } from "@/utils/dateUtils"
+import { formatReadingTitle, formatReadingDate, inferPeriodId } from "@/utils/dateUtils"
+import { getThemeConfig } from "@/utils/themeConfig"
 
 // outputs.overall は string か {tag,summary,content} のどちらでも来うる
 function overallText(overall: any): string {
@@ -52,27 +53,30 @@ useEffect(() => {
         )}
 
         <div className="space-y-3">
-          {readings.map(r => (
-            <button key={r.reading_id} onClick={() => router.push(`/reading/${r.reading_id}`)}
-              className="card w-full p-4 text-left hover:border-gold/30 transition-colors">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-[13px] font-bold text-[#F0F0F8]">
-                  {formatReadingTitle(r.theme, "", r.created_at)}
-                </span>
-                <span className="text-[11px] text-white/30">
-                  {formatReadingDate(r.created_at)}
-                </span>
-              </div>
-              {overallText(r.outputs?.overall) && (
-                <p className="text-[12px] text-white/50 leading-relaxed line-clamp-2">
-                  {overallText(r.outputs?.overall)}
-                </p>
-              )}
-              <div className="text-[11px] text-gold/60 mt-2">
-                {formatReadingPeriodText("", r.period_start, r.period_end)}
-              </div>
-            </button>
-          ))}
+          {readings.map(r => {
+            const cfg = getThemeConfig(r.theme)
+            const period = inferPeriodId(r.period_start, r.period_end)
+            return (
+              <button key={r.reading_id} onClick={() => router.push(`/reading/${r.reading_id}`)}
+                className="card w-full p-4 text-left hover:border-gold/30 transition-colors"
+                style={{ borderLeft: `3px solid ${cfg.color}` }}>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-[13px] font-bold text-[#F0F0F8] flex items-center gap-1.5">
+                    <span style={{ color: cfg.color }}>{cfg.icon}</span>
+                    {formatReadingTitle(r.theme, period, r.created_at)}
+                  </span>
+                  <span className="text-[11px] text-white/30">
+                    {formatReadingDate(r.created_at)}に鑑定
+                  </span>
+                </div>
+                {overallText(r.outputs?.overall) && (
+                  <p className="text-[12px] text-white/50 leading-relaxed line-clamp-2">
+                    {overallText(r.outputs?.overall)}
+                  </p>
+                )}
+              </button>
+            )
+          })}
         </div>
       </div>
       <BottomNav />

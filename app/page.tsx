@@ -8,7 +8,8 @@ import AstrologyLoading from "@/components/ui/AstrologyLoading"
 import { XShareButton } from "@/components/ui/XShareButton"
 import { isLoggedIn, clearTokens, guestPersonalityApi, homeApi, readingApi, type GuestPersonalityResult, type DailyHome } from "@/lib/api"
 import type { Reading } from "@/types"
-import { formatReadingTitle, formatReadingPeriodText } from "@/utils/dateUtils"
+import { formatReadingTitle, formatReadingDate, inferPeriodId } from "@/utils/dateUtils"
+import { getThemeConfig } from "@/utils/themeConfig"
 
 const FEATURES = [
   { icon:"🔭", title:"天体計算",  desc:"Swiss Ephemerisによる正確な計算" },
@@ -221,20 +222,25 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
                 <span className="text-gold text-xs">✦</span>
                 <span className="text-[12px] font-bold text-[#F0F0F8]">最近の鑑定</span>
               </div>
-              {readings.slice(0, 3).map((r, i) => (
-                <Link key={r.reading_id} href={`/reading/${r.reading_id}`}
-                  className={`flex items-center gap-2.5 px-4 py-3 hover:bg-white/[0.02] transition-colors ${i > 0 ? "border-t border-white/[0.04]" : ""}`}>
-                  <div className="w-8 h-8 rounded-full flex items-center justify-center text-gold shrink-0 text-[12px]"
-                    style={{ background: "rgba(201,165,84,.1)", border: "1px solid rgba(201,165,84,.25)" }}>
-                    ✦
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="text-[12px] text-[#F0F0F8]">{formatReadingTitle(r.theme, "", r.created_at)}</div>
-                    <div className="text-[10px] text-white/40">{formatReadingPeriodText("", r.period_start, r.period_end)}</div>
-                  </div>
-                  <span className="text-white/30 text-sm">›</span>
-                </Link>
-              ))}
+              {readings.slice(0, 3).map((r, i) => {
+                const cfg = getThemeConfig(r.theme)
+                const period = inferPeriodId(r.period_start, r.period_end)
+                return (
+                  <Link key={r.reading_id} href={`/reading/${r.reading_id}`}
+                    className={`flex items-center gap-2.5 px-4 py-3 hover:bg-white/[0.02] transition-colors ${i > 0 ? "border-t border-white/[0.04]" : ""}`}
+                    style={{ borderLeft: `2px solid ${cfg.color}` }}>
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-[13px]"
+                      style={{ background: cfg.bg, border: `1px solid ${cfg.color}55`, color: cfg.color }}>
+                      {cfg.icon}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="text-[12px] text-[#F0F0F8]">{formatReadingTitle(r.theme, period, r.created_at)}</div>
+                      <div className="text-[10px] text-white/35">{formatReadingDate(r.created_at)}に鑑定</div>
+                    </div>
+                    <span className="text-white/30 text-sm">›</span>
+                  </Link>
+                )
+              })}
             </div>
           ) : (
             <div className="card p-5 text-center">

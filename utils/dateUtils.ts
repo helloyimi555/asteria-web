@@ -1,14 +1,6 @@
 // 日付・期間フォーマットの共通ユーティリティ
 // 鑑定のテーマ／期間／日時表示はすべてここを経由する
-
-const THEME_LABELS: Record<string, string> = {
-  general:      "総合運",
-  work:         "仕事運",
-  love:         "恋愛運",
-  health:       "健康運",
-  money:        "金運",
-  relationship: "人間関係",
-}
+import { getThemeConfig } from "./themeConfig"
 
 // period の値 → 日本語ラベル。
 // コードベースの実 ID（today/week/month/half2/year）と、別名（this_week 等）の両方を受け付ける
@@ -25,9 +17,38 @@ const PERIOD_LABELS: Record<string, string> = {
   next_year:      "来年",
 }
 
-/** テーマ ID → 日本語ラベル（未知の値はそのまま返す） */
+/** テーマ ID → 日本語ラベル（themeConfig を単一情報源として委譲） */
 export function themeLabel(theme: string): string {
-  return THEME_LABELS[theme] ?? theme
+  return getThemeConfig(theme).label
+}
+
+/** period_start / period_end の日付範囲から period ID を推定する。
+ *  鑑定作成時の getPeriodDates が決定論的に範囲を生成するため、逆算可能。
+ *  推定できない場合は空文字を返す（呼び出し側で日付フォールバック）。 */
+export function inferPeriodId(start?: string | null, end?: string | null): string {
+  if (!start) return ""
+  const s = new Date(start); if (isNaN(s.getTime())) return ""
+  s.setHours(0, 0, 0, 0)
+  const e = end ? new Date(end) : new Date(start)
+  if (isNaN(e.getTime())) return ""
+  e.setHours(0, 0, 0, 0)
+  const today = new Date(); today.setHours(0, 0, 0, 0)
+  const DAY = 86_400_000
+  const startDiff = Math.round((s.getTime() - today.getTime()) / DAY)
+  const spanDays  = Math.round((e.getTime() - s.getTime()) / DAY)
+
+  if (spanDays === 0) {
+    if (startDiff === 0) return "today"
+    if (startDiff === 1) return "tomorrow"
+    return ""
+  }
+  if (spanDays === 6) return "week"               // 今日から7日間
+  const lastDay = new Date(s.getFullYear(), s.getMonth() + 1, 0).getDate()
+  if (s.getMonth() === e.getMonth() && e.getDate() === lastDay) return "month"  // 月末まで
+  if (s.getMonth() === 6 && s.getDate() === 1 && e.getMonth() === 11 && e.getDate() === 31) return "half2"  // 7-12月
+  if (s.getMonth() === 0 && s.getDate() === 1 && e.getMonth() === 11 && e.getDate() === 31
+      && s.getFullYear() > today.getFullYear()) return "year"  // 翌年通年
+  return ""
 }
 
 /** 単日の相対表現（今日/明日/昨日）。該当しなければ null */
@@ -67,9 +88,11 @@ export function formatPeriodLabel(period: string): string {
   return PERIOD_LABELS[period] ?? period
 }
 
-/** 「5月27日の総合運」形式（ホーム・マイページ・履歴一覧で使う）
- *  period は将来拡張用に受け取るが、表示は createdAt の日付 + テーマ */
+/** 「今日の総合運」「今週の総合運」「今月の恋愛運」形式（ホーム・マイページ・履歴一覧で使う）
+ *  period が既知の ID/別名なら「{期間}の{テーマ}」、未知なら createdAt の日付で代替 */
 export function formatReadingTitle(theme: string, period: string, createdAt: string): string {
+  const periodLabel = period ? PERIOD_LABELS[period] : undefined
+  if (periodLabel) return `${periodLabel}の${themeLabel(theme)}`
   return `${formatReadingDate(createdAt)}の${themeLabel(theme)}`
 }
 
