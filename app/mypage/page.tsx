@@ -311,9 +311,9 @@ export default function MyPage() {
           </div>
         )}
 
-        {/* プレミアムプラン */}
+        {/* プレミアムプラン（決済は未実装のため案内のみ）*/}
         <div className="mb-4">
-          <PremiumCard />
+          <PremiumCard onClick={() => alert("プレミアムプランは近日公開予定です。")} />
         </div>
 
         {/* Personality */}

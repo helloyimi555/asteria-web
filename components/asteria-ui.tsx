@@ -40,19 +40,39 @@ export function BaseCard({
   interactive = false,
   className,
   children,
+  style,
   ...props
 }: BaseCardProps) {
-  const variants: Record<BaseCardVariant, string> = {
-    default:
-      "border-white/10 bg-white/[0.04] shadow-[0_0_30px_rgba(201,165,84,0.06)]",
-    summary:
-      "border-[#C9A554]/35 bg-[radial-gradient(circle_at_top,rgba(201,165,84,0.16),rgba(255,255,255,0.045)_42%,rgba(255,255,255,0.025))] shadow-[0_0_42px_rgba(201,165,84,0.14)]",
-    premium:
-      "border-[#C9A554]/45 bg-[linear-gradient(180deg,rgba(201,165,84,0.28),rgba(255,255,255,0.055)_34%,rgba(255,255,255,0.035))] shadow-[0_0_48px_rgba(201,165,84,0.18)]",
-    notice:
-      "border-amber-400/30 bg-amber-950/20 shadow-[0_0_30px_rgba(251,191,36,0.08)]",
-    lucky:
-      "border-emerald-300/25 bg-emerald-950/20 shadow-[0_0_30px_rgba(110,231,183,0.08)]",
+  // 信頼性のため、ゴールド系グラデーション/ボーダー/シャドウはインラインスタイルで指定
+  // （Tailwind の任意値 radial/linear-gradient は JIT で取りこぼされることがある）
+  const variantStyles: Record<BaseCardVariant, React.CSSProperties> = {
+    default: {
+      borderColor: "rgba(255,255,255,0.1)",
+      background: "rgba(255,255,255,0.04)",
+      boxShadow: "0 0 30px rgba(201,165,84,0.06)",
+    },
+    summary: {
+      borderColor: "rgba(201,165,84,0.35)",
+      background:
+        "radial-gradient(circle at top, rgba(201,165,84,0.16), rgba(255,255,255,0.045) 42%, rgba(255,255,255,0.025))",
+      boxShadow: "0 0 42px rgba(201,165,84,0.14)",
+    },
+    premium: {
+      borderColor: "rgba(201,165,84,0.45)",
+      background:
+        "linear-gradient(180deg, rgba(201,165,84,0.28), rgba(255,255,255,0.055) 34%, rgba(255,255,255,0.035))",
+      boxShadow: "0 0 48px rgba(201,165,84,0.18)",
+    },
+    notice: {
+      borderColor: "rgba(251,191,36,0.3)",
+      background: "rgba(69,26,3,0.2)",
+      boxShadow: "0 0 30px rgba(251,191,36,0.08)",
+    },
+    lucky: {
+      borderColor: "rgba(110,231,183,0.25)",
+      background: "rgba(2,44,34,0.2)",
+      boxShadow: "0 0 30px rgba(110,231,183,0.08)",
+    },
   };
 
   return (
@@ -60,7 +80,6 @@ export function BaseCard({
       className={cn(
         "relative overflow-hidden rounded-2xl border p-5 backdrop-blur-sm",
         "before:pointer-events-none before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_top_right,rgba(201,165,84,0.12),transparent_36%)] before:opacity-70",
-        variants[variant],
         interactive &&
           cn(
             baseTransition,
@@ -68,6 +87,7 @@ export function BaseCard({
           ),
         className
       )}
+      style={{ ...variantStyles[variant], ...style }}
       {...props}
     >
       <div className="relative z-10">{children}</div>

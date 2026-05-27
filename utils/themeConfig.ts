@@ -10,8 +10,8 @@ export interface ThemeConfig {
 
 const THEME_CONFIG: Record<string, ThemeConfig> = {
   general:      { label: "総合運",   icon: "✦", color: "#C9A554", bg: "rgba(201,165,84,.15)" },
-  work:         { label: "仕事運",   icon: "⬡", color: "#70B4FF", bg: "rgba(112,180,255,.15)" },
-  love:         { label: "恋愛運",   icon: "♡", color: "#F07098", bg: "rgba(240,112,152,.15)" },
+  work:         { label: "仕事運",   icon: "⚡", color: "#70B4FF", bg: "rgba(112,180,255,.15)" },
+  love:         { label: "恋愛運",   icon: "♥", color: "#F07098", bg: "rgba(240,112,152,.15)" },
   health:       { label: "健康運",   icon: "◎", color: "#70DDA8", bg: "rgba(112,221,168,.15)" },
   money:        { label: "金運",     icon: "¥", color: "#F0C75E", bg: "rgba(240,199,94,.15)" },
   relationship: { label: "人間関係", icon: "✿", color: "#A37DFF", bg: "rgba(163,125,255,.15)" },
