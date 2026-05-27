@@ -31,8 +31,8 @@ export function ReadingCoverCard({ date, title, theme, keywords = [], message }:
         background: "radial-gradient(ellipse at 50% 8%, #15244E 0%, #0A1230 52%, #060B1F 100%)",
       }}
     >
-      {/* 枠線は上・左・右の3辺のみ（下辺は四隅装飾＋エンブレムで締める。線がエンブレムを横切る重なりを回避） */}
-      <span className="pointer-events-none absolute inset-[8px] rounded-md border-t-2 border-x-2" style={{ borderColor: "#E3AE59" }} />
+      {/* 枠線（4辺連続・#E3AE59）。線なしエンブレムが下辺の上に乗る */}
+      <span className="pointer-events-none absolute inset-[8px] rounded-md border-2" style={{ borderColor: "#E3AE59" }} />
 
       {/* 四隅に corner-ornament.png を反転・回転で配置（細い辺線の上に重なる） */}
       <img src="/asteria/assets/corner-ornament.png" alt="" aria-hidden
@@ -130,7 +130,7 @@ export function ReadingCoverCard({ date, title, theme, keywords = [], message }:
 
       {/* 下部のエンブレム（バナー底の線を下辺の細線に乗せる。bottom 値で上下微調整） */}
       <img src="/asteria/assets/cover-seal.png" alt="" aria-hidden
-        className="pointer-events-none absolute bottom-[-20px] left-1/2 w-40 -translate-x-1/2 brightness-110 saturate-[.92]" />
+        className="pointer-events-none absolute bottom-[-12px] left-1/2 w-40 -translate-x-1/2 brightness-110 saturate-[.92]" />
     </div>
   )
 }
