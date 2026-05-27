@@ -36,13 +36,13 @@ export function ReadingCoverCard({ date, title, theme, keywords = [], message }:
 
       {/* 四隅に corner-ornament.png を反転・回転で配置（細い辺線の上に重なる） */}
       <img src="/asteria/assets/corner-ornament.png" alt="" aria-hidden
-        className="pointer-events-none absolute left-0 top-0 h-28 w-28" />
+        className="pointer-events-none absolute left-0 top-0 h-28 w-28 brightness-110 saturate-[.92]" />
       <img src="/asteria/assets/corner-ornament.png" alt="" aria-hidden
-        className="pointer-events-none absolute right-0 top-0 h-28 w-28 -scale-x-100" />
+        className="pointer-events-none absolute right-0 top-0 h-28 w-28 -scale-x-100 brightness-110 saturate-[.92]" />
       <img src="/asteria/assets/corner-ornament.png" alt="" aria-hidden
-        className="pointer-events-none absolute bottom-0 left-0 h-28 w-28 -scale-y-100" />
+        className="pointer-events-none absolute bottom-0 left-0 h-28 w-28 -scale-y-100 brightness-110 saturate-[.92]" />
       <img src="/asteria/assets/corner-ornament.png" alt="" aria-hidden
-        className="pointer-events-none absolute bottom-0 right-0 h-28 w-28 -scale-100" />
+        className="pointer-events-none absolute bottom-0 right-0 h-28 w-28 -scale-100 brightness-110 saturate-[.92]" />
 
       {/* 星屑（装飾） */}
       {SCATTER.map((cls, i) => (
@@ -130,7 +130,7 @@ export function ReadingCoverCard({ date, title, theme, keywords = [], message }:
 
       {/* 下部のエンブレム（バナー底の線を下辺の細線に乗せる。bottom 値で上下微調整） */}
       <img src="/asteria/assets/cover-seal.png" alt="" aria-hidden
-        className="pointer-events-none absolute bottom-[-20px] left-1/2 w-40 -translate-x-1/2" />
+        className="pointer-events-none absolute bottom-[-20px] left-1/2 w-40 -translate-x-1/2 brightness-110 saturate-[.92]" />
     </div>
   )
 }
