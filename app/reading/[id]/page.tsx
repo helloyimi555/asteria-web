@@ -44,6 +44,33 @@ function getSummary(section: any): string | undefined {
   return section.summary
 }
 
+/** 総合メッセージのティザー用に、target 文字数の前後で
+ *  区切りの良い位置（。！？改行 → 読点）で切り詰めて末尾に「…」を付ける */
+function smartTruncate(raw: string, target = 120): string {
+  const clean = raw.replace(/【.*?】/g, "").trim()
+  if (clean.length <= target) return clean
+
+  // target 付近（target-50 〜 target+40）を探索範囲にする
+  const lower  = target - 50
+  const window = clean.slice(0, target + 40)
+
+  // 句点系（。！？改行）で target に最も近い区切りを探す
+  let cut = -1
+  for (const ch of ["。", "！", "？", "\n"]) {
+    const idx = window.lastIndexOf(ch)
+    if (idx > lower && idx > cut) cut = idx
+  }
+  // 句点が無ければ読点で代替
+  if (cut < 0) {
+    const idx = window.lastIndexOf("、")
+    if (idx > lower) cut = idx
+  }
+  // どの区切りも無ければ target で機械的に切る
+  if (cut < 0) return clean.slice(0, target).trim() + "…"
+
+  return clean.slice(0, cut).trim() + "…"
+}
+
 function TagPill({ tag }: { tag: string }) {
   const style = TAG_STYLES[tag] ?? { bg: "rgba(255,255,255,.06)", color: "#C9A554" }
   return (
@@ -179,7 +206,7 @@ export default function ReadingResultPage() {
                   ) : (
                     <>
                       <p className="font-serif text-[13px] leading-8 text-[#D0D0E8] font-light">
-                        {content.replace(/【.*?】/g, "").trim().slice(0, 120)}…
+                        {smartTruncate(content, 120)}
                       </p>
                       <button type="button" onClick={() => setOverallExpanded(true)}
                         className="mt-3 text-[12px] text-gold/80 hover:text-gold transition-colors">
