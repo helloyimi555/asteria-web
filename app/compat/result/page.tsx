@@ -8,7 +8,7 @@ import { BottomNav } from "@/components/layout/BottomNav"
 import { TONE_COLOR } from "@/lib/zodiac"
 import { XShareButton } from "@/components/ui/XShareButton"
 import { ChapterHeading } from "@/components/ui/ChapterHeading"
-import { AlertCard, LuckyCard } from "@/components/ui/cards"
+import { AlertCard } from "@/components/ui/cards"
 import { OrnamentalDivider } from "@/components/asteria-ui"
 import {
   calcElementBalance, elementPercents, getDominantElement, getElementCompatibility,
@@ -414,8 +414,8 @@ export default function CompatResultPage() {
             <div className="rounded-2xl p-4"
               style={{ background:"linear-gradient(135deg,rgba(20,44,32,.9),rgba(14,30,22,.9))", border:"1px solid rgba(112,221,168,.28)" }}>
               <div className="flex items-center gap-1.5 mb-2">
-                <span style={{ color:"#8BC34A" }}>✸</span>
-                <span className="font-serif text-[14px]" style={{ color:"#A8E08F" }}>ふたりへ贈る言葉</span>
+                <span style={{ color:"#8BC34A" }}>✦</span>
+                <span className="font-serif text-[14px]" style={{ color:"#A8E08F" }}>ふたりへのアドバイス</span>
               </div>
               <p className="font-serif text-[13px] leading-8 text-[#D8E8D0] font-light">
                 {adviceText}
@@ -424,12 +424,16 @@ export default function CompatResultPage() {
           </>
         )}
 
-        {/* 【3】 盛り上がりポイント → LuckyCard */}
+        {/* 盛り上がりポイント → ゴールド系（アドバイスのグリーンと色で区別） */}
         {outputs?.highlight && (
-          <div className="mt-2.5">
-            <LuckyCard title="ふたりの盛り上がりポイント">
+          <div className="mt-2.5 rounded-2xl p-4 bg-[#C9A554]/10 border border-[#C9A554]/30">
+            <div className="flex items-center gap-1.5 mb-2">
+              <span>🌟</span>
+              <span className="font-serif text-[14px] text-gold">盛り上がりポイント</span>
+            </div>
+            <p className="font-serif text-[13px] leading-8 text-[#E8E0C8] font-light">
               {outputs.highlight}
-            </LuckyCard>
+            </p>
           </div>
         )}
 
@@ -452,15 +456,18 @@ export default function CompatResultPage() {
 
         {/* 【4】 ふたりの合言葉 → ゴールドグラデ・装飾ライン・大きなイタリック */}
         {outputs?.magic_phrase && (
-          <div className="relative overflow-hidden rounded-2xl p-6 mt-3 text-center backdrop-blur-sm" style={GOLD_CARD_STYLE}>
-            <div className="flex items-center justify-center gap-1.5">
-              <span className="text-gold text-xs">✦</span>
-              <span className="text-[12px] font-bold tracking-wider text-[#F0F0F8]">ふたりの合言葉</span>
-              <span className="text-gold text-xs">✦</span>
+          <div className="relative overflow-hidden rounded-2xl p-8 mt-3 text-center backdrop-blur-sm" style={GOLD_CARD_STYLE}>
+            <div className="flex items-center justify-center gap-2">
+              <span className="text-gold text-sm">✦</span>
+              <span className="text-[14px] font-bold tracking-[0.18em] text-gold"
+                style={{ textShadow:"0 0 14px rgba(201,165,84,.4)" }}>
+                ふたりの合言葉
+              </span>
+              <span className="text-gold text-sm">✦</span>
             </div>
             <OrnamentalDivider />
-            <p className="font-serif italic text-gold text-[22px] leading-9"
-              style={{ textShadow:"0 0 22px rgba(201,165,84,.45)" }}>
+            <p className="font-serif italic text-gold text-[30px] leading-[1.5] py-3"
+              style={{ textShadow:"0 0 34px rgba(201,165,84,.7), 0 0 14px rgba(201,165,84,.5)" }}>
               「{outputs.magic_phrase}」
             </p>
             <OrnamentalDivider />
