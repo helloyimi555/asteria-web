@@ -21,7 +21,7 @@ export function ReadingCoverCard({ date, title, theme, keywords = [], message }:
     >
       {/* 背景フレーム（コンテナと同比率＝歪まず全体表示） */}
       <img
-        src="/assets/reading-cover-bg.png"
+        src="/asteria/assets/reading-cover-bg.png"
         alt=""
         aria-hidden
         className="pointer-events-none absolute inset-0 h-full w-full object-cover"
@@ -84,7 +84,7 @@ export function ReadingCoverCard({ date, title, theme, keywords = [], message }:
               style={{ aspectRatio: "1122 / 1402" }}
             >
               <img
-                src="/assets/reading-message-box.png"
+                src="/asteria/assets/reading-message-box.png"
                 alt=""
                 aria-hidden
                 className="pointer-events-none absolute inset-0 h-full w-full object-cover"
