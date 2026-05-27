@@ -17,7 +17,7 @@ export function ReadingCoverCard({ date, title, theme, keywords = [], message }:
   return (
     <div
       className="relative mx-auto mt-3 w-full max-w-[390px] overflow-hidden rounded-[28px]"
-      style={{ aspectRatio: "1024 / 1536", backgroundColor: "#04060F" }}
+      style={{ aspectRatio: "1024 / 1536", maxHeight: "85vh", backgroundColor: "#04060F" }}
     >
       {/* 背景フレーム（コンテナと同比率＝歪まず全体表示） */}
       <img
@@ -29,7 +29,7 @@ export function ReadingCoverCard({ date, title, theme, keywords = [], message }:
 
       {/* コンテンツ（フレーム上に重ねる。収まらない場合のみ内部スクロール） */}
       <div className="absolute inset-0 z-10 overflow-y-auto">
-        <div className="flex min-h-full flex-col items-center justify-center px-8 py-10 text-center">
+        <div className="flex min-h-full flex-col items-center justify-center px-8 py-8 text-center">
           {/* ヘッダー */}
           <div className="flex items-center justify-center gap-2.5 text-gold/90">
             <span className="text-[10px]">✦</span>
@@ -38,10 +38,10 @@ export function ReadingCoverCard({ date, title, theme, keywords = [], message }:
           </div>
 
           {/* 日付 */}
-          {date && <p className="mb-1.5 mt-6 text-[14px] text-[#E8E8F0]/85">{date}</p>}
+          {date && <p className="mb-1 mt-4 text-[14px] text-[#E8E8F0]/85">{date}</p>}
 
           {/* タイトル（主役） */}
-          <h1 className="font-serif text-[clamp(34px,10vw,44px)] font-normal leading-[1.2] text-gold"
+          <h1 className="font-serif text-3xl font-normal leading-tight text-gold"
             style={{ textShadow: "0 0 32px rgba(201,165,84,.5), 0 0 12px rgba(201,165,84,.35)" }}>
             {title}
           </h1>
@@ -49,12 +49,12 @@ export function ReadingCoverCard({ date, title, theme, keywords = [], message }:
           {/* テーマ */}
           {theme && (
             <>
-              <div className="mb-3 mt-8 flex items-center justify-center gap-3">
+              <div className="mb-2.5 mt-5 flex items-center justify-center gap-3">
                 <span className="h-px w-10 bg-gradient-to-r from-transparent to-gold/50" />
                 <span className="text-[12px] tracking-[0.25em] text-gold/75">あなたのテーマ</span>
                 <span className="h-px w-10 bg-gradient-to-l from-transparent to-gold/50" />
               </div>
-              <p className="mb-7 flex items-center justify-center gap-2.5 font-serif text-[clamp(24px,7vw,30px)] leading-snug text-gold"
+              <p className="mb-4 flex items-center justify-center gap-2.5 font-serif text-[clamp(22px,6.5vw,28px)] leading-snug text-gold"
                 style={{ textShadow: "0 0 24px rgba(201,165,84,.5)" }}>
                 <span className="text-[16px] text-gold/70">✦</span>
                 <span>{theme}</span>
@@ -65,7 +65,7 @@ export function ReadingCoverCard({ date, title, theme, keywords = [], message }:
 
           {/* キーワード */}
           {keywords.length > 0 && (
-            <div className="mb-8 flex flex-wrap items-center justify-center gap-2.5">
+            <div className="mb-4 flex flex-wrap items-center justify-center gap-2.5">
               {keywords.map((kw, i) => (
                 <Fragment key={i}>
                   {i > 0 && <span className="text-[10px] text-gold/60">✦</span>}
@@ -80,7 +80,7 @@ export function ReadingCoverCard({ date, title, theme, keywords = [], message }:
           {/* 星からの一言（本文欄。テキスト量に応じて高さ可変、背景画像を枠として伸縮） */}
           {message && (
             <div
-              className="relative mt-2 w-full rounded-2xl px-8 py-12 text-center"
+              className="relative mt-1 w-full rounded-2xl px-6 py-8 text-center"
               style={{
                 backgroundImage: "url('/asteria/assets/reading-message-box.png')",
                 backgroundSize: "100% 100%",

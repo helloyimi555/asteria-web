@@ -160,8 +160,8 @@ export default function ReadingResultPage() {
   const coverKeywords = Array.isArray(outputs?.keywords)
     ? outputs!.keywords!.filter((k): k is string => typeof k === "string").slice(0, 5)
     : []
-  // 星からの一言：句点で区切って最初の2文のみ
-  const coverMessage  = firstSentences(overallContent, 2)
+  // 星からの一言：句点で区切って最初の1文のみ（カバーを縦に収める）
+  const coverMessage  = firstSentences(overallContent, 1)
 
   return (
     <div className="relative min-h-screen pb-28">
