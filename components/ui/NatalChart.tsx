@@ -52,7 +52,7 @@ export default function NatalChart({ positions, meanings }: NatalChartProps) {
         <span className="text-[10px] text-white/30 ml-1">出生時の天体配置</span>
       </div>
 
-      <div className="relative aspect-square w-full max-w-[320px] mx-auto rounded-full overflow-hidden"
+      <div className="relative aspect-square w-full max-w-[min(92vw,440px)] mx-auto rounded-full overflow-hidden"
         style={{ background:"radial-gradient(circle at center, rgba(15,20,50,.95) 0%, rgba(8,12,30,.95) 70%, #060920 100%)" }}>
 
         {/* ゴールドの淡いグロー */}

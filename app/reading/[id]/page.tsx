@@ -67,6 +67,7 @@ export default function ReadingResultPage() {
   const { data: reading, isLoading } = useReading(id)
   const [open,  setOpen] = useState(false)
   const [isGuest, setIsGuest] = useState(false)
+  const [overallExpanded, setOverallExpanded] = useState(false)
   const [meanings, setMeanings] = useState<Record<string, DegreeMeaning>>({})
 
   useEffect(() => {
@@ -164,9 +165,31 @@ export default function ReadingResultPage() {
                     {summary && <span className="text-[12px] text-white/55 leading-tight">{summary}</span>}
                   </div>
                 )}
-                {def.key === "overall"
-                  ? <OverallText text={content} isGuest={isGuest} />
-                  : <p className="font-sans text-[13px] leading-[1.9] text-[#C0C0D8] font-light whitespace-pre-line">{content}</p>}
+                {def.key === "overall" ? (
+                  isGuest ? (
+                    <OverallText text={content} isGuest={isGuest} />
+                  ) : overallExpanded ? (
+                    <>
+                      <OverallText text={content} isGuest={false} />
+                      <button type="button" onClick={() => setOverallExpanded(false)}
+                        className="mt-3 text-[12px] text-gold/80 hover:text-gold transition-colors">
+                        閉じる ∧
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <p className="font-serif text-[13px] leading-8 text-[#D0D0E8] font-light">
+                        {content.replace(/【.*?】/g, "").trim().slice(0, 120)}…
+                      </p>
+                      <button type="button" onClick={() => setOverallExpanded(true)}
+                        className="mt-3 text-[12px] text-gold/80 hover:text-gold transition-colors">
+                        続きを読む ∨
+                      </button>
+                    </>
+                  )
+                ) : (
+                  <p className="font-sans text-[13px] leading-[1.9] text-[#C0C0D8] font-light whitespace-pre-line">{content}</p>
+                )}
               </div>
             </div>
           )
@@ -281,13 +304,13 @@ export default function ReadingResultPage() {
           return (
             <>
               <SectionDivider />
-              <div className="mt-1">
-                <XShareButton text={shareText} />
+              <div className="flex flex-col gap-3 mt-1">
+                <XShareButton text={shareText} variant="gold" />
+                <button onClick={() => router.push("/reading")}
+                  className="btn-gold-outline w-full py-3.5 flex items-center justify-center gap-2 text-[15px]">
+                  <span>←</span><span>別の鑑定を行う</span>
+                </button>
               </div>
-              <button onClick={() => router.push("/reading")}
-                className="btn-gold-outline w-full py-3.5 mt-3 flex items-center justify-center gap-2">
-                <span>←</span><span>別の鑑定を行う</span>
-              </button>
             </>
           )
         })()}
