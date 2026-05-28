@@ -133,11 +133,24 @@ export default function AstrologyLoading({
                   {done ? "✓" : i + 1}
                 </span>
                 <span
-                  className={`text-[13px] ${
+                  className={`flex-1 text-[13px] ${
                     done ? "text-white/80" : current ? "text-gold font-medium" : "text-white/40"
                   }`}
                 >
                   {i + 1}. {label}
+                </span>
+                {/* 右側の星屑装飾（行の状態でトーンを変化） */}
+                <span
+                  aria-hidden
+                  className={`ml-auto flex shrink-0 items-center gap-1.5 ${
+                    done ? "text-gold/55" : current ? "text-gold/80" : "text-white/20"
+                  }`}
+                >
+                  <span className="text-[10px]">✦</span>
+                  <span className="text-[6px] opacity-60">·</span>
+                  <span className="text-[8px]">✧</span>
+                  <span className="text-[6px] opacity-60">·</span>
+                  <span className="text-[10px]">✦</span>
                 </span>
               </li>
             )
