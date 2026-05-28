@@ -244,15 +244,15 @@ export default function MyPage() {
           const isPremium = (profile as any)?.is_premium === true
           return (
             <div
-              className="relative mb-3 overflow-hidden rounded-3xl border border-[#C9A554]/35 px-6 py-7 backdrop-blur-sm"
+              className="relative mb-3 border border-[#C9A554]/35 px-6 py-7 backdrop-blur-sm"
               style={{
                 background:
                   "radial-gradient(circle at top left, rgba(201,165,84,0.22), rgba(255,255,255,0.055) 36%, rgba(255,255,255,0.025) 100%), #04060F",
                 boxShadow: "0 0 48px rgba(201,165,84,0.16)",
               }}
             >
-              {/* 内側の薄いゴールド二重枠 */}
-              <span className="pointer-events-none absolute inset-2.5 rounded-[22px] border border-[#C9A554]/15" />
+              {/* 内側の薄いゴールド枠（直角） */}
+              <span className="pointer-events-none absolute inset-2.5 border border-[#C9A554]/15" />
 
               {/* 星屑（ambient） */}
               <span className="pointer-events-none absolute left-[18%] top-[26%] select-none text-[9px] text-gold/30">✦</span>
@@ -263,13 +263,13 @@ export default function MyPage() {
 
               {/* 四隅装飾（バナーと同じくらい大きく・直角を覆うように） */}
               <img src="/asteria/assets/profile-corner.png" alt="" aria-hidden
-                className="pointer-events-none absolute -left-1 -top-1 h-36 w-36 md:-left-2 md:-top-2 md:h-52 md:w-52" />
+                className="pointer-events-none absolute left-0 top-0 h-36 w-36 md:h-52 md:w-52" />
               <img src="/asteria/assets/profile-corner.png" alt="" aria-hidden
-                className="pointer-events-none absolute -right-1 -top-1 h-36 w-36 -scale-x-100 md:-right-2 md:-top-2 md:h-52 md:w-52" />
+                className="pointer-events-none absolute right-0 top-0 h-36 w-36 -scale-x-100 md:h-52 md:w-52" />
               <img src="/asteria/assets/profile-corner.png" alt="" aria-hidden
-                className="pointer-events-none absolute -bottom-1 -left-1 h-36 w-36 -scale-y-100 md:-bottom-2 md:-left-2 md:h-52 md:w-52" />
+                className="pointer-events-none absolute bottom-0 left-0 h-36 w-36 -scale-y-100 md:h-52 md:w-52" />
               <img src="/asteria/assets/profile-corner.png" alt="" aria-hidden
-                className="pointer-events-none absolute -bottom-1 -right-1 h-36 w-36 -scale-100 md:-bottom-2 md:-right-2 md:h-52 md:w-52" />
+                className="pointer-events-none absolute bottom-0 right-0 h-36 w-36 -scale-100 md:h-52 md:w-52" />
 
               {/* Premium バッジ（右上・控えめだが高級感） */}
               {isPremium && (
