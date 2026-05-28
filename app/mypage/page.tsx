@@ -261,10 +261,10 @@ export default function MyPage() {
                 </div>
               )}
 
-              {/* コンテンツ：メダリオン（左）＋ テキスト（右）。バナーのゴールド枠の内側に収める */}
-              <div className="absolute inset-0 flex items-center gap-3 px-[7%] md:gap-6 md:px-[6%]">
+              {/* コンテンツ：メダリオン（左）＋ テキスト（中央寄せ）。バナーのゴールド枠の内側に収める */}
+              <div className="absolute inset-0 flex items-center gap-3 px-[7%] md:gap-10 md:px-[8%]">
                 {/* メダリオン：高さは枠内に収まるよう % で指定。星雲背景に重なって幻想的に */}
-                <div className="relative aspect-square h-[64%] shrink-0 md:h-[78%]">
+                <div className="relative aspect-square h-[64%] shrink-0 md:h-[82%]">
                   <img
                     src={`/asteria/assets/${sunSign ? sunSign.en.toLowerCase() : "zodiac-medallion"}.png`}
                     alt={sunSign ? `${sunSign.sign} のメダリオン` : ""}
@@ -273,9 +273,9 @@ export default function MyPage() {
                   />
                 </div>
 
-                {/* テキスト情報（中央寄せ、暗部の上に重ねる） */}
-                <div className="relative z-10 min-w-0 flex-1 text-center md:text-left">
-                  <div className="flex items-center justify-center gap-2 text-[#E7D08A] md:justify-start">
+                {/* テキスト情報（暗部の中央に配置） */}
+                <div className="relative z-10 min-w-0 flex-1 text-center">
+                  <div className="flex items-center justify-center gap-2 text-[#E7D08A]">
                     <span className="text-[8px] md:text-[10px]">✦</span>
                     <span className="font-serif text-[10px] tracking-[0.3em] md:text-[11px] md:tracking-[0.34em]">MY ASTERIA</span>
                     <span className="text-[8px] md:text-[10px]">✦</span>
