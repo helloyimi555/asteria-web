@@ -46,17 +46,21 @@ export default function AstrologyLoading({
     <section
       aria-busy="true"
       aria-live="polite"
-      className={`relative flex min-h-screen flex-col items-center overflow-hidden text-[#F6F1E4] ${className}`}
-      style={{
-        backgroundColor: "#080C1E",
-        backgroundImage: "url('/asteria/assets/loading-bg.png')",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-      }}
+      className={`relative flex min-h-screen items-center justify-center overflow-hidden bg-[#04060F] px-4 py-6 text-[#F6F1E4] ${className}`}
     >
+      {/* 鑑定書カード（max-w-[420px] で PC でも適切なサイズに） */}
+      <div
+        className="relative flex w-full max-w-[420px] flex-col items-center overflow-hidden rounded-2xl"
+        style={{
+          backgroundColor: "#080C1E",
+          backgroundImage: "url('/asteria/assets/loading-bg.png')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}
+      >
       {/* 上部：ヘッダー＋日付＋タイトル */}
-      <div className="relative z-10 mt-10 w-full max-w-[360px] px-6 text-center">
+      <div className="relative z-10 mt-10 w-full px-6 text-center">
         <div className="flex items-center justify-center gap-2.5 text-gold/90">
           <span className="text-[10px]">✦</span>
           <span className="font-serif text-[13px] tracking-[0.34em]">ASTERIA READING</span>
@@ -79,7 +83,7 @@ export default function AstrologyLoading({
       <div className="flex-1" />
 
       {/* 下部：ステータス＋区切り＋チェックリスト */}
-      <div className="relative z-10 mb-10 w-full max-w-[360px] px-6">
+      <div className="relative z-10 mb-10 w-full px-6">
         {/* 状態テキスト */}
         <p
           className="text-center font-serif text-[22px] tracking-wide text-[#F6F1E4]"
@@ -137,6 +141,7 @@ export default function AstrologyLoading({
             )
           })}
         </ol>
+      </div>
       </div>
     </section>
   )
