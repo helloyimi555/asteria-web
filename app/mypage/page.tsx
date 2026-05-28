@@ -262,13 +262,13 @@ export default function MyPage() {
               <span className="pointer-events-none absolute right-[8%] bottom-[18%] select-none text-[8px] text-gold/25">✧</span>
 
               {/* 四隅装飾（控えめにカードに馴染ませる） */}
-              <img src="/asteria/assets/corner-ornament.png" alt="" aria-hidden
+              <img src="/asteria/assets/profile-corner.png" alt="" aria-hidden
                 className="pointer-events-none absolute left-0 top-0 h-14 w-14 opacity-70" />
-              <img src="/asteria/assets/corner-ornament.png" alt="" aria-hidden
+              <img src="/asteria/assets/profile-corner.png" alt="" aria-hidden
                 className="pointer-events-none absolute right-0 top-0 h-14 w-14 -scale-x-100 opacity-70" />
-              <img src="/asteria/assets/corner-ornament.png" alt="" aria-hidden
+              <img src="/asteria/assets/profile-corner.png" alt="" aria-hidden
                 className="pointer-events-none absolute bottom-0 left-0 h-14 w-14 -scale-y-100 opacity-70" />
-              <img src="/asteria/assets/corner-ornament.png" alt="" aria-hidden
+              <img src="/asteria/assets/profile-corner.png" alt="" aria-hidden
                 className="pointer-events-none absolute bottom-0 right-0 h-14 w-14 -scale-100 opacity-70" />
 
               {/* Premium バッジ（右上・控えめだが高級感） */}

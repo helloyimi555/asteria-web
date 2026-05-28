@@ -197,7 +197,7 @@ export function PremiumCard({
     >
       {/* テキスト＋CTA のオーバーレイ：右半分のダーク領域に配置
           モバイル＝縦並び（テキスト上、CTA下）／PC＝横並び（テキスト左、CTA右） */}
-      <div className="absolute inset-0 flex flex-col items-end justify-center gap-2.5 py-3 pl-[48%] pr-4 md:flex-row md:items-center md:gap-6 md:py-0 md:pl-[40%] md:pr-6">
+      <div className="absolute inset-0 flex flex-col items-end justify-center gap-2.5 py-3 pl-[48%] pr-4 md:flex-row md:items-center md:gap-5 md:py-0 md:pl-[34%] md:pr-5">
         {/* テキスト群 */}
         <div className="relative z-10 min-w-0 text-right md:flex-1 md:text-left">
           <div className="flex items-center justify-end gap-2 text-[#E7D08A] md:justify-start">
@@ -206,7 +206,7 @@ export function PremiumCard({
             <span className="text-[8px] md:text-[10px]">✦</span>
           </div>
           <h3
-            className="mt-1 font-serif text-[clamp(16px,5vw,22px)] font-semibold leading-tight text-[#F7E9B5] md:mt-1.5 md:text-[22px]"
+            className="mt-1 whitespace-nowrap font-serif text-[clamp(16px,5vw,22px)] font-semibold leading-tight text-[#F7E9B5] md:mt-1.5 md:text-[22px]"
             style={{ textShadow: "0 0 18px rgba(201,165,84,0.55), 0 0 6px rgba(201,165,84,0.35)" }}
           >
             {planName}
