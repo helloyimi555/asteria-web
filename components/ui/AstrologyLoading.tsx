@@ -139,19 +139,29 @@ export default function AstrologyLoading({
                 >
                   {i + 1}. {label}
                 </span>
-                {/* 右側の星屑装飾（行の状態でトーンを変化） */}
-                <span
+                {/* 右側のコンスタレーション装飾（点線で結ばれた小さな星座風。状態でトーン変化） */}
+                <svg
                   aria-hidden
-                  className={`ml-auto flex shrink-0 items-center gap-1.5 ${
-                    done ? "text-gold/55" : current ? "text-gold/80" : "text-white/20"
+                  width="64"
+                  height="22"
+                  viewBox="0 0 64 22"
+                  className={`ml-auto shrink-0 ${
+                    done ? "text-gold/60" : current ? "text-gold animate-pulse" : "text-white/20"
                   }`}
+                  fill="none"
                 >
-                  <span className="text-[10px]">✦</span>
-                  <span className="text-[6px] opacity-60">·</span>
-                  <span className="text-[8px]">✧</span>
-                  <span className="text-[6px] opacity-60">·</span>
-                  <span className="text-[10px]">✦</span>
-                </span>
+                  <g stroke="currentColor" strokeWidth="0.4" strokeDasharray="1.2 1.6" opacity="0.55">
+                    <line x1="6" y1="16" x2="22" y2="5" />
+                    <line x1="22" y1="5" x2="40" y2="14" />
+                    <line x1="40" y1="14" x2="58" y2="6" />
+                  </g>
+                  <g fill="currentColor">
+                    <circle cx="6" cy="16" r="1.1" />
+                    <circle cx="40" cy="14" r="0.9" />
+                  </g>
+                  <text x="22" y="8.5" textAnchor="middle" fontSize="10" fill="currentColor">✦</text>
+                  <text x="58" y="10" textAnchor="middle" fontSize="12" fill="currentColor">✧</text>
+                </svg>
               </li>
             )
           })}
