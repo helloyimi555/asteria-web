@@ -206,7 +206,7 @@ export function PremiumCard({
             <span className="text-[8px] md:text-[10px]">✦</span>
           </div>
           <h3
-            className="mt-1 truncate font-serif text-[clamp(15px,4.5vw,24px)] font-semibold leading-tight text-[#F7E9B5] md:mt-1.5"
+            className="mt-1 truncate font-serif text-[clamp(14px,4vw,20px)] font-semibold leading-tight text-[#F7E9B5] md:mt-1.5 md:text-[22px]"
             style={{ textShadow: "0 0 18px rgba(201,165,84,0.55), 0 0 6px rgba(201,165,84,0.35)" }}
           >
             {planName}

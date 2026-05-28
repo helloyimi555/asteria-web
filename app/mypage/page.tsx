@@ -297,7 +297,7 @@ export default function MyPage() {
                     className="pointer-events-none absolute inset-0 h-full w-full object-contain drop-shadow-[0_0_18px_rgba(201,165,84,0.45)]"
                   />
                   <span
-                    className="relative font-serif text-5xl text-gold"
+                    className="relative font-serif text-5xl text-gold leading-none translate-y-[3px]"
                     style={{
                       textShadow: "0 0 22px rgba(201,165,84,0.75), 0 0 8px rgba(201,165,84,0.55)",
                       fontVariantEmoji: "text",
