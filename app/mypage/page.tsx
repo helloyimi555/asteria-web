@@ -298,9 +298,13 @@ export default function MyPage() {
                   />
                   <span
                     className="relative font-serif text-5xl text-gold"
-                    style={{ textShadow: "0 0 22px rgba(201,165,84,0.75), 0 0 8px rgba(201,165,84,0.55)" }}
+                    style={{
+                      textShadow: "0 0 22px rgba(201,165,84,0.75), 0 0 8px rgba(201,165,84,0.55)",
+                      fontVariantEmoji: "text",
+                    }}
                   >
-                    {sunSign?.symbol ?? "✦"}
+                    {/* ︎ でテキスト表示を強制し、OSの絵文字レンダリングを抑止 */}
+                    {sunSign?.symbol ? `${sunSign.symbol}︎` : "✦"}
                   </span>
                 </div>
 
