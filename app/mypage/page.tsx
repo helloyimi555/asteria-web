@@ -14,6 +14,7 @@ import {
 } from "@/lib/elements"
 import { ReadingHistoryCard } from "@/components/ui/ReadingHistoryCard"
 import { PremiumCard } from "@/components/asteria-ui"
+import { getSunSign } from "@/lib/zodiac"
 
 const YEARS = Array.from({ length: 75 }, (_, i) => 2008 - i)
 const MONTHS = Array.from({ length: 12 }, (_, i) => i + 1)
@@ -237,31 +238,98 @@ export default function MyPage() {
           <span className="text-gold text-sm">✦</span>
         </div>
 
-        {/* Profile card */}
-        <div className="card mb-3 p-4 flex items-center gap-4"
-          style={{ background:"linear-gradient(135deg,rgba(20,25,70,.9),rgba(10,14,40,.9))" }}>
-          <div className="w-14 h-14 rounded-full flex-shrink-0 flex items-center justify-center
-                          text-2xl text-gold"
-            style={{ background:"rgba(201,165,84,.12)", border:"2px solid rgba(201,165,84,.4)" }}>
-            {profile ? "♉" : "✦"}
-          </div>
-          <div className="flex-1">
-            {profile ? (
-              <>
-                <div className="font-serif text-[17px] text-[#F0F0F8] font-semibold mb-0.5">
-                  {profile.display_name}
+        {/* Profile card（新デザイン：メダリオン＋ステータスカード） */}
+        {(() => {
+          const sunSign = profile?.birth_date ? getSunSign(profile.birth_date) : null
+          const isPremium = (profile as any)?.is_premium === true
+          return (
+            <div
+              className="relative mb-3 overflow-hidden rounded-2xl"
+              style={{
+                background:
+                  "radial-gradient(ellipse at top left, rgba(201,165,84,0.14), transparent 55%), linear-gradient(135deg, rgba(20,25,70,.92), rgba(10,14,40,.95))",
+                border: "1px solid rgba(201,165,84,0.25)",
+              }}
+            >
+              {/* 四隅装飾 */}
+              <img src="/asteria/assets/corner-ornament.png" alt="" aria-hidden
+                className="pointer-events-none absolute left-1 top-1 h-16 w-16 brightness-110 saturate-[.92]" />
+              <img src="/asteria/assets/corner-ornament.png" alt="" aria-hidden
+                className="pointer-events-none absolute right-1 top-1 h-16 w-16 -scale-x-100 brightness-110 saturate-[.92]" />
+              <img src="/asteria/assets/corner-ornament.png" alt="" aria-hidden
+                className="pointer-events-none absolute bottom-1 left-1 h-16 w-16 -scale-y-100 brightness-110 saturate-[.92]" />
+              <img src="/asteria/assets/corner-ornament.png" alt="" aria-hidden
+                className="pointer-events-none absolute bottom-1 right-1 h-16 w-16 -scale-100 brightness-110 saturate-[.92]" />
+
+              {/* Premium バッジ（is_premium が true のときのみ） */}
+              {isPremium && (
+                <div className="absolute right-4 top-4 z-10 inline-flex items-center gap-1 rounded-full px-3 py-1 text-[11px] font-semibold"
+                  style={{
+                    background: "linear-gradient(135deg,#C9A554,#E7D08A,#C9A554)",
+                    color: "#04060F",
+                    boxShadow: "0 0 14px rgba(201,165,84,.4)",
+                  }}>
+                  <span>👑</span><span>Premium</span>
                 </div>
-                <div className="text-[11px] text-white/50">{abbreviatedPlace}</div>
-              </>
-            ) : (
-              <div className="text-[13px] text-white/50">プロフィール未設定</div>
-            )}
-            <button type="button" onClick={openProfileEdit}
-              className="text-[12px] text-gold mt-1.5 inline-flex items-center gap-1">
-              プロフィールを編集 <span>›</span>
-            </button>
-          </div>
-        </div>
+              )}
+
+              {/* 上段：メダリオン + テキスト情報 */}
+              <div className="relative z-[1] flex items-center gap-3 px-5 pt-6 pb-3">
+                {/* メダリオン */}
+                <div className="relative flex h-28 w-28 shrink-0 items-center justify-center">
+                  <img src="/asteria/assets/zodiac-medallion.png" alt="" aria-hidden
+                    className="pointer-events-none absolute inset-0 h-full w-full object-contain" />
+                  <span className="relative font-serif text-[44px] text-gold"
+                    style={{ textShadow: "0 0 18px rgba(201,165,84,.7)" }}>
+                    {sunSign?.symbol ?? "✦"}
+                  </span>
+                </div>
+
+                {/* 名前・出生地・編集 */}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 text-gold/80">
+                    <span className="text-[10px]">✦</span>
+                    <span className="font-serif text-[11px] tracking-[0.28em]">MY ASTERIA</span>
+                    <span className="text-[10px]">✦</span>
+                  </div>
+                  {profile ? (
+                    <>
+                      <div className="mt-2 font-serif text-[20px] text-[#F0F0F8] font-semibold truncate">
+                        {profile.display_name || "ゲスト"}
+                      </div>
+                      <div className="text-[11px] text-white/55 mt-0.5 truncate">
+                        出生地：{abbreviatedPlace || "—"}
+                      </div>
+                    </>
+                  ) : (
+                    <div className="mt-2 text-[13px] text-white/55">プロフィール未設定</div>
+                  )}
+                  <button type="button" onClick={openProfileEdit}
+                    className="text-[12px] text-gold/90 hover:text-gold mt-2 inline-flex items-center gap-1 transition-colors">
+                    プロフィールを編集 <span>›</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* 装飾区切り */}
+              <div className="relative z-[1] mx-5 my-2 flex items-center gap-2 text-gold/60">
+                <span className="text-[7px]">·</span>
+                <span className="h-px flex-1 bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
+                <span className="text-gold text-base"
+                  style={{ textShadow: "0 0 10px rgba(201,165,84,.5)" }}>✦</span>
+                <span className="h-px flex-1 bg-gradient-to-l from-transparent via-gold/40 to-transparent" />
+                <span className="text-[7px]">·</span>
+              </div>
+
+              {/* 下段：3つの統計カード */}
+              <div className="relative z-[1] grid grid-cols-3 gap-2 px-5 pb-5 pt-2">
+                <StatBlock icon="☉" label="太陽星座" value={sunSign?.sign ?? "—"} />
+                <StatBlock icon="☽" label="月星座" value="—" />
+                <StatBlock icon="✦" label="MBTI" value={profile?.mbti_type ?? "—"} />
+              </div>
+            </div>
+          )
+        })()}
 
         {isEditingProfile && (
           <div className="card mb-3 p-4" style={{ border:"1px solid rgba(201,165,84,.25)" }}>
@@ -497,6 +565,31 @@ export default function MyPage() {
         </Link>
       </div>
       <BottomNav />
+    </div>
+  )
+}
+
+/** プロフィールカード下段の小さな統計ブロック（太陽星座／月星座／MBTI） */
+function StatBlock({ icon, label, value }: { icon: string; label: string; value: string }) {
+  return (
+    <div
+      className="rounded-xl px-3 py-3 text-center"
+      style={{
+        background: "rgba(201,165,84,0.05)",
+        border: "1px solid rgba(201,165,84,0.22)",
+      }}
+    >
+      <div className="text-lg text-gold leading-none"
+        style={{ textShadow: "0 0 10px rgba(201,165,84,.45)" }}>
+        {icon}
+      </div>
+      <div className="mt-1.5 text-[10px] tracking-wider text-white/60">{label}</div>
+      <div className="my-1.5 flex items-center justify-center gap-1 text-gold/40">
+        <span className="h-px w-4 bg-gold/30" />
+        <span className="text-[6px]">·</span>
+        <span className="h-px w-4 bg-gold/30" />
+      </div>
+      <div className="font-serif text-[14px] text-gold">{value}</div>
     </div>
   )
 }
