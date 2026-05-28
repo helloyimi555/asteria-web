@@ -28,7 +28,7 @@ export default function AstrologyLoading({
             draggable={false}
           />
           {/* センターロゴ：画像内の上=星／下=ASTERIA。リング中心に ASTERIA テキストが来るよう少し上にずらす */}
-          <div className="absolute inset-0 flex items-center justify-center -translate-y-8">
+          <div className="absolute inset-0 flex items-center justify-center -translate-y-4">
             <img
               src="/asteria/loading/center-logo-transparent.png"
               alt="ASTERIA"
