@@ -187,37 +187,38 @@ export function PremiumCard({
     <div
       className={cn(
         "relative w-full overflow-hidden rounded-2xl",
-        // モバイル＝縦長バナー、md 以上＝横長バナー
-        "aspect-[1374/1145] md:aspect-[1916/821]",
+        // モバイル/PC ともに横長スリムバナー（新画像のアスペクトに合わせる）
+        "aspect-[1896/495] md:aspect-[1896/335]",
         // 背景画像（モバイル/デスクトップで切り替え）
         "bg-[url('/asteria/assets/premium-banner-bg-mobile.png')] md:bg-[url('/asteria/assets/premium-banner-bg.png')]",
         "bg-cover bg-center bg-no-repeat",
         className,
       )}
     >
-      {/* テキスト＋CTA のオーバーレイ */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center px-6 md:flex-row md:justify-end md:gap-6 md:pr-8">
-        {/* テキスト群（モバイル：中央寄せ／md：左寄せ） */}
-        <div className="relative z-10 text-center md:flex-1 md:text-left md:max-w-[58%]">
-          <div className="flex items-center justify-center gap-2 text-[#E7D08A] md:justify-start">
-            <span className="text-[10px]">✦</span>
-            <span className="font-serif text-[11px] tracking-[0.34em]">PREMIUM</span>
-            <span className="text-[10px]">✦</span>
+      {/* テキスト＋CTA のオーバーレイ（左：テキスト群／右：CTA を横並びに） */}
+      {/* 左側の王冠メダリオンを避けるため、padding-left でテキスト開始位置を内側にずらす */}
+      <div className="absolute inset-0 flex items-center gap-2 pl-[26%] pr-3 md:gap-6 md:pl-[22%] md:pr-6">
+        {/* テキスト群 */}
+        <div className="relative z-10 min-w-0 flex-1 text-left">
+          <div className="flex items-center gap-2 text-[#E7D08A]">
+            <span className="text-[8px] md:text-[10px]">✦</span>
+            <span className="font-serif text-[9px] tracking-[0.3em] md:text-[11px] md:tracking-[0.34em]">PREMIUM</span>
+            <span className="text-[8px] md:text-[10px]">✦</span>
           </div>
           <h3
-            className="mt-2 font-serif text-[clamp(22px,5.5vw,30px)] font-semibold leading-tight text-[#F7E9B5]"
-            style={{ textShadow: "0 0 22px rgba(201,165,84,0.55), 0 0 8px rgba(201,165,84,0.35)" }}
+            className="mt-1 truncate font-serif text-[clamp(15px,4.5vw,24px)] font-semibold leading-tight text-[#F7E9B5] md:mt-1.5"
+            style={{ textShadow: "0 0 18px rgba(201,165,84,0.55), 0 0 6px rgba(201,165,84,0.35)" }}
           >
             {planName}
           </h3>
-          <p className="mt-2 text-[12px] text-[#F7F3E7]/85 md:text-[13px]">{subtitle}</p>
+          <p className="mt-1 truncate text-[10px] text-[#F7F3E7]/85 md:mt-1.5 md:text-[13px]">{subtitle}</p>
         </div>
 
-        {/* CTA ボタン（モバイル：下／md：右寄せ） */}
+        {/* CTA ボタン（常に右側） */}
         <button
           type="button"
           onClick={onClick}
-          className="btn-gold relative z-10 mt-5 inline-flex items-center justify-center gap-2 px-6 py-2.5 text-[14px] md:mt-0 md:shrink-0 md:px-7 md:py-3"
+          className="btn-gold relative z-10 inline-flex shrink-0 items-center justify-center gap-1 px-3 py-2 text-[11px] md:gap-2 md:px-6 md:py-2.5 md:text-[14px]"
         >
           {ctaLabel} <span>→</span>
         </button>
