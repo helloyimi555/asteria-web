@@ -19,7 +19,7 @@ export default function AstrologyLoading({
     >
       {/* 他の画面と同じ星空背景（Stars コンポーネント） */}
       <Stars />
-      <div className="relative z-10 flex w-full max-w-[420px] flex-col items-center -translate-y-16">
+      <div className="relative z-10 flex w-full max-w-[420px] flex-col items-center -translate-y-32">
         <div className="relative aspect-square w-[min(108vw,430px)] -translate-y-10">
           <img
             src="/asteria/loading/zodiac-ring-transparent.png"
