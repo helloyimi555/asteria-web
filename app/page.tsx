@@ -41,14 +41,14 @@ export default function HomePage() {
     <div className="relative min-h-screen flex flex-col items-center overflow-hidden">
       <Stars />
 
-      <header className="relative z-10 w-full max-w-app px-5 pt-5 flex justify-between items-center">
+      <header className="relative z-10 w-full max-w-app md:max-w-2xl px-5 pt-5 flex justify-between items-center">
         <span className="font-serif text-[15px] tracking-widest shimmer-gold">✦ ASTERIA</span>
         <Link href="/auth/login" className="text-sm text-white/50 hover:text-white/80 transition-colors">
           ログイン
         </Link>
       </header>
 
-      <section className="relative z-10 w-full max-w-app px-5 flex flex-col items-center
+      <section className="relative z-10 w-full max-w-app md:max-w-2xl px-5 flex flex-col items-center
                           justify-center text-center min-h-[60vh]">
         <ZodiacWheelSVG />
         <h1 className="font-serif text-[clamp(26px,7vw,36px)] font-normal leading-[1.45]
@@ -66,18 +66,24 @@ export default function HomePage() {
           出生情報と現在・未来の天体配置から、<br />今のテーマを読み解きます
         </p>
         <div className="w-full opacity-0 animate-fade-up" style={{ animationDelay:"0.4s" }}>
-          <Link href="/reading"
-            className="btn-gold flex items-center justify-center gap-2 py-4 px-6 text-[16px] mb-3">
-            ✦ 無料で鑑定を始める
-          </Link>
-          <Link href="/auth/register"
-            className="btn-gold-outline flex items-center justify-center gap-2 py-3 px-6 text-[14px]">
-            会員登録（無料）
+          <div className="flex flex-col md:flex-row md:justify-center gap-3">
+            <Link href="/reading"
+              className="btn-gold flex items-center justify-center gap-2 py-4 px-6 text-[16px] md:text-lg w-full md:w-auto md:px-8">
+              ✦ 無料で鑑定を始める
+            </Link>
+            <Link href="/auth/register"
+              className="btn-gold-outline flex items-center justify-center gap-2 py-3 px-6 text-[14px] md:text-base w-full md:w-auto md:px-8">
+              会員登録（無料）
+            </Link>
+          </div>
+          <Link href="/auth/login"
+            className="block text-center text-[13px] text-gold/60 hover:text-gold transition-colors mt-4">
+            すでに会員の方はこちら → ログイン
           </Link>
         </div>
       </section>
 
-      <section className="relative z-10 w-full max-w-app px-5 pb-16">
+      <section className="relative z-10 w-full max-w-app md:max-w-2xl px-5 pb-16">
         <div className="flex items-center gap-2.5 mb-5">
           <div className="flex-1 h-px bg-gradient-to-r from-transparent to-gold/30" />
           <span className="font-serif text-[12px] text-gold tracking-widest">
@@ -136,7 +142,7 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
         </div>
       )}
       <Stars />
-      <div className="relative z-10 max-w-app mx-auto px-5">
+      <div className="relative z-10 max-w-app md:max-w-2xl mx-auto px-5">
         <div className="pt-9 pb-5 flex justify-between items-center">
           <span className="font-serif text-[15px] tracking-widest shimmer-gold">✦ ASTERIA</span>
           <button onClick={onLogout} className="text-[12px] text-white/40 hover:text-white/70 transition-colors">
@@ -146,7 +152,7 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
 
         <div className="text-center mb-8">
           <ZodiacWheelSVG />
-          <h1 className="font-serif text-[22px] text-white mb-2">おかえりなさい</h1>
+          <h1 className="font-serif text-2xl tracking-wide text-white mb-2">おかえりなさい</h1>
           <p className="text-[13px] text-white/50">星の暦から、今日を静かに読み解く</p>
         </div>
 

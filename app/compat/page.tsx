@@ -37,8 +37,8 @@ function PersonPanel({ title, form, setForm, sign, mbti, setMbti }) {
         <label className="text-[11px] text-white/50 tracking-widest uppercase block mb-2">生年月日 *</label>
         <div className="grid grid-cols-[2fr_1.1fr_1.1fr] gap-2">
           {[{k:"year",opts:YEARS,ph:"年",fmt:v=>`${v}年`},{k:"month",opts:MONTHS,ph:"月",fmt:v=>`${String(v).padStart(2,"0")}月`},{k:"day",opts:DAYS,ph:"日",fmt:v=>`${String(v).padStart(2,"0")}日`}].map(({k,opts,ph,fmt})=>(
-            <div key={k} className="relative">
-              <select value={form[k]} onChange={e=>update(k,e.target.value)} className="input-field">
+            <div key={k} className="relative min-w-0">
+              <select value={form[k]} onChange={e=>update(k,e.target.value)} className="input-field max-w-full truncate">
                 <option value="">{ph}</option>
                 {opts.map(o=><option key={o} value={o}>{fmt(o)}</option>)}
               </select>
@@ -49,16 +49,16 @@ function PersonPanel({ title, form, setForm, sign, mbti, setMbti }) {
       </div>
       <div className="mb-3">
         <label className="text-[11px] text-white/50 tracking-widest uppercase block mb-2">出生時刻</label>
-        <input type="time" value={form.time} onChange={e=>update("time",e.target.value)} className="input-field" />
+        <input type="time" value={form.time} onChange={e=>update("time",e.target.value)} className="input-field w-full max-w-full" />
       </div>
       <div>
         <label className="text-[11px] text-white/50 tracking-widest uppercase block mb-2">出生地（任意）</label>
         <input type="text" value={form.place} placeholder={title.includes("あなた")?"東京都":"大阪府"}
-          onChange={e=>update("place",e.target.value)} className="input-field" />
+          onChange={e=>update("place",e.target.value)} className="input-field w-full max-w-full overflow-hidden truncate" />
       </div>
       <div className="mt-3">
         <label className="text-[11px] text-white/50 tracking-widest uppercase block mb-2">MBTIタイプ（任意）</label>
-        <select value={mbti ?? ""} onChange={e => setMbti?.(e.target.value)} className="input-field">
+        <select value={mbti ?? ""} onChange={e => setMbti?.(e.target.value)} className="input-field w-full max-w-full">
           <option value="">選択しない</option>
           {MBTI_TYPES.map(type => (
             <option key={type} value={type}>{type}</option>
@@ -158,24 +158,27 @@ const handleSubmit = async () => {
   return (
     <div className="relative min-h-screen pb-24">
       <Stars />
-      <div className="relative z-10 max-w-app mx-auto px-5">
+      <div className="relative z-10 max-w-app md:max-w-2xl mx-auto px-5">
         <div className="pt-8 pb-5 text-center">
           <div className="font-serif text-[15px] tracking-widest shimmer-gold mb-2">✦ ASTERIA ✦</div>
-          <h1 className="font-serif text-[26px] text-[#F0F0F8]">相性診断</h1>
+          <h1 className="font-serif text-2xl tracking-wide text-[#F0F0F8]">相性診断</h1>
           <div className="flex items-center gap-2.5 justify-center mt-2">
             <div className="flex-1 h-px bg-gradient-to-r from-transparent to-gold/40" />
             <span className="text-gold text-xs">✦</span>
             <div className="flex-1 h-px bg-gradient-to-l from-transparent to-gold/40" />
           </div>
         </div>
-        <PersonPanel title="あなたの情報" form={myForm} setForm={setMyForm} sign={mySign} mbti={myMbti} setMbti={setMyMbti} />
-        <div className="flex items-center justify-center py-3 relative">
-          <div className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2"
-            style={{ background:"linear-gradient(to right,transparent,rgba(201,165,84,.25),transparent)" }} />
-          <div className="w-14 h-14 rounded-full flex items-center justify-center text-2xl text-gold z-10"
-            style={{ background:"rgba(201,165,84,.08)", border:"1px solid rgba(201,165,84,.35)", boxShadow:"0 0 20px rgba(201,165,84,.2)" }}>♡</div>
+        <div className="md:grid md:grid-cols-2 md:gap-4 md:items-start">
+          <PersonPanel title="あなたの情報" form={myForm} setForm={setMyForm} sign={mySign} mbti={myMbti} setMbti={setMyMbti} />
+          {/* 連結ハート（縦並びのモバイルのみ。md の横2カラムでは非表示） */}
+          <div className="flex items-center justify-center py-3 relative md:hidden">
+            <div className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2"
+              style={{ background:"linear-gradient(to right,transparent,rgba(201,165,84,.25),transparent)" }} />
+            <div className="w-14 h-14 rounded-full flex items-center justify-center text-2xl text-gold z-10"
+              style={{ background:"rgba(201,165,84,.08)", border:"1px solid rgba(201,165,84,.35)", boxShadow:"0 0 20px rgba(201,165,84,.2)" }}>♡</div>
+          </div>
+          <PersonPanel title="お相手の情報" form={theirForm} setForm={setTheirForm} sign={theirSign} mbti={theirMbti} setMbti={setTheirMbti} />
         </div>
-        <PersonPanel title="お相手の情報" form={theirForm} setForm={setTheirForm} sign={theirSign} mbti={theirMbti} setMbti={setTheirMbti} />
         <div className="card mt-3 p-4">
           <div className="text-[11px] text-white/50 tracking-widest uppercase mb-3">関係性選択（任意）</div>
           <div className="grid grid-cols-3 gap-2">

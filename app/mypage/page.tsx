@@ -229,11 +229,11 @@ export default function MyPage() {
   return (
     <div className="relative min-h-screen pb-24">
       <Stars />
-      <div className="relative z-10 max-w-app mx-auto px-5 pt-5">
+      <div className="relative z-10 max-w-app md:max-w-2xl mx-auto px-5 pt-5">
         {/* Title */}
         <div className="text-center mb-5 flex items-center gap-2.5 justify-center">
           <span className="text-gold text-sm">✦</span>
-          <h1 className="font-serif text-lg tracking-wide text-[#F0F0F8]">マイページ</h1>
+          <h1 className="font-serif text-2xl tracking-wide text-[#F0F0F8]">マイページ</h1>
           <span className="text-gold text-sm">✦</span>
         </div>
 

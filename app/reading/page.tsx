@@ -197,7 +197,7 @@ export default function ReadingInputPage() {
     return (
       <div className="relative min-h-screen pb-24">
         <Stars />
-        <div className="relative z-10 max-w-app mx-auto px-5 flex flex-col items-center justify-center min-h-screen text-center">
+        <div className="relative z-10 max-w-app md:max-w-2xl mx-auto px-5 flex flex-col items-center justify-center min-h-screen text-center">
           <div className="font-serif text-[15px] tracking-widest shimmer-gold mb-6">✦ ASTERIA ✦</div>
           <h2 className="font-serif text-xl text-[#F0F0F8] mb-3">無料体験は1回までです</h2>
           <p className="text-[13px] text-white/50 mb-8 leading-7">
@@ -219,12 +219,12 @@ export default function ReadingInputPage() {
   return (
     <div className="relative min-h-screen pb-24">
       <Stars />
-      <div className="relative z-10 max-w-app mx-auto px-5">
+      <div className="relative z-10 max-w-app md:max-w-2xl mx-auto px-5">
         <div className="pt-9 pb-5 text-center">
           <div className="font-serif text-[15px] tracking-widest shimmer-gold mb-2">
             ✦ ASTERIA ✦
           </div>
-          <h1 className="font-serif text-xl text-[#F0F0F8]">鑑定を行う</h1>
+          <h1 className="font-serif text-2xl tracking-wide text-[#F0F0F8]">鑑定を行う</h1>
           <p className="text-[12px] text-white/45 mt-1">
             テーマと期間を選んでください
           </p>

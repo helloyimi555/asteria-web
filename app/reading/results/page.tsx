@@ -41,7 +41,7 @@ export default function ReadingResultsPage() {
   return (
     <div className="relative min-h-screen pb-24">
       <Stars />
-      <div className="relative z-10 max-w-app mx-auto px-5">
+      <div className="relative z-10 max-w-app md:max-w-2xl mx-auto px-5">
         <div className="pt-9 pb-2">
           <Link href="/mypage"
             className="text-[12px] text-white/45 hover:text-white/75 transition-colors inline-flex items-center gap-1">
@@ -50,7 +50,7 @@ export default function ReadingResultsPage() {
         </div>
         <div className="pb-5 flex items-center gap-2.5">
           <span className="text-gold text-sm">✦</span>
-          <h1 className="font-serif text-xl text-[#F0F0F8]">鑑定履歴</h1>
+          <h1 className="font-serif text-2xl tracking-wide text-[#F0F0F8]">鑑定履歴</h1>
           <div className="flex-1 h-px bg-gradient-to-r from-gold/30 to-transparent" />
           <span className="text-gold text-sm">✦</span>
         </div>

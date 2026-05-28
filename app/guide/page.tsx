@@ -87,9 +87,9 @@ export default function GuidePage() {
   return (
     <div className="relative min-h-screen pb-24">
       <Stars />
-      <div className="relative z-10 max-w-app mx-auto">
+      <div className="relative z-10 max-w-app md:max-w-2xl mx-auto">
         <div className="pt-5 pb-4 text-center">
-          <h1 className="font-serif text-lg tracking-wide shimmer-gold">✦ 星ガイド ✦</h1>
+          <h1 className="font-serif text-2xl tracking-wide shimmer-gold">✦ 星ガイド ✦</h1>
         </div>
         <div className="mx-4 mb-4 flex rounded-xl overflow-hidden"
           style={{ background:"rgba(20,25,60,.7)", border:"1px solid rgba(255,255,255,.1)" }}>
