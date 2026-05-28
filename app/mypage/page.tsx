@@ -244,7 +244,7 @@ export default function MyPage() {
           const isPremium = (profile as any)?.is_premium === true
           return (
             <div
-              className="relative mx-auto mb-3 max-w-md overflow-hidden rounded-3xl border border-[#C9A554]/35 px-6 py-7 backdrop-blur-sm"
+              className="relative mb-3 overflow-hidden rounded-3xl border border-[#C9A554]/35 px-6 py-7 backdrop-blur-sm"
               style={{
                 background:
                   "radial-gradient(circle at top left, rgba(201,165,84,0.22), rgba(255,255,255,0.055) 36%, rgba(255,255,255,0.025) 100%), #04060F",
