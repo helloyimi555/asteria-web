@@ -51,7 +51,7 @@ export function ReadingCoverCard({ date, title, theme, keywords = [], message }:
         </span>
       ))}
 
-      <div className="relative z-10 flex flex-col items-center px-6 pb-10 pt-14 text-center">
+      <div className="relative z-10 flex flex-col items-center px-6 pb-10 pt-10 text-center">
         {/* ヘッダー */}
         <div className="flex items-center justify-center gap-2.5 text-gold/90">
           <span className="text-[10px]">✦</span>
