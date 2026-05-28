@@ -139,28 +139,33 @@ export default function AstrologyLoading({
                 >
                   {i + 1}. {label}
                 </span>
-                {/* 右側のコンスタレーション装飾（点線で結ばれた小さな星座風。状態でトーン変化） */}
+                {/* 右側の装飾：中央大星＋十字＋両側ダイヤ＋小星（区切り線の縮小版風） */}
                 <svg
                   aria-hidden
-                  width="64"
-                  height="22"
-                  viewBox="0 0 64 22"
+                  width="76"
+                  height="26"
+                  viewBox="0 0 76 26"
                   className={`ml-auto shrink-0 ${
-                    done ? "text-gold/60" : current ? "text-gold animate-pulse" : "text-white/20"
+                    done ? "text-gold/65" : current ? "text-gold animate-pulse" : "text-white/20"
                   }`}
                   fill="none"
                 >
-                  <g stroke="currentColor" strokeWidth="0.4" strokeDasharray="1.2 1.6" opacity="0.55">
-                    <line x1="6" y1="16" x2="22" y2="5" />
-                    <line x1="22" y1="5" x2="40" y2="14" />
-                    <line x1="40" y1="14" x2="58" y2="6" />
+                  {/* 背面の点線 */}
+                  <line x1="4" y1="13" x2="72" y2="13" stroke="currentColor" strokeWidth="0.35" strokeDasharray="1 2" opacity="0.35" />
+                  {/* 左の小星 */}
+                  <text x="10" y="17.5" textAnchor="middle" fontSize="11" fill="currentColor">✧</text>
+                  {/* 左ダイヤ */}
+                  <polygon points="22,13 24,10 26,13 24,16" fill="currentColor" opacity="0.7" />
+                  {/* 中央：大きな星＋十字レイ */}
+                  <g transform="translate(38,13)">
+                    <line x1="-9" y1="0" x2="9" y2="0" stroke="currentColor" strokeWidth="0.6" opacity="0.65" />
+                    <line x1="0" y1="-7" x2="0" y2="7" stroke="currentColor" strokeWidth="0.6" opacity="0.65" />
+                    <text x="0" y="5" textAnchor="middle" fontSize="15" fill="currentColor">✦</text>
                   </g>
-                  <g fill="currentColor">
-                    <circle cx="6" cy="16" r="1.1" />
-                    <circle cx="40" cy="14" r="0.9" />
-                  </g>
-                  <text x="22" y="8.5" textAnchor="middle" fontSize="10" fill="currentColor">✦</text>
-                  <text x="58" y="10" textAnchor="middle" fontSize="12" fill="currentColor">✧</text>
+                  {/* 右ダイヤ */}
+                  <polygon points="50,13 52,10 54,13 52,16" fill="currentColor" opacity="0.7" />
+                  {/* 右の小星 */}
+                  <text x="66" y="17.5" textAnchor="middle" fontSize="11" fill="currentColor">✧</text>
                 </svg>
               </li>
             )
