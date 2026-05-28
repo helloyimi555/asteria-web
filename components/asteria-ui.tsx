@@ -195,29 +195,30 @@ export function PremiumCard({
         className,
       )}
     >
-      {/* テキスト＋CTA のオーバーレイ：銀河テクスチャを避けて右半分のダーク領域に配置 */}
-      <div className="absolute inset-0 flex items-center gap-2 pl-[40%] pr-3 md:gap-6 md:pl-[40%] md:pr-6">
+      {/* テキスト＋CTA のオーバーレイ：右半分のダーク領域に配置
+          モバイル＝縦並び（テキスト上、CTA下）／PC＝横並び（テキスト左、CTA右） */}
+      <div className="absolute inset-0 flex flex-col items-end justify-center gap-2.5 py-3 pl-[48%] pr-4 md:flex-row md:items-center md:gap-6 md:py-0 md:pl-[40%] md:pr-6">
         {/* テキスト群 */}
-        <div className="relative z-10 min-w-0 flex-1 text-left">
-          <div className="flex items-center gap-2 text-[#E7D08A]">
+        <div className="relative z-10 min-w-0 text-right md:flex-1 md:text-left">
+          <div className="flex items-center justify-end gap-2 text-[#E7D08A] md:justify-start">
             <span className="text-[8px] md:text-[10px]">✦</span>
-            <span className="font-serif text-[9px] tracking-[0.3em] md:text-[11px] md:tracking-[0.34em]">PREMIUM</span>
+            <span className="font-serif text-[10px] tracking-[0.3em] md:text-[11px] md:tracking-[0.34em]">PREMIUM</span>
             <span className="text-[8px] md:text-[10px]">✦</span>
           </div>
           <h3
-            className="mt-1 truncate font-serif text-[clamp(14px,4vw,20px)] font-semibold leading-tight text-[#F7E9B5] md:mt-1.5 md:text-[22px]"
+            className="mt-1 font-serif text-[clamp(16px,5vw,22px)] font-semibold leading-tight text-[#F7E9B5] md:mt-1.5 md:text-[22px]"
             style={{ textShadow: "0 0 18px rgba(201,165,84,0.55), 0 0 6px rgba(201,165,84,0.35)" }}
           >
             {planName}
           </h3>
-          <p className="mt-1 truncate text-[10px] text-[#F7F3E7]/85 md:mt-1.5 md:text-[13px]">{subtitle}</p>
+          <p className="mt-1 text-[11px] leading-snug text-[#F7F3E7]/85 md:mt-1.5 md:text-[13px]">{subtitle}</p>
         </div>
 
-        {/* CTA ボタン（常に右側） */}
+        {/* CTA ボタン（モバイル＝テキスト下／PC＝右端） */}
         <button
           type="button"
           onClick={onClick}
-          className="btn-gold relative z-10 inline-flex shrink-0 items-center justify-center gap-1 px-3 py-2 text-[11px] md:gap-2 md:px-6 md:py-2.5 md:text-[14px]"
+          className="btn-gold relative z-10 inline-flex shrink-0 items-center justify-center gap-1 px-4 py-2 text-[12px] md:gap-2 md:px-6 md:py-2.5 md:text-[14px]"
         >
           {ctaLabel} <span>→</span>
         </button>
