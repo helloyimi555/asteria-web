@@ -1,3 +1,6 @@
+"use client"
+import { Stars } from "@/components/ui/Stars"
+
 type AstrologyLoadingProps = {
   className?: string;
   message?: string;
@@ -10,18 +13,12 @@ export default function AstrologyLoading({
 }: AstrologyLoadingProps) {
   return (
     <section
-      className={`relative flex min-h-screen items-center justify-center overflow-hidden bg-[#090E1F] px-6 text-[#F6F1E4] ${className}`}
+      className={`relative flex min-h-screen items-center justify-center overflow-hidden bg-[#080C1E] px-6 text-[#F6F1E4] ${className}`}
       aria-busy="true"
       aria-live="polite"
     >
-      <img
-        src="/asteria/loading/star-field-bg.webp"
-        srcSet="/asteria/loading/star-field-bg.webp 375w, /asteria/loading/star-field-bg@2x.webp 750w"
-        alt=""
-        className="absolute inset-0 h-full w-full object-cover"
-        draggable={false}
-      />
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(201,165,84,0.10),transparent_34%),linear-gradient(to_bottom,rgba(9,14,31,0)_0%,rgba(9,14,31,0.25)_72%,rgba(9,14,31,0.72)_100%)]" />
+      {/* 他の画面と同じ星空背景（Stars コンポーネント） */}
+      <Stars />
       <div className="relative z-10 flex w-full max-w-[420px] flex-col items-center">
         <div className="relative aspect-square w-[min(108vw,430px)] -translate-y-10">
           <img
