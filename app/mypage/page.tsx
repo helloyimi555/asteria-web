@@ -261,8 +261,8 @@ export default function MyPage() {
                 </div>
               )}
 
-              {/* コンテンツ：メダリオン＋テキストを暗部の中央〜右寄りエリアに収める */}
-              <div className="absolute inset-0 flex items-center gap-3 pl-[34%] pr-[9%] md:gap-6 md:pl-[32%] md:pr-[15%]">
+              {/* コンテンツ：メダリオン＋テキストを1グループとして中央に配置 */}
+              <div className="absolute inset-0 flex items-center justify-center gap-3 px-[6%] md:gap-6 md:px-[8%]">
                 {/* メダリオン：枠内に収めるためサイズを抑える（SP h-50% / PC h-68%） */}
                 <div className="relative aspect-square h-[50%] shrink-0 md:h-[68%]">
                   <img
@@ -273,8 +273,8 @@ export default function MyPage() {
                   />
                 </div>
 
-                {/* テキスト情報（暗部の中央に配置） */}
-                <div className="relative z-10 min-w-0 flex-1 text-center">
+                {/* テキスト情報（コンテンツ幅で自然に。グループ全体が中央寄せされる） */}
+                <div className="relative z-10 min-w-0 text-center">
                   <div className="flex items-center justify-center gap-2 text-[#E7D08A]">
                     <span className="text-[8px] md:text-[10px]">✦</span>
                     <span className="font-serif text-[10px] tracking-[0.3em] md:text-[11px] md:tracking-[0.34em]">MY ASTERIA</span>
