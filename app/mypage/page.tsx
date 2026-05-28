@@ -261,10 +261,10 @@ export default function MyPage() {
                 </div>
               )}
 
-              {/* コンテンツ：メダリオン（星雲中央付近に寄せる）＋ テキスト（中央寄せ）。バナーのゴールド枠の内側に収める */}
-              <div className="absolute inset-0 flex items-center gap-3 pl-[20%] pr-[6%] md:gap-6 md:pl-[28%] md:pr-[7%]">
-                {/* メダリオン：高さは枠内に収まるよう % で指定。星雲背景に重なって幻想的に */}
-                <div className="relative aspect-square h-[64%] shrink-0 md:h-[82%]">
+              {/* コンテンツ：メダリオン＋テキストを暗部の中央〜右寄りエリアに収める */}
+              <div className="absolute inset-0 flex items-center gap-3 pl-[34%] pr-[9%] md:gap-6 md:pl-[32%] md:pr-[15%]">
+                {/* メダリオン：SP は枠内に収まるよう小さめ、PC は従来サイズ */}
+                <div className="relative aspect-square h-[50%] shrink-0 md:h-[82%]">
                   <img
                     src={`/asteria/assets/${sunSign ? sunSign.en.toLowerCase() : "zodiac-medallion"}.png`}
                     alt={sunSign ? `${sunSign.sign} のメダリオン` : ""}
