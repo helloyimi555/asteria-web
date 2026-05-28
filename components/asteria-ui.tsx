@@ -197,7 +197,7 @@ export function PremiumCard({
     >
       {/* テキスト＋CTA のオーバーレイ（左：テキスト群／右：CTA を横並びに） */}
       {/* 左側の王冠メダリオンを避けるため、padding-left でテキスト開始位置を内側にずらす */}
-      <div className="absolute inset-0 flex items-center gap-2 pl-[26%] pr-3 md:gap-6 md:pl-[22%] md:pr-6">
+      <div className="absolute inset-0 flex items-center gap-2 pl-[34%] pr-3 md:gap-6 md:pl-[30%] md:pr-6">
         {/* テキスト群 */}
         <div className="relative z-10 min-w-0 flex-1 text-left">
           <div className="flex items-center gap-2 text-[#E7D08A]">
