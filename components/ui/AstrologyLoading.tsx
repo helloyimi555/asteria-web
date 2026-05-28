@@ -79,26 +79,26 @@ export default function AstrologyLoading({
             {title}
           </h1>
         )}
+
+        {/* 状態テキスト（鑑定中の直下。背景の12宮の円にかからないよう上に置く） */}
+        <p
+          className="mt-5 text-center font-serif text-[20px] tracking-wide text-[#F6F1E4]"
+          style={{ textShadow: "0 0 14px rgba(201,165,84,.35)" }}
+        >
+          {message}
+        </p>
+        <p className="mt-2 text-center text-[12px] leading-relaxed text-[#F6F1E4]/65">
+          {subMessage}
+        </p>
       </div>
 
       {/* 中央スペーサー（背景画像のホイールがここに見える） */}
       <div className="flex-1" />
 
-      {/* 下部：ステータス＋区切り＋チェックリスト */}
+      {/* 下部：区切り＋チェックリスト */}
       <div className="relative z-10 mb-10 w-full px-6">
-        {/* 状態テキスト */}
-        <p
-          className="text-center font-serif text-[22px] tracking-wide text-[#F6F1E4]"
-          style={{ textShadow: "0 0 14px rgba(201,165,84,.35)" }}
-        >
-          {message}
-        </p>
-        <p className="mt-3 text-center text-[12px] leading-relaxed text-[#F6F1E4]/65">
-          {subMessage}
-        </p>
-
         {/* 装飾区切り */}
-        <div className="my-4 flex items-center justify-center gap-2 text-gold/70">
+        <div className="mb-4 flex items-center justify-center gap-2 text-gold/70">
           <span className="h-px w-16 bg-gradient-to-r from-transparent to-gold/40" />
           <span className="text-xs">✦</span>
           <span className="h-px w-16 bg-gradient-to-l from-transparent to-gold/40" />
