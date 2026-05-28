@@ -27,7 +27,8 @@ export default function AstrologyLoading({
             className="absolute inset-0 h-full w-full animate-[asteria-spin_30s_linear_infinite] object-contain opacity-90 motion-reduce:animate-none"
             draggable={false}
           />
-          <div className="absolute inset-0 flex items-center justify-center">
+          {/* センターロゴ：画像内の上=星／下=ASTERIA。リング中心に ASTERIA テキストが来るよう少し上にずらす */}
+          <div className="absolute inset-0 flex items-center justify-center -translate-y-8">
             <img
               src="/asteria/loading/center-logo-transparent.png"
               alt="ASTERIA"
