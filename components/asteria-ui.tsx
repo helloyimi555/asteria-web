@@ -166,47 +166,63 @@ export function ResultSummaryCard({
  * ======================================================= */
 
 type PremiumCardProps = {
+  /** メイン見出し */
   planName?: string;
-  features?: string[];
+  /** 機能を1行で説明するサブテキスト（背景バナー版で使用） */
+  subtitle?: string;
   ctaLabel?: string;
   onClick?: () => void;
   className?: string;
 };
 
+/** プレミアム誘導バナー。背景画像（モバイル＝縦長／md以上＝横長）にテキストとCTAを CSS で重ねる。 */
 export function PremiumCard({
   planName = "プレミアムプラン",
-  features = ["詳細な鑑定結果", "鑑定履歴の保存", "相性診断", "星読みガイド"],
-  ctaLabel = "プランを確認する",
+  subtitle = "詳細鑑定・保存・相性診断を解放",
+  ctaLabel = "プランを見る",
   onClick,
   className,
 }: PremiumCardProps) {
   return (
-    <BaseCard variant="premium" className={className}>
-      <div className="mb-4 flex items-start justify-between gap-3">
-        <div>
-          <p className="text-xs tracking-[0.22em] text-[#C9A554]/80">PREMIUM</p>
-          <h3 className="mt-1 text-lg font-semibold text-white">{planName}</h3>
+    <div
+      className={cn(
+        "relative w-full overflow-hidden rounded-2xl",
+        // モバイル＝縦長バナー、md 以上＝横長バナー
+        "aspect-[1374/1145] md:aspect-[1916/821]",
+        // 背景画像（モバイル/デスクトップで切り替え）
+        "bg-[url('/asteria/assets/premium-banner-bg-mobile.png')] md:bg-[url('/asteria/assets/premium-banner-bg.png')]",
+        "bg-cover bg-center bg-no-repeat",
+        className,
+      )}
+    >
+      {/* テキスト＋CTA のオーバーレイ */}
+      <div className="absolute inset-0 flex flex-col items-center justify-center px-6 md:flex-row md:justify-end md:gap-6 md:pr-8">
+        {/* テキスト群（モバイル：中央寄せ／md：左寄せ） */}
+        <div className="relative z-10 text-center md:flex-1 md:text-left md:max-w-[58%]">
+          <div className="flex items-center justify-center gap-2 text-[#E7D08A] md:justify-start">
+            <span className="text-[10px]">✦</span>
+            <span className="font-serif text-[11px] tracking-[0.34em]">PREMIUM</span>
+            <span className="text-[10px]">✦</span>
+          </div>
+          <h3
+            className="mt-2 font-serif text-[clamp(22px,5.5vw,30px)] font-semibold leading-tight text-[#F7E9B5]"
+            style={{ textShadow: "0 0 22px rgba(201,165,84,0.55), 0 0 8px rgba(201,165,84,0.35)" }}
+          >
+            {planName}
+          </h3>
+          <p className="mt-2 text-[12px] text-[#F7F3E7]/85 md:text-[13px]">{subtitle}</p>
         </div>
 
-        <PremiumBadge />
+        {/* CTA ボタン（モバイル：下／md：右寄せ） */}
+        <button
+          type="button"
+          onClick={onClick}
+          className="btn-gold relative z-10 mt-5 inline-flex items-center justify-center gap-2 px-6 py-2.5 text-[14px] md:mt-0 md:shrink-0 md:px-7 md:py-3"
+        >
+          {ctaLabel} <span>→</span>
+        </button>
       </div>
-
-      <ul className="space-y-2">
-        {features.map((feature) => (
-          <li
-            key={feature}
-            className="flex items-center gap-2 text-sm text-white/80"
-          >
-            <span className="text-[#C9A554]">✧</span>
-            <span>{feature}</span>
-          </li>
-        ))}
-      </ul>
-
-      <GoldButton type="button" onClick={onClick} className="mt-5 w-full">
-        {ctaLabel}
-      </GoldButton>
-    </BaseCard>
+    </div>
   );
 }
 
