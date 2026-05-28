@@ -238,91 +238,109 @@ export default function MyPage() {
           <span className="text-gold text-sm">✦</span>
         </div>
 
-        {/* Profile card（新デザイン：メダリオン＋ステータスカード） */}
+        {/* Profile card（ヒーローカード：神秘的・上品なゴールドラジアル＋メダリオン主役） */}
         {(() => {
           const sunSign = profile?.birth_date ? getSunSign(profile.birth_date) : null
           const isPremium = (profile as any)?.is_premium === true
           return (
             <div
-              className="relative mb-3 overflow-hidden rounded-2xl"
+              className="relative mx-auto mb-3 max-w-md overflow-hidden rounded-3xl border border-[#C9A554]/35 px-6 py-7 backdrop-blur-sm"
               style={{
                 background:
-                  "radial-gradient(ellipse at top left, rgba(201,165,84,0.14), transparent 55%), linear-gradient(135deg, rgba(20,25,70,.92), rgba(10,14,40,.95))",
-                border: "1px solid rgba(201,165,84,0.25)",
+                  "radial-gradient(circle at top left, rgba(201,165,84,0.22), rgba(255,255,255,0.055) 36%, rgba(255,255,255,0.025) 100%), #04060F",
+                boxShadow: "0 0 48px rgba(201,165,84,0.16)",
               }}
             >
-              {/* 四隅装飾 */}
-              <img src="/asteria/assets/corner-ornament.png" alt="" aria-hidden
-                className="pointer-events-none absolute left-1 top-1 h-16 w-16 brightness-110 saturate-[.92]" />
-              <img src="/asteria/assets/corner-ornament.png" alt="" aria-hidden
-                className="pointer-events-none absolute right-1 top-1 h-16 w-16 -scale-x-100 brightness-110 saturate-[.92]" />
-              <img src="/asteria/assets/corner-ornament.png" alt="" aria-hidden
-                className="pointer-events-none absolute bottom-1 left-1 h-16 w-16 -scale-y-100 brightness-110 saturate-[.92]" />
-              <img src="/asteria/assets/corner-ornament.png" alt="" aria-hidden
-                className="pointer-events-none absolute bottom-1 right-1 h-16 w-16 -scale-100 brightness-110 saturate-[.92]" />
+              {/* 内側の薄いゴールド二重枠 */}
+              <span className="pointer-events-none absolute inset-2.5 rounded-[22px] border border-[#C9A554]/15" />
 
-              {/* Premium バッジ（is_premium が true のときのみ） */}
+              {/* 星屑（ambient） */}
+              <span className="pointer-events-none absolute left-[18%] top-[26%] select-none text-[9px] text-gold/30">✦</span>
+              <span className="pointer-events-none absolute right-[14%] top-[16%] select-none text-[11px] text-gold/35">✧</span>
+              <span className="pointer-events-none absolute left-[6%] top-[58%] select-none text-[8px] text-gold/25">✦</span>
+              <span className="pointer-events-none absolute right-[22%] bottom-[34%] select-none text-[10px] text-gold/30">✦</span>
+              <span className="pointer-events-none absolute right-[8%] bottom-[18%] select-none text-[8px] text-gold/25">✧</span>
+
+              {/* 四隅装飾（控えめにカードに馴染ませる） */}
+              <img src="/asteria/assets/corner-ornament.png" alt="" aria-hidden
+                className="pointer-events-none absolute left-0 top-0 h-14 w-14 opacity-70" />
+              <img src="/asteria/assets/corner-ornament.png" alt="" aria-hidden
+                className="pointer-events-none absolute right-0 top-0 h-14 w-14 -scale-x-100 opacity-70" />
+              <img src="/asteria/assets/corner-ornament.png" alt="" aria-hidden
+                className="pointer-events-none absolute bottom-0 left-0 h-14 w-14 -scale-y-100 opacity-70" />
+              <img src="/asteria/assets/corner-ornament.png" alt="" aria-hidden
+                className="pointer-events-none absolute bottom-0 right-0 h-14 w-14 -scale-100 opacity-70" />
+
+              {/* Premium バッジ（右上・控えめだが高級感） */}
               {isPremium && (
-                <div className="absolute right-4 top-4 z-10 inline-flex items-center gap-1 rounded-full px-3 py-1 text-[11px] font-semibold"
+                <div
+                  className="absolute right-3.5 top-3.5 z-10 inline-flex items-center gap-1 rounded-full border border-[#C9A554]/45 px-2.5 py-1 text-[10px] font-semibold tracking-[0.18em]"
                   style={{
-                    background: "linear-gradient(135deg,#C9A554,#E7D08A,#C9A554)",
-                    color: "#04060F",
-                    boxShadow: "0 0 14px rgba(201,165,84,.4)",
-                  }}>
-                  <span>👑</span><span>Premium</span>
+                    background: "linear-gradient(135deg, rgba(201,165,84,0.28), rgba(231,208,138,0.12))",
+                    color: "#E7D08A",
+                    boxShadow: "0 0 14px rgba(201,165,84,0.32)",
+                  }}
+                >
+                  <span className="text-[10px]">👑</span>
+                  <span>PREMIUM</span>
                 </div>
               )}
 
               {/* 上段：メダリオン + テキスト情報 */}
-              <div className="relative z-[1] flex items-center gap-3 px-5 pt-6 pb-3">
-                {/* メダリオン */}
+              <div className="relative z-[1] flex items-center gap-4">
+                {/* メダリオン（主役・大きめ＋ゴールド発光） */}
                 <div className="relative flex h-28 w-28 shrink-0 items-center justify-center">
-                  <img src="/asteria/assets/zodiac-medallion.png" alt="" aria-hidden
-                    className="pointer-events-none absolute inset-0 h-full w-full object-contain" />
-                  <span className="relative font-serif text-[44px] text-gold"
-                    style={{ textShadow: "0 0 18px rgba(201,165,84,.7)" }}>
+                  <img
+                    src="/asteria/assets/zodiac-medallion.png"
+                    alt=""
+                    aria-hidden
+                    className="pointer-events-none absolute inset-0 h-full w-full object-contain drop-shadow-[0_0_18px_rgba(201,165,84,0.45)]"
+                  />
+                  <span
+                    className="relative font-serif text-5xl text-gold"
+                    style={{ textShadow: "0 0 22px rgba(201,165,84,0.75), 0 0 8px rgba(201,165,84,0.55)" }}
+                  >
                     {sunSign?.symbol ?? "✦"}
                   </span>
                 </div>
 
                 {/* 名前・出生地・編集 */}
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 text-gold/80">
-                    <span className="text-[10px]">✦</span>
-                    <span className="font-serif text-[11px] tracking-[0.28em]">MY ASTERIA</span>
-                    <span className="text-[10px]">✦</span>
+                  <div className="flex items-center gap-2 text-[#C9A554]/85">
+                    <span className="text-[9px]">✦</span>
+                    <span className="font-serif text-[10px] tracking-[0.32em]">MY ASTERIA</span>
                   </div>
                   {profile ? (
                     <>
-                      <div className="mt-2 font-serif text-[20px] text-[#F0F0F8] font-semibold truncate">
+                      <div className="mt-3 truncate font-serif text-[24px] font-semibold leading-tight text-[#F7F3E7]">
                         {profile.display_name || "ゲスト"}
                       </div>
-                      <div className="text-[11px] text-white/55 mt-0.5 truncate">
+                      <div className="mt-1.5 truncate text-[11px] text-white/55">
                         出生地：{abbreviatedPlace || "—"}
                       </div>
                     </>
                   ) : (
-                    <div className="mt-2 text-[13px] text-white/55">プロフィール未設定</div>
+                    <div className="mt-3 text-[14px] text-white/60">プロフィール未設定</div>
                   )}
-                  <button type="button" onClick={openProfileEdit}
-                    className="text-[12px] text-gold/90 hover:text-gold mt-2 inline-flex items-center gap-1 transition-colors">
+                  <button
+                    type="button"
+                    onClick={openProfileEdit}
+                    className="mt-3 inline-flex items-center gap-1 text-[12px] text-[#C9A554]/90 transition-colors hover:text-[#C9A554]"
+                  >
                     プロフィールを編集 <span>›</span>
                   </button>
                 </div>
               </div>
 
-              {/* 装飾区切り */}
-              <div className="relative z-[1] mx-5 my-2 flex items-center gap-2 text-gold/60">
-                <span className="text-[7px]">·</span>
-                <span className="h-px flex-1 bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
-                <span className="text-gold text-base"
-                  style={{ textShadow: "0 0 10px rgba(201,165,84,.5)" }}>✦</span>
-                <span className="h-px flex-1 bg-gradient-to-l from-transparent via-gold/40 to-transparent" />
-                <span className="text-[7px]">·</span>
+              {/* ゴールドの装飾区切り */}
+              <div className="relative z-[1] my-5 flex items-center gap-2 text-[#C9A554]/65">
+                <span className="h-px flex-1 bg-gradient-to-r from-transparent via-[#C9A554]/35 to-[#C9A554]/55" />
+                <span className="text-[#C9A554] text-sm" style={{ textShadow: "0 0 10px rgba(201,165,84,0.55)" }}>✦</span>
+                <span className="h-px flex-1 bg-gradient-to-l from-transparent via-[#C9A554]/35 to-[#C9A554]/55" />
               </div>
 
               {/* 下段：3つの統計カード */}
-              <div className="relative z-[1] grid grid-cols-3 gap-2 px-5 pb-5 pt-2">
+              <div className="relative z-[1] grid grid-cols-3 gap-2.5">
                 <StatBlock icon="☉" label="太陽星座" value={sunSign?.sign ?? "—"} />
                 <StatBlock icon="☽" label="月星座" value="—" />
                 <StatBlock icon="✦" label="MBTI" value={profile?.mbti_type ?? "—"} />
@@ -572,24 +590,16 @@ export default function MyPage() {
 /** プロフィールカード下段の小さな統計ブロック（太陽星座／月星座／MBTI） */
 function StatBlock({ icon, label, value }: { icon: string; label: string; value: string }) {
   return (
-    <div
-      className="rounded-xl px-3 py-3 text-center"
-      style={{
-        background: "rgba(201,165,84,0.05)",
-        border: "1px solid rgba(201,165,84,0.22)",
-      }}
-    >
-      <div className="text-lg text-gold leading-none"
-        style={{ textShadow: "0 0 10px rgba(201,165,84,.45)" }}>
+    <div className="rounded-xl border border-white/10 bg-black/20 px-3 py-3.5 text-center backdrop-blur-sm">
+      <div
+        className="text-[18px] leading-none text-[#C9A554]"
+        style={{ textShadow: "0 0 10px rgba(201,165,84,0.5)" }}
+      >
         {icon}
       </div>
-      <div className="mt-1.5 text-[10px] tracking-wider text-white/60">{label}</div>
-      <div className="my-1.5 flex items-center justify-center gap-1 text-gold/40">
-        <span className="h-px w-4 bg-gold/30" />
-        <span className="text-[6px]">·</span>
-        <span className="h-px w-4 bg-gold/30" />
-      </div>
-      <div className="font-serif text-[14px] text-gold">{value}</div>
+      <div className="mt-1.5 text-[10px] tracking-wider text-white/55">{label}</div>
+      <div className="my-1.5 mx-auto h-px w-6 bg-[#C9A554]/30" />
+      <div className="font-serif text-[14px] text-[#C9A554]">{value}</div>
     </div>
   )
 }
