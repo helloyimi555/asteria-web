@@ -261,15 +261,15 @@ export default function MyPage() {
               <span className="pointer-events-none absolute right-[22%] bottom-[34%] select-none text-[10px] text-gold/30">✦</span>
               <span className="pointer-events-none absolute right-[8%] bottom-[18%] select-none text-[8px] text-gold/25">✧</span>
 
-              {/* 四隅装飾（控えめにカードに馴染ませる） */}
+              {/* 四隅装飾（バナーと同じくらい大きく・目立たせる） */}
               <img src="/asteria/assets/profile-corner.png" alt="" aria-hidden
-                className="pointer-events-none absolute left-0 top-0 h-14 w-14 opacity-70" />
+                className="pointer-events-none absolute left-0 top-0 h-24 w-24 md:h-32 md:w-32" />
               <img src="/asteria/assets/profile-corner.png" alt="" aria-hidden
-                className="pointer-events-none absolute right-0 top-0 h-14 w-14 -scale-x-100 opacity-70" />
+                className="pointer-events-none absolute right-0 top-0 h-24 w-24 -scale-x-100 md:h-32 md:w-32" />
               <img src="/asteria/assets/profile-corner.png" alt="" aria-hidden
-                className="pointer-events-none absolute bottom-0 left-0 h-14 w-14 -scale-y-100 opacity-70" />
+                className="pointer-events-none absolute bottom-0 left-0 h-24 w-24 -scale-y-100 md:h-32 md:w-32" />
               <img src="/asteria/assets/profile-corner.png" alt="" aria-hidden
-                className="pointer-events-none absolute bottom-0 right-0 h-14 w-14 -scale-100 opacity-70" />
+                className="pointer-events-none absolute bottom-0 right-0 h-24 w-24 -scale-100 md:h-32 md:w-32" />
 
               {/* Premium バッジ（右上・控えめだが高級感） */}
               {isPremium && (

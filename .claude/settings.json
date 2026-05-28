@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls -la corner-ornament.png)",
+      "Bash(node -e \"const fs=require\\('fs'\\);const b=fs.readFileSync\\('corner-ornament.png'\\);const ct=b.readUInt8\\(25\\);const types={0:'Gray',2:'RGB',3:'Palette',4:'GrayAlpha',6:'RGBA'};console.log\\('size', b.readUInt32BE\\(16\\)+'x'+b.readUInt32BE\\(20\\), '| colorType', ct, types[ct]||'?', '| alpha:', \\(ct===4||ct===6\\)?'YES':\\(ct===3?'maybe\\(palette tRNS\\)':'NO'\\)\\);\")",
+      "Bash(git commit -m ' *)",
+      "Bash(node -e \"const fs=require\\('fs'\\);const b=fs.readFileSync\\('corner-frame.png'\\);const ct=b.readUInt8\\(25\\);console.log\\('corner-frame.png', b.readUInt32BE\\(16\\)+'x'+b.readUInt32BE\\(20\\),'colorType',ct,\\(ct===6||ct===4\\)?'alpha-capable':'NO-alpha'\\)\")",
+      "Bash(node -e ' *)",
+      "Bash(cd \"C:\\\\Users\\\\hello\\\\Documents\\\\占いアプリ\\\\占星術_Asteria\\\\asteria-web/public/assets\" && ls -lat cover-seal*.png seal*.png emblem*.png 2>/dev/null | head; echo \"--- mtime check ---\"; stat -c '%y %n' cover-seal.png 2>/dev/null)",
+      "Read(//c/Users/hello/Documents/占いアプリ/占星術_Asteria/asteria-web/**)",
+      "Bash(python -m py_compile main.py)",
+      "Bash(ls -la loading-bg*)",
+      "Bash(node -e \"const fs=require\\('fs'\\);const b=fs.readFileSync\\('loading-bg.png'\\);console.log\\('size', b.readUInt32BE\\(16\\)+'x'+b.readUInt32BE\\(20\\), 'bytes', b.length\\)\")"
+    ]
+  }
+}

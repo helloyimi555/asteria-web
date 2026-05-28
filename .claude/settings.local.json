@@ -5,7 +5,12 @@
       "Bash(./node_modules/.bin/tsc --noEmit -p .)",
       "PowerShell(npx --no-install tsc --noEmit -p . 2>&1)",
       "PowerShell(try { \\(Invoke-WebRequest -Uri \"http://localhost:8000/health\" -TimeoutSec 3 -UseBasicParsing\\).Content } catch { \"NOT_RUNNING: $\\($_.Exception.Message\\)\" })",
-      "Read(//c/Users/hello/Documents/�肢�A�v��/�萯�p_Asteria/asteria-api/**)"
+      "Read(//c/Users/hello/Documents/�肢�A�v��/�萯�p_Asteria/asteria-api/**)",
+      "Bash(git commit -m ' *)",
+      "Bash(node -e ' *)",
+      "Bash(node -e \"try{require\\('sharp'\\);console.log\\('sharp:OK'\\)}catch\\(e\\){console.log\\('sharp:NG'\\)}; try{require\\('jimp'\\);console.log\\('jimp:OK'\\)}catch\\(e\\){console.log\\('jimp:NG'\\)}; try{require\\('pngjs'\\);console.log\\('pngjs:OK'\\)}catch\\(e\\){console.log\\('pngjs:NG'\\)}\")",
+      "Bash(node __clean_pngs.cjs)",
+      "Bash(rm __clean_pngs.cjs)"
     ]
   }
 }
