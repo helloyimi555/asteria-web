@@ -48,13 +48,15 @@ export default function AstrologyLoading({
       aria-live="polite"
       className={`relative flex min-h-screen items-center justify-center overflow-hidden bg-[#04060F] px-4 py-6 text-[#F6F1E4] ${className}`}
     >
-      {/* 鑑定書カード（max-w-[420px] で PC でも適切なサイズに） */}
+      {/* 鑑定書カード（背景画像と同じ縦横比に固定して、ホイールが画像どおりに収まるように） */}
       <div
         className="relative flex w-full max-w-[420px] flex-col items-center overflow-hidden rounded-2xl"
         style={{
+          aspectRatio: "853 / 1844",
+          maxHeight: "92vh",
           backgroundColor: "#080C1E",
           backgroundImage: "url('/asteria/assets/loading-bg.png')",
-          backgroundSize: "cover",
+          backgroundSize: "100% 100%",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
         }}
