@@ -288,24 +288,14 @@ export default function MyPage() {
 
               {/* 上段：メダリオン + テキスト情報 */}
               <div className="relative z-[1] flex items-center gap-4">
-                {/* メダリオン（主役・大きめ＋ゴールド発光） */}
-                <div className="relative flex h-28 w-28 shrink-0 items-center justify-center">
+                {/* メダリオン（サインごとの専用画像。シンボルがリングに完璧に焼き込まれている） */}
+                <div className="relative h-28 w-28 shrink-0">
                   <img
-                    src="/asteria/assets/zodiac-medallion.png"
-                    alt=""
-                    aria-hidden
-                    className="pointer-events-none absolute inset-0 h-full w-full object-contain drop-shadow-[0_0_18px_rgba(201,165,84,0.45)]"
+                    src={`/asteria/assets/${sunSign ? sunSign.en.toLowerCase() : "zodiac-medallion"}.png`}
+                    alt={sunSign ? `${sunSign.sign} のメダリオン` : ""}
+                    aria-hidden={!sunSign}
+                    className="pointer-events-none h-full w-full object-contain drop-shadow-[0_0_18px_rgba(201,165,84,0.45)]"
                   />
-                  <span
-                    className="relative font-serif text-5xl text-gold leading-none translate-y-[3px]"
-                    style={{
-                      textShadow: "0 0 22px rgba(201,165,84,0.75), 0 0 8px rgba(201,165,84,0.55)",
-                      fontVariantEmoji: "text",
-                    }}
-                  >
-                    {/* ︎ でテキスト表示を強制し、OSの絵文字レンダリングを抑止 */}
-                    {sunSign?.symbol ? `${sunSign.symbol}︎` : "✦"}
-                  </span>
                 </div>
 
                 {/* 名前・出生地・編集 */}
