@@ -263,8 +263,8 @@ export default function MyPage() {
 
               {/* コンテンツ：メダリオン＋テキストを暗部の中央〜右寄りエリアに収める */}
               <div className="absolute inset-0 flex items-center gap-3 pl-[34%] pr-[9%] md:gap-6 md:pl-[32%] md:pr-[15%]">
-                {/* メダリオン：SP は枠内に収まるよう小さめ、PC は従来サイズ */}
-                <div className="relative aspect-square h-[50%] shrink-0 md:h-[82%]">
+                {/* メダリオン：枠内に収めるためサイズを抑える（SP h-50% / PC h-68%） */}
+                <div className="relative aspect-square h-[50%] shrink-0 md:h-[68%]">
                   <img
                     src={`/asteria/assets/${sunSign ? sunSign.en.toLowerCase() : "zodiac-medallion"}.png`}
                     alt={sunSign ? `${sunSign.sign} のメダリオン` : ""}
