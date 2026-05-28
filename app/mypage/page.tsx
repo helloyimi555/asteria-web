@@ -304,10 +304,16 @@ export default function MyPage() {
                     <span className="text-[9px]">✦</span>
                     <span className="font-serif text-[10px] tracking-[0.32em]">MY ASTERIA</span>
                   </div>
-                  {profile ? (
+                  {sunSign ? (
                     <>
+                      {/* 大見出し：星座 × MBTI（MBTI未設定なら星座のみ） */}
                       <div className="mt-3 truncate font-serif text-[24px] font-semibold leading-tight text-[#F7F3E7]">
-                        {profile.display_name || "ゲスト"}
+                        {sunSign.sign}
+                        {profile?.mbti_type && (
+                          <span className="ml-2 text-[18px] font-normal text-[#C9A554]/90">
+                            × {profile.mbti_type}
+                          </span>
+                        )}
                       </div>
                       <div className="mt-1.5 truncate text-[11px] text-white/55">
                         出生地：{abbreviatedPlace || "—"}
