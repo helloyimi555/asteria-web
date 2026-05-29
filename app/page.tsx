@@ -204,7 +204,7 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
                     診断する <span className="text-[11px] leading-none">›</span>
                   </span>
                 </div>
-                <div className="text-[10.5px] md:text-[12px] text-white/60 leading-[1.7]">ふたりの星が響き合うかを読み解きます</div>
+                <div className="text-[11.5px] md:text-[12px] text-white/60 leading-[1.7]">ふたりの星が響き合うかを読み解きます</div>
               </div>
             </Link>
             <PartnerPersonalityCard onLoadingChange={setPartnerLoading} />
@@ -323,7 +323,7 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="text-[12.5px] md:text-[14px] text-white/92 font-medium">{formatReadingTitle(r.theme, period, r.created_at)}</div>
-                      <div className="text-[10px] md:text-[12px] text-white/45 mt-0.5">{formatReadingDate(r.created_at)}に鑑定</div>
+                      <div className="text-[11px] md:text-[12px] text-white/45 mt-0.5">{formatReadingDate(r.created_at)}に鑑定</div>
                     </div>
                     <span className="text-gold text-xl leading-none">›</span>
                   </Link>
@@ -344,8 +344,8 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
               className="h-[72px] w-[72px] shrink-0 object-contain pointer-events-none"
               style={{ filter: "drop-shadow(0 0 8px rgba(201,165,84,0.14))" }} />
             <div className="flex-1 min-w-0">
-              <div className="font-serif text-[14px] md:text-[15.5px] text-white/88 mb-1">星読みガイド</div>
-              <div className="text-[10px] md:text-[12px] text-white/48 leading-[1.7]">星の知識を深めて、日々のヒントに</div>
+              <div className="font-serif text-[14px] md:text-[15.5px] text-white/92 mb-1">星読みガイド</div>
+              <div className="text-[11px] md:text-[12px] text-white/55 leading-[1.7]">星の知識を深めて、日々のヒントに</div>
             </div>
             <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gold/70 text-xl leading-none">›</span>
           </Link>
@@ -455,7 +455,7 @@ function PartnerPersonalityCard({ onLoadingChange }: { onLoadingChange?: (loadin
               読み解く <span className="text-[11px] leading-none">›</span>
             </span>
           </div>
-          <div className="text-[10.5px] md:text-[12px] text-white/60 leading-[1.7]">生年月日から本質と傾向を読み解く</div>
+          <div className="text-[11.5px] md:text-[12px] text-white/60 leading-[1.7]">生年月日から本質と傾向を読み解く</div>
         </div>
       </button>
 

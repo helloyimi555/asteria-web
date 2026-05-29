@@ -244,7 +244,7 @@ export default function ReadingResultPage() {
                     </>
                   ) : (
                     <>
-                      <p className="font-serif text-[13px] leading-8 text-[#D0D0E8] font-light">
+                      <p className="font-serif text-[14px] leading-[1.85] text-[#D0D0E8] font-light">
                         {smartTruncate(content, 120)}
                       </p>
                       <button type="button" onClick={() => setOverallExpanded(true)}
@@ -254,7 +254,7 @@ export default function ReadingResultPage() {
                     </>
                   )
                 ) : (
-                  <p className="font-sans text-[13px] leading-[1.9] text-[#C0C0D8] font-light whitespace-pre-line">{content}</p>
+                  <p className="font-sans text-[14px] leading-[1.85] text-[#C0C0D8] font-light whitespace-pre-line">{content}</p>
                 )}
               </div>
             </div>
@@ -333,7 +333,7 @@ export default function ReadingResultPage() {
             <ChapterHeading number={7} title="アドバイス"
               subtitle="今日を生きるための羅針盤" color="#C9A554" />
             <div className="card p-4" style={{ borderLeft: "3px solid #C9A554" }}>
-              <p className="font-serif text-[13px] leading-8 text-[#C0C0D8] font-light">
+              <p className="font-serif text-[14px] leading-[1.85] text-[#C0C0D8] font-light">
                 {outputs.advice}
               </p>
             </div>
@@ -410,7 +410,7 @@ function OverallText({ text, isGuest }: { text: string; isGuest: boolean }) {
 
   if (displayParts.length <= 1 && !isGuest) {
     return (
-      <p className="font-serif text-[13px] leading-8 text-[#D0D0E8] font-light">{text}</p>
+      <p className="font-serif text-[14px] leading-[1.85] text-[#D0D0E8] font-light">{text}</p>
     )
   }
 
@@ -424,14 +424,14 @@ function OverallText({ text, isGuest }: { text: string; isGuest: boolean }) {
             return (
               <div key={i}>
                 <div className="text-[12px] font-bold text-gold/80 mb-1.5">【{match[1]}】</div>
-                <p className="font-serif text-[13px] leading-8 text-[#D0D0E8] font-light">
+                <p className="font-serif text-[14px] leading-[1.85] text-[#D0D0E8] font-light">
                   {match[2].trim()}
                 </p>
               </div>
             )
           }
           return (
-            <p key={i} className="font-serif text-[13px] leading-8 text-[#D0D0E8] font-light">
+            <p key={i} className="font-serif text-[14px] leading-[1.85] text-[#D0D0E8] font-light">
               {part.trim()}
             </p>
           )
