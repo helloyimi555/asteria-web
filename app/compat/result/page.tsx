@@ -179,48 +179,39 @@ export default function CompatResultPage() {
               </div>
             )}
 
-            {/* 6 項目バー（角丸の枠で囲み、各バーの間にドット区切り） */}
+            {/* 6 項目バー（参考画像どおり、ドット区切りなしで詰めて並べる） */}
             <div
-              className="mt-4 rounded-2xl border border-[#C9A554]/25 px-4 py-4"
+              className="mt-4 flex flex-col gap-3 rounded-2xl border border-[#C9A554]/25 px-4 py-4"
               style={{ background: "rgba(8,12,30,0.45)", boxShadow: "inset 0 0 24px rgba(201,165,84,0.05)" }}
             >
-              {COMPAT_SCORE_FIELDS.map((field, i) => (
-                <div key={field.key}>
-                  {i > 0 && (
-                    <div className="flex justify-center gap-2 py-1 text-[#E0B870]/65">
-                      <span className="text-[10px] leading-none">・</span>
-                      <span className="text-[10px] leading-none">・</span>
-                      <span className="text-[10px] leading-none">・</span>
-                      <span className="text-[10px] leading-none">・</span>
-                      <span className="text-[10px] leading-none">・</span>
-                    </div>
-                  )}
-                  <MetricBar
-                    icon={field.icon}
-                    label={field.label}
-                    value={outputs.scores?.[field.key] ?? 0}
-                    invert={field.invert}
-                  />
-                </div>
+              {COMPAT_SCORE_FIELDS.map(field => (
+                <MetricBar
+                  key={field.key}
+                  icon={field.icon}
+                  label={field.label}
+                  value={outputs.scores?.[field.key] ?? 0}
+                  invert={field.invert}
+                />
               ))}
             </div>
 
-            {/* コメント枠 */}
+            {/* コメント枠（参考画像どおりにスター + 短文の構成） */}
             {scoreComment && (
               <div
-                className="mt-6 flex gap-3 rounded-xl border border-gold/30 p-4"
+                className="mt-5 flex items-start gap-3 rounded-2xl border border-[#C9A554]/35 px-4 py-3.5"
                 style={{ background: "rgba(8,12,30,0.55)" }}
               >
-                <span className="mt-0.5 shrink-0 text-[14px] text-gold">✦</span>
-                <p className="font-serif text-[12.5px] leading-relaxed text-white/85">
+                <span
+                  className="mt-1 shrink-0 text-[14px] text-[#F0C870]"
+                  style={{ textShadow: "0 0 10px rgba(232,184,110,.5)" }}
+                >
+                  ✦
+                </span>
+                <p className="font-serif text-[12.5px] leading-[1.85] text-[#F0F0F8]/85">
                   {scoreComment}
                 </p>
               </div>
             )}
-
-            <p className="mt-4 border-t border-white/10 pt-3 text-[11px] leading-5 text-white/40">
-              スコアは良い・悪いの判定ではなく、ふたりの関係に表れやすいテーマの強さを示しています
-            </p>
           </div>
         )}
 
