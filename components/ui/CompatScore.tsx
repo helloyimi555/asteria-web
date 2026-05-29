@@ -206,8 +206,8 @@ export function MetricBar({
         />
       </div>
       <span
-        className="w-9 shrink-0 text-right font-serif text-[15px] font-bold text-[#F0C870]"
-        style={{ textShadow: "0 0 8px rgba(232,184,110,0.4)" }}
+        className="w-10 shrink-0 text-right font-serif text-[20px] font-bold leading-none text-[#F0C870]"
+        style={{ textShadow: "0 0 10px rgba(232,184,110,0.45)" }}
       >
         {displayValue}
       </span>

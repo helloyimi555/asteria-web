@@ -161,16 +161,26 @@ export default function CompatResultPage() {
             {/* ラベル枠（後で compat-label-frame.png に差し替え予定） */}
             {overallLabel && <RelationshipLabel label={overallLabel} />}
 
-            {/* 6 項目バー */}
-            <div className="mt-4 space-y-3.5">
-              {COMPAT_SCORE_FIELDS.map((field) => (
-                <MetricBar
-                  key={field.key}
-                  icon={field.icon}
-                  label={field.label}
-                  value={outputs.scores?.[field.key] ?? 0}
-                  invert={field.invert}
-                />
+            {/* 6 項目バー（各バーの間にドット区切り） */}
+            <div className="mt-4">
+              {COMPAT_SCORE_FIELDS.map((field, i) => (
+                <div key={field.key}>
+                  {i > 0 && (
+                    <div className="my-3 flex justify-center gap-3 text-[#D9B776]/35">
+                      <span className="text-[10px] leading-none">・</span>
+                      <span className="text-[10px] leading-none">・</span>
+                      <span className="text-[10px] leading-none">・</span>
+                      <span className="text-[10px] leading-none">・</span>
+                      <span className="text-[10px] leading-none">・</span>
+                    </div>
+                  )}
+                  <MetricBar
+                    icon={field.icon}
+                    label={field.label}
+                    value={outputs.scores?.[field.key] ?? 0}
+                    invert={field.invert}
+                  />
+                </div>
               ))}
             </div>
 
