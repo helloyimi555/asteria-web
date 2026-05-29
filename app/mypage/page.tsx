@@ -594,6 +594,13 @@ export default function MyPage() {
           className="btn-gold flex items-center justify-center gap-2 py-4 text-[15px]">
           <span>✦</span><span>新しい鑑定を行う</span><span className="text-base">›</span>
         </Link>
+
+        {/* Legal links */}
+        <div className="pt-6 pb-2 text-center text-[11px] text-white/35">
+          <Link href="/terms" className="hover:text-white/65 transition-colors underline underline-offset-2">
+            利用規約・プライバシーポリシー
+          </Link>
+        </div>
       </div>
       <BottomNav />
     </div>

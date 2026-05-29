@@ -124,6 +124,13 @@ export default function HomePage() {
           className="btn-gold-outline flex items-center justify-center gap-2 py-3.5 px-6 text-[14px]">
           ✦ 今すぐ鑑定する <span>›</span>
         </Link>
+
+        {/* Legal links */}
+        <div className="mt-10 text-center text-[11px] text-white/35">
+          <Link href="/terms" className="hover:text-white/65 transition-colors underline underline-offset-2">
+            利用規約・プライバシーポリシー
+          </Link>
+        </div>
       </section>
     </div>
   )
@@ -367,6 +374,12 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
             <span className="text-gold/70 text-xl leading-none">›</span>
           </Link>
 
+          {/* Legal links */}
+          <div className="pt-6 pb-2 text-center text-[11px] text-white/35">
+            <Link href="/terms" className="hover:text-white/65 transition-colors underline underline-offset-2">
+              利用規約・プライバシーポリシー
+            </Link>
+          </div>
         </div>
       </div>
       <BottomNav />
