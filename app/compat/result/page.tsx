@@ -137,8 +137,22 @@ export default function CompatResultPage() {
         {/* 【1】 ふたりのシンクロスコア（円形リング + ラベル + アイコン付きバー） */}
         {outputs?.scores && (
           <div className="relative overflow-hidden rounded-2xl p-6 mt-3 backdrop-blur-sm" style={GOLD_CARD_STYLE}>
+            {/* 上部コーナーの星座装飾（右上 as-is、左上 反転） */}
+            <img
+              src="/asteria/assets/compat-corner-constellation.png"
+              alt=""
+              aria-hidden
+              className="pointer-events-none absolute right-0 top-0 w-56 opacity-70 md:w-72"
+            />
+            <img
+              src="/asteria/assets/compat-corner-constellation.png"
+              alt=""
+              aria-hidden
+              className="pointer-events-none absolute left-0 top-0 w-56 -scale-x-100 opacity-70 md:w-72"
+            />
+
             {/* ヘッダー */}
-            <div className="text-center">
+            <div className="relative z-[1] text-center">
               <div className="flex items-center justify-center gap-2 text-gold/85">
                 <span className="text-[10px]">✦</span>
                 <span className="font-serif text-[11px] tracking-[0.34em]">ASTERIA READING</span>
