@@ -84,19 +84,19 @@ export function ScoreRing({ score, size = 260 }: { score: number; size?: number 
       <svg viewBox={`0 0 ${size} ${size}`} className="block h-full w-full">
         <defs>
           <linearGradient id="compatRingGold" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#F0D880" />
-            <stop offset="50%" stopColor="#C9A554" />
-            <stop offset="100%" stopColor="#8A6E2F" />
+            <stop offset="0%" stopColor="#F5D49C" />
+            <stop offset="50%" stopColor="#E0A24E" />
+            <stop offset="100%" stopColor="#7E4F18" />
           </linearGradient>
           <filter id="compatRingGlow" x="-25%" y="-25%" width="150%" height="150%">
             <feGaussianBlur stdDeviation="3.5" />
           </filter>
         </defs>
         {/* 装飾：背面の細い同心円 */}
-        <circle cx={center} cy={center} r={radius + 12} fill="none" stroke="rgba(201,165,84,0.08)" strokeWidth="0.7" />
-        <circle cx={center} cy={center} r={radius - 12} fill="none" stroke="rgba(201,165,84,0.06)" strokeWidth="0.5" />
+        <circle cx={center} cy={center} r={radius + 12} fill="none" stroke="rgba(216,154,74,0.10)" strokeWidth="0.7" />
+        <circle cx={center} cy={center} r={radius - 12} fill="none" stroke="rgba(216,154,74,0.08)" strokeWidth="0.5" />
         {/* トラック */}
-        <circle cx={center} cy={center} r={radius} fill="none" stroke="rgba(201,165,84,0.16)" strokeWidth="6" />
+        <circle cx={center} cy={center} r={radius} fill="none" stroke="rgba(216,154,74,0.18)" strokeWidth="6" />
         {/* グロー（下層） */}
         <g transform={`rotate(-90 ${center} ${center})`}>
           <circle
@@ -126,17 +126,17 @@ export function ScoreRing({ score, size = 260 }: { score: number; size?: number 
           />
         </g>
         {/* リング上端に飾り星 */}
-        <text x={center} y={center - radius + 5} textAnchor="middle" fontSize="14" fill="#E7D08A">✦</text>
+        <text x={center} y={center - radius + 5} textAnchor="middle" fontSize="14" fill="#F2B864">✦</text>
       </svg>
       {/* 中央の数字 */}
       <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
         <div
-          className="font-serif font-bold leading-none text-[#E7D08A]"
-          style={{ fontSize: Math.round(size * 0.34), textShadow: "0 0 30px rgba(201,165,84,.6), 0 0 12px rgba(201,165,84,.4)" }}
+          className="font-serif font-bold leading-none text-[#F0B45F]"
+          style={{ fontSize: Math.round(size * 0.34), textShadow: "0 0 30px rgba(220,150,70,.65), 0 0 12px rgba(220,150,70,.45)" }}
         >
           {s}
         </div>
-        <div className="mt-1 font-serif text-[13px] tracking-wider text-gold/70">/100</div>
+        <div className="mt-1 font-serif text-[13px] tracking-wider text-[#E0A24E]/75">/100</div>
       </div>
     </div>
   )
@@ -149,21 +149,21 @@ export function ScoreRing({ score, size = 260 }: { score: number; size?: number 
  * ======================================================= */
 export function RelationshipLabel({ label }: { label: string }): ReactElement {
   return (
-    <div className="my-6 flex w-full items-center justify-center gap-3 text-gold/85">
-      <span className="h-px max-w-[80px] flex-1 bg-gradient-to-r from-transparent via-gold/40 to-gold/70" />
+    <div className="my-6 flex w-full items-center justify-center gap-3 text-[#E0A24E]/90">
+      <span className="h-px max-w-[80px] flex-1 bg-gradient-to-r from-transparent via-[#D89A4A]/40 to-[#D89A4A]/70" />
       <span className="text-[10px]">✦</span>
       <div className="relative px-6 py-2">
-        <span className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
-        <span className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
+        <span className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#D89A4A]/65 to-transparent" />
+        <span className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[#D89A4A]/65 to-transparent" />
         <span
-          className="font-serif text-[15px] tracking-[0.08em] text-[#E7D08A]"
-          style={{ textShadow: "0 0 16px rgba(201,165,84,.4)" }}
+          className="font-serif text-[15px] tracking-[0.08em] text-[#F0B45F]"
+          style={{ textShadow: "0 0 16px rgba(220,150,70,.45)" }}
         >
           {label}
         </span>
       </div>
       <span className="text-[10px]">✦</span>
-      <span className="h-px max-w-[80px] flex-1 bg-gradient-to-l from-transparent via-gold/40 to-gold/70" />
+      <span className="h-px max-w-[80px] flex-1 bg-gradient-to-l from-transparent via-[#D89A4A]/40 to-[#D89A4A]/70" />
     </div>
   )
 }
@@ -179,8 +179,8 @@ export function MetricBar({
   return (
     <div className="flex items-center gap-3">
       <span
-        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-gold"
-        style={{ background: "rgba(201,165,84,0.08)", border: "1px solid rgba(201,165,84,0.45)" }}
+        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[#F0B45F]"
+        style={{ background: "rgba(220,150,70,0.10)", border: "1px solid rgba(220,150,70,0.50)" }}
       >
         <Icon type={icon} className="h-4 w-4" />
       </span>
@@ -190,12 +190,12 @@ export function MetricBar({
           className="absolute inset-y-0 left-0 rounded-full"
           style={{
             width: `${displayValue}%`,
-            background: "linear-gradient(90deg, #F0D880 0%, #C9A554 60%, #B8923F 100%)",
-            boxShadow: "0 0 10px rgba(201,165,84,0.55)",
+            background: "linear-gradient(90deg, #F5D49C 0%, #E0A24E 55%, #B6783A 100%)",
+            boxShadow: "0 0 10px rgba(220,150,70,0.6)",
           }}
         />
       </div>
-      <span className="w-9 shrink-0 text-right font-serif text-[15px] font-bold text-[#E7D08A]">
+      <span className="w-9 shrink-0 text-right font-serif text-[15px] font-bold text-[#F0B45F]">
         {displayValue}
       </span>
     </div>
