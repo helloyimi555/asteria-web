@@ -111,7 +111,7 @@ export default function CompatResultPage() {
         </div>
 
         {/* 星座バッジ */}
-        <div className="flex items-center gap-2.5 pt-3.5 flex-wrap">
+        <div className="flex items-center justify-center gap-2.5 pt-3.5 flex-wrap">
           <div className="inline-flex items-center gap-2 px-3 py-2 rounded-xl"
             style={{ background:"rgba(255,255,255,.06)", border:"1px solid rgba(201,165,84,.3)" }}>
             <span className="font-serif text-[14px] text-[#F0F0F8]">{my_sign}</span>
@@ -127,7 +127,7 @@ export default function CompatResultPage() {
 
         {/* ヘッドライン */}
         {outputs?.headline && (
-          <p className="font-serif text-[13px] italic text-gold leading-7 mt-3 flex items-center gap-1.5">
+          <p className="font-serif text-[13px] italic text-gold leading-7 mt-3 flex items-center justify-center gap-1.5 text-center">
             <span className="text-[11px]">✦</span>
             <span>{outputs.headline}</span>
             <span className="text-[11px]">✦</span>
@@ -168,7 +168,7 @@ export default function CompatResultPage() {
             </div>
 
             {/* リング */}
-            <div className="mt-1 flex justify-center">
+            <div className="mt-3 flex justify-center">
               <ScoreRing score={outputs.scores.overall ?? 0} />
             </div>
 
