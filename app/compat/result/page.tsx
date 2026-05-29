@@ -166,12 +166,12 @@ export default function CompatResultPage() {
               {COMPAT_SCORE_FIELDS.map((field, i) => (
                 <div key={field.key}>
                   {i > 0 && (
-                    <div className="my-3 flex justify-center gap-3 text-[#D9B776]/35">
-                      <span className="text-[10px] leading-none">・</span>
-                      <span className="text-[10px] leading-none">・</span>
-                      <span className="text-[10px] leading-none">・</span>
-                      <span className="text-[10px] leading-none">・</span>
-                      <span className="text-[10px] leading-none">・</span>
+                    <div className="my-1 flex justify-center gap-2 text-[#D9B776]/35">
+                      <span className="text-[8px] leading-none">・</span>
+                      <span className="text-[8px] leading-none">・</span>
+                      <span className="text-[8px] leading-none">・</span>
+                      <span className="text-[8px] leading-none">・</span>
+                      <span className="text-[8px] leading-none">・</span>
                     </div>
                   )}
                   <MetricBar
