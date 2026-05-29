@@ -150,10 +150,10 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
           </button>
         </div>
 
-        <div className="text-center mb-8">
+        <div className="relative flex flex-col items-center justify-center text-center min-h-[260px] mb-2 overflow-hidden">
           <ZodiacWheelSVG />
-          <h1 className="font-serif text-2xl tracking-wide text-white mb-2">おかえりなさい</h1>
-          <p className="text-[13px] text-white/50">星の暦から、今日を静かに読み解く</p>
+          <h1 className="relative font-serif text-2xl tracking-wide text-white mb-2">おかえりなさい</h1>
+          <p className="relative text-[13px] text-white/50">星の暦から、今日を静かに読み解く</p>
         </div>
 
 <div className="space-y-3">
@@ -175,13 +175,13 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
               >
                 <div className="flex items-center gap-1.5 mb-2">
                   <span className="text-gold text-xs">✦</span>
-                  <span className="text-[12px] font-bold text-[#F0F0F8]">本日の星模様</span>
+                  <span className="font-serif text-[14px] text-[#F0F0F8]">本日の星模様</span>
                 </div>
                 <p className="font-serif text-[13px] leading-7 text-[#C0C0D8] font-light">
                   {daily.flow}
                 </p>
               </div>
-              <p className="text-center text-[10px] text-white/30 mt-1.5 tracking-wider">
+              <p className="text-center text-[10px] text-white/30 mt-1.5 tracking-[0.12em]">
                 全ユーザー共通の星空情報
               </p>
             </div>
@@ -192,7 +192,7 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
             <div className="card p-4">
               <div className="flex items-center gap-1.5 mb-3">
                 <span className="text-gold text-xs">✦</span>
-                <span className="text-[12px] font-bold text-[#F0F0F8]">本日の天体観測</span>
+                <span className="font-serif text-[14px] text-[#F0F0F8]">本日の天体観測</span>
               </div>
               <div className="grid grid-cols-2 gap-2 text-[11px]">
                 {[
@@ -203,7 +203,7 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
                 ].map(({ label, value, color }) => (
                   <div key={label} className="px-2.5 py-2 rounded-md"
                     style={{ background: "rgba(255,255,255,.03)", border: "1px solid rgba(255,255,255,.06)" }}>
-                    <div className="text-white/45 mb-0.5 tracking-wider">{label}</div>
+                    <div className="text-white/45 mb-0.5 tracking-[0.12em]">{label}</div>
                     <div className="text-[12px]" style={{ color }}>{value}</div>
                   </div>
                 ))}
@@ -211,7 +211,7 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
               {daily.observation_point && (
                 <div className="mt-2 px-2.5 py-2 rounded-md"
                   style={{ background: "rgba(255,255,255,.03)", border: "1px solid rgba(255,255,255,.06)" }}>
-                  <div className="text-[11px] text-white/45 mb-0.5 tracking-wider">観測ポイント</div>
+                  <div className="text-[11px] text-white/45 mb-0.5 tracking-[0.12em]">観測ポイント</div>
                   <div className="text-[12px] text-[#F0F0F8] leading-relaxed">{daily.observation_point}</div>
                 </div>
               )}
@@ -233,7 +233,7 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
             <div className="card overflow-hidden">
               <div className="px-4 pt-3.5 pb-2 flex items-center gap-1.5">
                 <span className="text-gold text-xs">✦</span>
-                <span className="text-[12px] font-bold text-[#F0F0F8]">最近の鑑定</span>
+                <span className="font-serif text-[14px] text-[#F0F0F8]">最近の鑑定</span>
               </div>
               {readings.slice(0, 3).map((r, i) => {
                 const cfg = getThemeConfig(r.theme)
@@ -262,22 +262,17 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
             </div>
           )}
 
-          <Link href="/guide"
-            className="block text-center text-[12px] text-gold/60 hover:text-gold transition-colors py-1">
-            ✦ 今日の星を学ぶ ›
-          </Link>
-
           <div className="grid grid-cols-2 gap-3">
             <Link href="/compat"
               className="card flex flex-col items-center justify-center px-4 py-5 text-center">
               <span className="text-2xl mb-2">♡</span>
-              <div className="text-[13px] text-[#F0F0F8] font-bold mb-0.5">相性診断</div>
+              <div className="font-serif text-[14px] text-[#F0F0F8] mb-0.5">相性診断</div>
               <div className="text-[10px] text-white/40 leading-relaxed">ふたりの星が響き合う場所を読む</div>
             </Link>
             <Link href="/guide"
               className="card flex flex-col items-center justify-center px-4 py-5 text-center">
               <span className="text-2xl mb-2">✦</span>
-              <div className="text-[13px] text-[#F0F0F8] font-bold mb-0.5">星ガイド</div>
+              <div className="font-serif text-[14px] text-[#F0F0F8] mb-0.5">星ガイド</div>
               <div className="text-[10px] text-white/40 leading-relaxed">天体・星座・ハウスの意味を学ぶ</div>
             </Link>
           </div>
@@ -287,7 +282,7 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
           <Link href="/reading/results"
             className="card flex items-center justify-between px-5 py-4">
             <div>
-              <div className="text-[13px] text-[#F0F0F8] font-bold mb-0.5">過去の鑑定を見る</div>
+              <div className="font-serif text-[14px] text-[#F0F0F8] mb-0.5">過去の鑑定を見る</div>
               <div className="text-[11px] text-white/40">これまでの鑑定履歴</div>
             </div>
             <span className="text-white/30">›</span>
@@ -296,7 +291,7 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
           <Link href="/mypage"
             className="card flex items-center justify-between px-5 py-4">
             <div>
-              <div className="text-[13px] text-[#F0F0F8] font-bold mb-0.5">マイページ</div>
+              <div className="font-serif text-[14px] text-[#F0F0F8] mb-0.5">マイページ</div>
               <div className="text-[11px] text-white/40">プロフィール・設定</div>
             </div>
             <span className="text-white/30">›</span>
@@ -370,8 +365,8 @@ function PartnerPersonalityCard({ onLoadingChange }: { onLoadingChange?: (loadin
         onClick={() => setOpen(v => !v)}
         className="w-full flex items-center justify-between px-5 py-4 text-left">
         <div>
-          <div className="text-[13px] text-[#F0F0F8] font-bold mb-0.5">
-            <span className="mr-1">👤</span>相手の性格を分析する
+          <div className="font-serif text-[14px] text-[#F0F0F8] mb-0.5 flex items-center gap-1.5">
+            <span className="text-gold text-xs">✦</span>相手の性格を分析する
           </div>
           <div className="text-[11px] text-white/40">生年月日から本質と傾向を読み解く</div>
         </div>
