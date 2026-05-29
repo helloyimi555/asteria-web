@@ -367,16 +367,6 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
             <span className="text-gold/70 text-xl leading-none">›</span>
           </Link>
 
-          <Link href="/mypage"
-            className="card flex items-center gap-3 px-5 py-3.5">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"
-              className="h-5 w-5 text-gold/70 shrink-0" aria-hidden>
-              <circle cx="12" cy="8" r="3.5" />
-              <path d="M4.5 20.5c0-3.6 3.4-6.5 7.5-6.5s7.5 2.9 7.5 6.5" />
-            </svg>
-            <div className="flex-1 font-serif text-[14px] md:text-[15.5px] text-[#F0F0F8]">マイページ</div>
-            <span className="text-gold/70 text-xl leading-none">›</span>
-          </Link>
         </div>
       </div>
       <BottomNav />
