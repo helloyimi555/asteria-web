@@ -168,7 +168,7 @@ export default function CompatResultPage() {
             </div>
 
             {/* リング */}
-            <div className="mt-8 flex justify-center">
+            <div className="mt-1 flex justify-center">
               <ScoreRing score={outputs.scores.overall ?? 0} />
             </div>
 
