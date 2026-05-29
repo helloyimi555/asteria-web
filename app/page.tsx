@@ -179,6 +179,23 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
             <span className="text-[#FFE6B0]">✦</span> 今日の鑑定を始める
           </Link>
 
+          {/* Secondary CTA：相性診断 / 相手の性格を分析する */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <Link href="/compat"
+              className="card relative flex items-center gap-2.5 overflow-hidden px-3 py-4 min-h-[124px]"
+              style={{ borderColor: "rgba(201,165,84,0.3)" }}>
+              <img src="/asteria/assets/home-feature-compat.png" alt="" aria-hidden
+                className="h-[92px] w-[92px] shrink-0 object-contain pointer-events-none"
+                style={{ filter: "drop-shadow(0 0 10px rgba(201,165,84,0.22))" }} />
+              <div className="flex-1 min-w-0">
+                <div className="font-serif text-[14px] text-white/92 mb-1">相性診断</div>
+                <div className="text-[10px] text-white/52 leading-[1.7]">ふたりの星が響き合うかを読み解きます</div>
+              </div>
+              <span className="absolute right-2.5 bottom-2.5 text-gold text-xl leading-none">›</span>
+            </Link>
+            <PartnerPersonalityCard onLoadingChange={setPartnerLoading} />
+          </div>
+
           {/* 今日のあなたへの星メモ / 今日の星空ニュース */}
           {daily && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -299,32 +316,18 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
             </div>
           )}
 
-          <div className="grid grid-cols-2 gap-3">
-            <Link href="/compat"
-              className="card relative flex items-center gap-2.5 overflow-hidden px-3 py-4 min-h-[124px]">
-              <img src="/asteria/assets/home-feature-compat.png" alt="" aria-hidden
-                className="h-[92px] w-[92px] shrink-0 object-contain pointer-events-none"
-                style={{ filter: "drop-shadow(0 0 10px rgba(201,165,84,0.18))" }} />
-              <div className="flex-1 min-w-0">
-                <div className="font-serif text-[14px] text-white/92 mb-1">相性診断</div>
-                <div className="text-[10px] text-white/52 leading-[1.7]">ふたりの星が響き合うかを読み解きます</div>
-              </div>
-              <span className="absolute right-2.5 bottom-2.5 text-white/30 text-sm">›</span>
-            </Link>
-            <Link href="/guide"
-              className="card relative flex items-center gap-2.5 overflow-hidden px-3 py-4 min-h-[124px]">
-              <img src="/asteria/assets/home-feature-guide.png" alt="" aria-hidden
-                className="h-[86px] w-[86px] shrink-0 object-contain pointer-events-none"
-                style={{ filter: "drop-shadow(0 0 10px rgba(201,165,84,0.18))" }} />
-              <div className="flex-1 min-w-0">
-                <div className="font-serif text-[14px] text-white/92 mb-1">星読みガイド</div>
-                <div className="text-[10px] text-white/52 leading-[1.7]">星の知識を深めて、日々のヒントに</div>
-              </div>
-              <span className="absolute right-2.5 bottom-2.5 text-white/30 text-sm">›</span>
-            </Link>
-          </div>
-
-          <PartnerPersonalityCard onLoadingChange={setPartnerLoading} />
+          {/* 星読みガイド（学習・補助導線、相性診断より弱い階層） */}
+          <Link href="/guide"
+            className="card relative flex items-center gap-2.5 overflow-hidden px-3 py-3.5 min-h-[100px]">
+            <img src="/asteria/assets/home-feature-guide.png" alt="" aria-hidden
+              className="h-[72px] w-[72px] shrink-0 object-contain pointer-events-none"
+              style={{ filter: "drop-shadow(0 0 8px rgba(201,165,84,0.14))" }} />
+            <div className="flex-1 min-w-0">
+              <div className="font-serif text-[14px] text-white/88 mb-1">星読みガイド</div>
+              <div className="text-[10px] text-white/48 leading-[1.7]">星の知識を深めて、日々のヒントに</div>
+            </div>
+            <span className="absolute right-2.5 bottom-2.5 text-gold/70 text-lg leading-none">›</span>
+          </Link>
 
           <Link href="/reading/results"
             className="card flex items-center gap-3 px-5 py-3.5">
@@ -410,18 +413,19 @@ function PartnerPersonalityCard({ onLoadingChange }: { onLoadingChange?: (loadin
   }
 
   return (
-    <div className="card overflow-hidden">
+    <div className="card overflow-hidden" style={{ borderColor: "rgba(201,165,84,0.3)" }}>
       <button
         type="button"
         onClick={() => setOpen(v => !v)}
-        className="w-full flex items-center justify-between px-5 py-4 text-left">
-        <div>
-          <div className="font-serif text-[14px] text-[#F0F0F8] mb-0.5 flex items-center gap-1.5">
-            <span className="text-gold text-xs">✦</span>相手の性格を分析する
-          </div>
-          <div className="text-[11px] text-white/40">生年月日から本質と傾向を読み解く</div>
+        className="w-full relative flex items-center gap-2.5 overflow-hidden px-3 py-4 min-h-[124px] text-left">
+        <img src="/asteria/assets/mood-icon-theme-star.png" alt="" aria-hidden
+          className="h-[86px] w-[86px] shrink-0 object-contain pointer-events-none"
+          style={{ filter: "drop-shadow(0 0 10px rgba(201,165,84,0.22))" }} />
+        <div className="flex-1 min-w-0">
+          <div className="font-serif text-[14px] text-white/92 mb-1">相手の性格を分析する</div>
+          <div className="text-[10px] text-white/52 leading-[1.7]">生年月日から本質と傾向を読み解く</div>
         </div>
-        <span className={`text-white/30 transition-transform ${open ? "rotate-90" : ""}`}>›</span>
+        <span className={`absolute right-2.5 bottom-2.5 text-gold text-xl leading-none transition-transform ${open ? "rotate-90" : ""}`}>›</span>
       </button>
 
       {open && (
