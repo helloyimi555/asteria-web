@@ -219,12 +219,8 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
                 <span className="flex-1 h-px ml-1" style={{ background: "linear-gradient(to right, rgba(201,165,84,0.28), rgba(201,165,84,0))" }} />
               </div>
               <div className="card flex flex-col p-3.5">
-                <div className="mb-3 flex items-center justify-between gap-2">
-                  <span className="font-serif text-[12px] md:text-[14px] text-white/92 truncate">今日のあなたへの星メモ</span>
-                  <span className="text-[9px] px-2 py-0.5 rounded-full text-gold whitespace-nowrap shrink-0"
-                    style={{ background: "rgba(201,165,84,.12)", border: "1px solid rgba(201,165,84,.32)" }}>
-                    あなた向け
-                  </span>
+                <div className="mb-3">
+                  <span className="font-serif text-[12px] md:text-[14px] text-white/92">今日のあなたへの星メモ</span>
                 </div>
                 <div className="rounded-xl px-2.5 py-2.5 flex items-start gap-2 flex-1"
                   style={{ background: "rgba(8,12,30,0.32)", border: "1px solid rgba(201,165,84,0.22)" }}>
@@ -245,15 +241,15 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
               <div className="flex items-center gap-2 pt-1">
                 <span className="text-gold text-xs">✦</span>
                 <span className="font-serif text-[13px] md:text-[15px] text-white/85 tracking-[0.08em]">今日の星空</span>
+                <span className="text-[9px] px-2 py-0.5 rounded-full text-[#A3C7FF] whitespace-nowrap"
+                  style={{ background: "rgba(112,180,255,.10)", border: "1px solid rgba(112,180,255,.32)" }}>
+                  全ユーザー共通
+                </span>
                 <span className="flex-1 h-px ml-1" style={{ background: "linear-gradient(to right, rgba(201,165,84,0.28), rgba(201,165,84,0))" }} />
               </div>
               <div className="card flex flex-col p-3.5">
-                <div className="mb-3 flex items-center justify-between gap-2">
-                  <span className="font-serif text-[12px] md:text-[14px] text-white/92 truncate">今日の星空ニュース</span>
-                  <span className="text-[9px] px-2 py-0.5 rounded-full text-[#A3C7FF] whitespace-nowrap shrink-0"
-                    style={{ background: "rgba(112,180,255,.10)", border: "1px solid rgba(112,180,255,.32)" }}>
-                    全ユーザー共通
-                  </span>
+                <div className="mb-3">
+                  <span className="font-serif text-[12px] md:text-[14px] text-white/92">今日の星空ニュース</span>
                 </div>
                 <div className="rounded-xl px-2.5 py-2.5 flex items-start gap-2 flex-1"
                   style={{ background: "rgba(8,12,30,0.32)", border: "1px solid rgba(201,165,84,0.22)" }}>
