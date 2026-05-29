@@ -210,16 +210,14 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
             <PartnerPersonalityCard onLoadingChange={setPartnerLoading} />
           </div>
 
-          {/* 今日の星模様：あなたへの星メモ / 星空ニュース */}
+          {/* ✦ 今日のあなたへ：星メモのみ */}
           {daily && (
             <>
               <div className="flex items-center gap-2 pt-1">
                 <span className="text-gold text-xs">✦</span>
-                <span className="font-serif text-[13px] md:text-[15px] text-white/85 tracking-[0.08em]">今日の星模様</span>
+                <span className="font-serif text-[13px] md:text-[15px] text-white/85 tracking-[0.08em]">今日のあなたへ</span>
                 <span className="flex-1 h-px ml-1" style={{ background: "linear-gradient(to right, rgba(201,165,84,0.28), rgba(201,165,84,0))" }} />
               </div>
-              <div className="grid grid-cols-1 gap-3">
-              {/* Personal card */}
               <div className="card flex flex-col p-3.5">
                 <div className="mb-3 flex items-center justify-between gap-2">
                   <span className="font-serif text-[12px] md:text-[14px] text-white/92 truncate">今日のあなたへの星メモ</span>
@@ -238,7 +236,17 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
                   </p>
                 </div>
               </div>
-              {/* Universal card */}
+            </>
+          )}
+
+          {/* ✦ 今日の星空：星空ニュース + 星のムード */}
+          {daily && (
+            <>
+              <div className="flex items-center gap-2 pt-1">
+                <span className="text-gold text-xs">✦</span>
+                <span className="font-serif text-[13px] md:text-[15px] text-white/85 tracking-[0.08em]">今日の星空</span>
+                <span className="flex-1 h-px ml-1" style={{ background: "linear-gradient(to right, rgba(201,165,84,0.28), rgba(201,165,84,0))" }} />
+              </div>
               <div className="card flex flex-col p-3.5">
                 <div className="mb-3 flex items-center justify-between gap-2">
                   <span className="font-serif text-[12px] md:text-[14px] text-white/92 truncate">今日の星空ニュース</span>
@@ -257,16 +265,15 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
                   </p>
                 </div>
               </div>
-            </div>
             </>
           )}
 
-          {/* 今日の星のムード */}
+          {/* 星のムード（「今日の星空」セクションの一部） */}
           {daily && (
             <div className="card p-4">
               <div className="flex items-center gap-1.5 mb-4">
                 <span className="text-gold text-xs">✦</span>
-                <span className="font-serif text-[14px] md:text-[15px] text-[#F0F0F8]">今日の星のムード</span>
+                <span className="font-serif text-[14px] md:text-[15px] text-[#F0F0F8]">星のムード</span>
               </div>
               <div className="grid grid-cols-3 gap-2">
                 <MoodCell
