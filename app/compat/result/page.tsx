@@ -20,8 +20,8 @@ import clsx from "clsx"
 // ゴールドグラデカード（シンクロスコア・合言葉用）
 const GOLD_CARD_STYLE: CSSProperties = {
   background: "radial-gradient(circle at top, rgba(201,165,84,0.16), rgba(255,255,255,0.045) 42%, rgba(255,255,255,0.025))",
-  border: "1px solid rgba(201,165,84,0.35)",
-  boxShadow: "0 0 42px rgba(201,165,84,0.14)",
+  border: "2px solid rgba(201,165,84,0.6)",
+  boxShadow: "0 0 42px rgba(201,165,84,0.18), inset 0 0 0 1px rgba(201,165,84,0.18)",
 }
 
 const EVAL: Record<string, { c:string; bg:string; bc:string }> = {
@@ -187,12 +187,12 @@ export default function CompatResultPage() {
               {COMPAT_SCORE_FIELDS.map((field, i) => (
                 <div key={field.key}>
                   {i > 0 && (
-                    <div className="flex justify-center gap-1.5 py-0.5 text-[#D9B776]/35">
-                      <span className="text-[6px] leading-none">・</span>
-                      <span className="text-[6px] leading-none">・</span>
-                      <span className="text-[6px] leading-none">・</span>
-                      <span className="text-[6px] leading-none">・</span>
-                      <span className="text-[6px] leading-none">・</span>
+                    <div className="flex justify-center gap-2 py-1 text-[#E0B870]/65">
+                      <span className="text-[10px] leading-none">・</span>
+                      <span className="text-[10px] leading-none">・</span>
+                      <span className="text-[10px] leading-none">・</span>
+                      <span className="text-[10px] leading-none">・</span>
+                      <span className="text-[10px] leading-none">・</span>
                     </div>
                   )}
                   <MetricBar
