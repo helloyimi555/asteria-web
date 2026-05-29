@@ -143,8 +143,15 @@ const handleSubmit = async () => {
         their_mbti_type:       theirMbti || undefined,
         relationship_type:     relType,
       })
+      // 結果を localStorage に保存（API が落ちた時のフォールバック・即時表示用）
       localStorage.setItem("asteria_compat_result", JSON.stringify(result))
-      router.push(`/compat/result`)
+      const compatId = result?.compat_id
+      if (compatId) {
+        router.push(`/compat/${compatId}`)
+      } else {
+        // 認証無し時など compat_id が無いケースは旧 result ページへフォールバック
+        router.push(`/compat/result`)
+      }
     } catch (e: any) {
       setError(e?.response?.data?.detail ?? "エラーが発生しました。もう一度お試しください。")
       setLoading(false)

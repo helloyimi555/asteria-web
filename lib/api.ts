@@ -261,6 +261,16 @@ export const guestPersonalityApi = {
 
 
 // ── Compat ────────────────────────────────────────────────────
+export type CompatListItem = {
+  compat_id: string
+  my_sign: string | null
+  their_sign: string | null
+  relationship_type: string
+  archived: boolean
+  created_at: string
+  last_accessed_at: string
+}
+
 export const compatApi = {
   create: (input: {
     my_birth_date: string
@@ -274,6 +284,12 @@ export const compatApi = {
     relationship_type: string
   }) =>
     api.post("/compat", input).then(r => r.data),
+  get: (compatId: string) =>
+    api.get(`/compat/${compatId}`).then(r => r.data),
+  list: (params?: { limit?: number; offset?: number; include_archived?: boolean }) =>
+    api.get<{ total: number; compats: CompatListItem[] }>("/compat", { params }).then(r => r.data),
+  remove: (compatId: string) =>
+    api.delete(`/compat/${compatId}`).then(r => r.data),
 }
 
 

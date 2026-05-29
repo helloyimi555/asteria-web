@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from "react"
 import { mutate as globalMutate } from "swr"
 import { useAuth } from "@/lib/auth-context"
 import { useProfiles, useReadingHistory } from "@/hooks/useReading"
-import { profileApi } from "@/lib/api"
+import { profileApi, compatApi, type CompatListItem } from "@/lib/api"
 import { Stars } from "@/components/ui/Stars"
 import AstrologyLoading from "@/components/ui/AstrologyLoading"
 import { BottomNav } from "@/components/layout/BottomNav"
@@ -30,6 +30,8 @@ export default function MyPage() {
   const [localProfile, setLocalProfile] = useState<any>(null)
   const [editForm, setEditForm] = useState({ year: "", month: "", day: "", time: "", place: "", mbti: "" })
   const [natalPositions, setNatalPositions] = useState<Array<{ planet: string; sign: string }>>([])
+  const [compats, setCompats] = useState<CompatListItem[]>([])
+  const [compatTotal, setCompatTotal] = useState(0)
 
   const profile = localProfile ?? profiles?.[0]
   // ハンドラ closure が古い profile を掴まないよう、最新値を ref に常に同期する
@@ -55,6 +57,20 @@ export default function MyPage() {
       .catch(() => { /* graceful: バランス表示なし */ })
     return () => { cancelled = true }
   }, [profile?.id])
+
+  // 相性履歴の取得（直近 6 件 + すべて見るリンク判定）
+  useEffect(() => {
+    if (!isAuthenticated) return
+    let cancelled = false
+    compatApi.list({ limit: 6 })
+      .then(res => {
+        if (cancelled) return
+        setCompats(res.compats ?? [])
+        setCompatTotal(res.total ?? 0)
+      })
+      .catch(() => { /* graceful: 履歴ゼロ扱い */ })
+    return () => { cancelled = true }
+  }, [isAuthenticated])
 
   const elementBalance = natalPositions.length > 0 ? calcElementBalance(natalPositions) : null
   const elementPct     = elementBalance ? elementPercents(elementBalance) : null
@@ -542,6 +558,37 @@ export default function MyPage() {
           </div>
         )}
 
+        {/* 相性履歴 */}
+        <div className="flex items-center gap-2.5 mt-6 mb-3.5">
+          <span className="text-gold text-sm">✦</span>
+          <h2 className="font-serif text-[15px] text-[#F0F0F8]">相性履歴</h2>
+          <div className="flex-1 h-px bg-gradient-to-r from-gold/30 to-transparent" />
+          <span className="text-gold text-sm">✦</span>
+        </div>
+
+        {compats.length === 0 ? (
+          <div className="card p-6 text-center mb-4">
+            <div className="text-3xl text-gold/60 mb-2">♡</div>
+            <div className="font-serif text-[14px] text-[#F0F0F8] mb-1">
+              まだ相性診断の記録はありません
+            </div>
+            <Link href="/compat" className="text-[12px] text-gold/75 hover:text-gold">
+              相性診断を始める →
+            </Link>
+          </div>
+        ) : (
+          <div className="flex flex-col gap-2 mb-4">
+            {compats.slice(0, 5).map(c => (
+              <CompatHistoryCard key={c.compat_id} compat={c} />
+            ))}
+            {compatTotal > 5 && (
+              <div className="text-center text-[12px] text-gold/70 py-2">
+                計 {compatTotal} 件の相性履歴
+              </div>
+            )}
+          </div>
+        )}
+
         {/* CTA */}
         <Link href="/reading"
           className="btn-gold flex items-center justify-center gap-2 py-4 text-[15px]">
@@ -550,6 +597,30 @@ export default function MyPage() {
       </div>
       <BottomNav />
     </div>
+  )
+}
+
+/** 相性履歴 1 行カード */
+function CompatHistoryCard({ compat }: { compat: CompatListItem }) {
+  const date = new Date(compat.created_at)
+  const dateLabel = `${date.getMonth() + 1}月${date.getDate()}日に診断`
+  const relLabel = compat.relationship_type === "friend" ? "友人"
+    : compat.relationship_type === "work" ? "仕事"
+    : "パートナー"
+  return (
+    <Link href={`/compat/${compat.compat_id}`}
+      className="card relative flex items-center gap-3 px-4 py-3.5">
+      <span className="text-gold/80 text-lg shrink-0">♡</span>
+      <div className="flex-1 min-w-0">
+        <div className="font-serif text-[14px] text-white/92 truncate">
+          {compat.my_sign ?? "—"} × {compat.their_sign ?? "—"}
+        </div>
+        <div className="text-[11px] text-white/45 mt-0.5">
+          {dateLabel}・{relLabel}
+        </div>
+      </div>
+      <span className="text-gold/70 text-xl leading-none">›</span>
+    </Link>
   )
 }
 
