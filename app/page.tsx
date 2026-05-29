@@ -268,7 +268,7 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
                   <span className="text-gold text-xs">✦</span>
                   <span className="font-serif text-[14px] text-[#F0F0F8]">最近読んだ鑑定</span>
                 </div>
-                <Link href="/reading/results" className="text-[11px] text-gold/65 hover:text-gold transition-colors flex items-center gap-0.5">
+                <Link href="/reading/results" className="text-[11px] text-gold hover:text-[#F0D880] transition-colors flex items-center gap-0.5">
                   すべて見る <span>›</span>
                 </Link>
               </div>
@@ -287,7 +287,7 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
                       <div className="text-[12.5px] text-white/92 font-medium">{formatReadingTitle(r.theme, period, r.created_at)}</div>
                       <div className="text-[10px] text-white/45 mt-0.5">{formatReadingDate(r.created_at)}に鑑定</div>
                     </div>
-                    <span className="text-gold/65 text-xl leading-none">›</span>
+                    <span className="text-gold text-xl leading-none">›</span>
                   </Link>
                 )
               })}
