@@ -34,11 +34,11 @@ export function BottomNav() {
           return (
             <Link key={item.href} href={item.href}
               className="flex flex-col items-center gap-0.5 px-2 py-1">
-              <span className={clsx("text-lg", active ? "text-gold" : "text-white/40")}>
+              <span className={clsx("text-lg", active ? "text-gold" : "text-white/55")}>
                 {item.icon}
               </span>
               <span className={clsx("text-[10px] font-sans",
-                active ? "text-gold" : "text-white/40")}>
+                active ? "text-gold" : "text-white/55")}>
                 {item.label}
               </span>
               {active && (

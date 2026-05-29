@@ -17,12 +17,10 @@ const zodiacFileBase = (jp?: string) =>
 
 function MoodCell({ iconSrc, label, value }: { iconSrc: string; label: string; value?: string }) {
   return (
-    <div className="flex items-center gap-2 min-w-0">
-      <img src={iconSrc} alt="" aria-hidden className="h-11 w-11 shrink-0 object-contain" />
-      <div className="min-w-0">
-        <div className="text-[10px] text-white/45 tracking-[0.12em] mb-0.5">{label}</div>
-        <div className="font-serif text-[12.5px] text-[#F0F0F8] truncate">{value || "—"}</div>
-      </div>
+    <div className="flex flex-col items-center text-center min-w-0">
+      <img src={iconSrc} alt="" aria-hidden className="h-12 w-12 mb-2 object-contain" />
+      <div className="text-[10px] text-white/52 tracking-[0.12em] mb-1">{label}</div>
+      <div className="font-serif text-[13px] text-white/90 truncate w-full">{value || "—"}</div>
     </div>
   )
 }
@@ -160,9 +158,9 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
       <Stars />
       <div className="relative z-10 max-w-app md:max-w-2xl mx-auto px-5">
         <div className="pt-7 pb-5 flex justify-between items-center">
-          <div className="flex items-center gap-2">
-            <img src="/asteria/assets/header-logo-mark.png" alt="" aria-hidden className="h-9 w-9" />
-            <span className="font-serif text-[18px] tracking-[0.22em] shimmer-gold">ASTERIA</span>
+          <div className="flex items-center gap-2.5">
+            <img src="/asteria/assets/header-logo-mark.png" alt="" aria-hidden className="h-11 w-11 object-contain" />
+            <span className="font-serif text-[19px] tracking-[0.22em] shimmer-gold">ASTERIA</span>
           </div>
           <button onClick={onLogout} className="text-[12px] text-white/40 hover:text-white/70 transition-colors">
             ログアウト
@@ -176,7 +174,8 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
 
 <div className="space-y-3">
           <Link href="/reading"
-            className="btn-gold flex items-center justify-center gap-2 py-4 text-[15px] !rounded-full">
+            className="btn-gold flex items-center justify-center gap-2 h-[56px] text-[14.5px] !rounded-full mx-auto w-[92%] max-w-[420px]"
+            style={{ boxShadow: "0 4px 18px rgba(201,165,84,0.22)" }}>
             <span className="text-[#FFE6B0]">✦</span> 今日の鑑定を始める
           </Link>
 
@@ -185,18 +184,19 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
             <div className="grid grid-cols-2 gap-3">
               {/* Personal card */}
               <div className="card flex flex-col p-3.5">
-                <div className="flex items-start justify-between gap-2 mb-3">
-                  <span className="font-serif text-[12.5px] leading-snug text-[#F0F0F8]">今日のあなたへの<br />星メモ</span>
-                  <span className="text-[9px] px-1.5 py-0.5 rounded-full text-gold whitespace-nowrap"
+                <div className="mb-2 flex justify-end">
+                  <span className="text-[9px] px-2 py-0.5 rounded-full text-gold whitespace-nowrap"
                     style={{ background: "rgba(201,165,84,.12)", border: "1px solid rgba(201,165,84,.32)" }}>
                     あなた向け
                   </span>
                 </div>
-                <div className="flex items-start gap-2.5 flex-1">
+                <div className="font-serif text-[12px] text-[#F0F0F8] mb-3 whitespace-nowrap">今日のあなたへの星メモ</div>
+                <div className="rounded-xl px-2.5 py-3 flex items-start gap-2 flex-1"
+                  style={{ background: "rgba(6,9,22,0.55)", border: "1px solid rgba(201,165,84,0.12)" }}>
                   <img src="/asteria/assets/home-card-personal-moon.png" alt="" aria-hidden
-                    className="h-14 w-14 shrink-0 rounded-full"
-                    style={{ filter: "drop-shadow(0 0 14px rgba(201,165,84,0.18))" }} />
-                  <p className="font-serif text-[11px] leading-[1.8] text-[#C0C0D8] font-light line-clamp-5">
+                    className="h-12 w-12 shrink-0 object-contain"
+                    style={{ filter: "drop-shadow(0 0 12px rgba(201,165,84,0.22))" }} />
+                  <p className="font-serif text-[11px] leading-[1.85] text-white/82 font-light line-clamp-3">
                     {daily.observation_point || daily.flow}
                   </p>
                 </div>
@@ -206,18 +206,19 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
               </div>
               {/* Universal card */}
               <div className="card flex flex-col p-3.5">
-                <div className="flex items-start justify-between gap-2 mb-3">
-                  <span className="font-serif text-[12.5px] leading-snug text-[#F0F0F8]">今日の星空<br />ニュース</span>
-                  <span className="text-[9px] px-1.5 py-0.5 rounded-full text-[#A3C7FF] whitespace-nowrap"
+                <div className="mb-2 flex justify-end">
+                  <span className="text-[9px] px-2 py-0.5 rounded-full text-[#A3C7FF] whitespace-nowrap"
                     style={{ background: "rgba(112,180,255,.10)", border: "1px solid rgba(112,180,255,.32)" }}>
                     全ユーザー共通
                   </span>
                 </div>
-                <div className="flex items-start gap-2.5 flex-1">
+                <div className="font-serif text-[12px] text-[#F0F0F8] mb-3 whitespace-nowrap">今日の星空ニュース</div>
+                <div className="rounded-xl px-2.5 py-3 flex items-start gap-2 flex-1"
+                  style={{ background: "rgba(6,9,22,0.55)", border: "1px solid rgba(112,180,255,0.10)" }}>
                   <img src="/asteria/assets/home-card-universal-saturn.png" alt="" aria-hidden
-                    className="h-14 w-14 shrink-0 rounded-full"
-                    style={{ filter: "drop-shadow(0 0 14px rgba(201,165,84,0.18))" }} />
-                  <p className="font-serif text-[11px] leading-[1.8] text-[#C0C0D8] font-light line-clamp-5">
+                    className="h-12 w-12 shrink-0 object-contain"
+                    style={{ filter: "drop-shadow(0 0 12px rgba(201,165,84,0.22))" }} />
+                  <p className="font-serif text-[11px] leading-[1.85] text-white/82 font-light line-clamp-3">
                     {daily.flow}
                   </p>
                 </div>
@@ -253,7 +254,7 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
                 />
               </div>
               {daily.keywords?.length > 0 && (
-                <div className="flex flex-wrap gap-1.5 mt-4">
+                <div className="flex flex-wrap justify-center gap-1.5 mt-5">
                   {daily.keywords.map((k, i) => (
                     <span key={i} className="px-2.5 py-0.5 rounded-full text-[10px] text-gold"
                       style={{ background: "rgba(201,165,84,.10)", border: "1px solid rgba(201,165,84,.25)" }}>
@@ -289,8 +290,8 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
                       {cfg.icon}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="text-[12px] text-[#F0F0F8]">{formatReadingTitle(r.theme, period, r.created_at)}</div>
-                      <div className="text-[10px] text-white/35">{formatReadingDate(r.created_at)}に鑑定</div>
+                      <div className="text-[12.5px] text-white/92 font-medium">{formatReadingTitle(r.theme, period, r.created_at)}</div>
+                      <div className="text-[10px] text-white/45 mt-0.5">{formatReadingDate(r.created_at)}に鑑定</div>
                     </div>
                     <span className="text-white/30 text-sm">›</span>
                   </Link>
@@ -306,26 +307,26 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
 
           <div className="grid grid-cols-2 gap-3">
             <Link href="/compat"
-              className="card relative flex items-center gap-2.5 overflow-hidden px-3 py-4 min-h-[120px]">
+              className="card relative flex items-center gap-2.5 overflow-hidden px-3 py-4 min-h-[124px]">
               <img src="/asteria/assets/home-feature-compat.png" alt="" aria-hidden
-                className="h-[96px] w-[96px] shrink-0 object-contain pointer-events-none"
+                className="h-[92px] w-[92px] shrink-0 object-contain pointer-events-none"
                 style={{ filter: "drop-shadow(0 0 10px rgba(201,165,84,0.18))" }} />
               <div className="flex-1 min-w-0">
-                <div className="font-serif text-[14px] text-[#F0F0F8] mb-1">相性診断</div>
-                <div className="text-[10px] text-white/55 leading-[1.7]">ふたりの星が響き合うかを読み解きます</div>
+                <div className="font-serif text-[14px] text-white/92 mb-1">相性診断</div>
+                <div className="text-[10px] text-white/52 leading-[1.7]">ふたりの星が響き合うかを読み解きます</div>
               </div>
-              <span className="absolute right-2.5 bottom-2.5 text-white/25 text-sm">›</span>
+              <span className="absolute right-2.5 bottom-2.5 text-white/30 text-sm">›</span>
             </Link>
             <Link href="/guide"
-              className="card relative flex items-center gap-2.5 overflow-hidden px-3 py-4 min-h-[120px]">
+              className="card relative flex items-center gap-2.5 overflow-hidden px-3 py-4 min-h-[124px]">
               <img src="/asteria/assets/home-feature-guide.png" alt="" aria-hidden
-                className="h-[96px] w-[96px] shrink-0 object-contain pointer-events-none"
+                className="h-[86px] w-[86px] shrink-0 object-contain pointer-events-none"
                 style={{ filter: "drop-shadow(0 0 10px rgba(201,165,84,0.18))" }} />
               <div className="flex-1 min-w-0">
-                <div className="font-serif text-[14px] text-[#F0F0F8] mb-1">星読みガイド</div>
-                <div className="text-[10px] text-white/55 leading-[1.7]">星の知識を深めて、日々のヒントに</div>
+                <div className="font-serif text-[14px] text-white/92 mb-1">星読みガイド</div>
+                <div className="text-[10px] text-white/52 leading-[1.7]">星の知識を深めて、日々のヒントに</div>
               </div>
-              <span className="absolute right-2.5 bottom-2.5 text-white/25 text-sm">›</span>
+              <span className="absolute right-2.5 bottom-2.5 text-white/30 text-sm">›</span>
             </Link>
           </div>
 
