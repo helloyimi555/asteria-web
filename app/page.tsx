@@ -199,8 +199,8 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
               <div className="flex-1 min-w-0 flex flex-col justify-center">
                 <div className="flex items-center justify-between gap-2 mb-1.5">
                   <div className="font-serif text-[14.5px] text-white/95 truncate">相性診断</div>
-                  <span className="shrink-0 text-[10px] px-2.5 py-0.5 rounded-full text-gold whitespace-nowrap flex items-center gap-0.5"
-                    style={{ background: "rgba(201,165,84,0.12)", border: "1px solid rgba(201,165,84,0.45)" }}>
+                  <span className="shrink-0 text-[10px] px-2.5 py-0.5 rounded-full whitespace-nowrap flex items-center gap-0.5"
+                    style={{ color: "#F8A0B8", background: "rgba(240,112,152,0.14)", border: "1px solid rgba(240,112,152,0.50)" }}>
                     診断する <span className="text-[11px] leading-none">›</span>
                   </span>
                 </div>
@@ -450,8 +450,8 @@ function PartnerPersonalityCard({ onLoadingChange }: { onLoadingChange?: (loadin
         <div className="flex-1 min-w-0 flex flex-col justify-center">
           <div className="flex items-center justify-between gap-2 mb-1.5">
             <div className="font-serif text-[14.5px] text-white/95 truncate">相手を知る</div>
-            <span className={`shrink-0 text-[10px] px-2.5 py-0.5 rounded-full text-gold whitespace-nowrap flex items-center gap-0.5 transition-transform ${open ? "rotate-0" : ""}`}
-              style={{ background: "rgba(201,165,84,0.12)", border: "1px solid rgba(201,165,84,0.45)" }}>
+            <span className={`shrink-0 text-[10px] px-2.5 py-0.5 rounded-full whitespace-nowrap flex items-center gap-0.5 transition-transform ${open ? "rotate-0" : ""}`}
+              style={{ color: "#A3C7FF", background: "rgba(112,180,255,0.12)", border: "1px solid rgba(112,180,255,0.50)" }}>
               読み解く <span className="text-[11px] leading-none">›</span>
             </span>
           </div>
