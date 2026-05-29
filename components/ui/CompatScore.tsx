@@ -189,10 +189,10 @@ export function MetricBar({
   return (
     <div className="flex items-center gap-3">
       <span
-        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-[#F0C870]"
+        className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[#F0C870]"
         style={{ background: "rgba(232,184,110,0.10)", border: "1px solid rgba(232,184,110,0.50)" }}
       >
-        <Icon type={icon} className="h-6 w-6" />
+        <Icon type={icon} className="h-4 w-4" />
       </span>
       <span className="w-14 shrink-0 font-serif text-[13px] text-[#F0F0F8]/90">{label}</span>
       <div className="relative h-2 flex-1 overflow-hidden rounded-full" style={{ background: "rgba(255,255,255,0.06)" }}>

@@ -174,7 +174,7 @@ export default function CompatResultPage() {
 
             {/* ラベル枠（円の下端に少しかぶせる） */}
             {overallLabel && (
-              <div className="relative z-[2] -mt-10">
+              <div className="relative z-[2] -mt-5">
                 <RelationshipLabel label={overallLabel} />
               </div>
             )}
@@ -187,12 +187,12 @@ export default function CompatResultPage() {
               {COMPAT_SCORE_FIELDS.map((field, i) => (
                 <div key={field.key}>
                   {i > 0 && (
-                    <div className="my-1 flex justify-center gap-2 text-[#D9B776]/35">
-                      <span className="text-[8px] leading-none">・</span>
-                      <span className="text-[8px] leading-none">・</span>
-                      <span className="text-[8px] leading-none">・</span>
-                      <span className="text-[8px] leading-none">・</span>
-                      <span className="text-[8px] leading-none">・</span>
+                    <div className="flex justify-center gap-1.5 py-0.5 text-[#D9B776]/35">
+                      <span className="text-[6px] leading-none">・</span>
+                      <span className="text-[6px] leading-none">・</span>
+                      <span className="text-[6px] leading-none">・</span>
+                      <span className="text-[6px] leading-none">・</span>
+                      <span className="text-[6px] leading-none">・</span>
                     </div>
                   )}
                   <MetricBar
