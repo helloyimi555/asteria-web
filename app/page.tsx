@@ -18,9 +18,9 @@ const zodiacFileBase = (jp?: string) =>
 function MoodCell({ iconSrc, label, value }: { iconSrc: string; label: string; value?: string }) {
   return (
     <div className="flex flex-col items-center text-center min-w-0">
-      <img src={iconSrc} alt="" aria-hidden className="h-12 w-12 mb-2 object-contain" />
-      <div className="text-[10px] text-white/52 tracking-[0.12em] mb-1">{label}</div>
-      <div className="font-serif text-[13px] text-white/90 truncate w-full">{value || "—"}</div>
+      <div className="text-[10px] text-white/52 tracking-[0.12em] mb-1.5">{label}</div>
+      <img src={iconSrc} alt="" aria-hidden className="h-16 w-16 mb-2 object-contain" />
+      <div className="font-serif text-[13.5px] text-white/92 truncate w-full">{value || "—"}</div>
     </div>
   )
 }
@@ -191,8 +191,8 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
                   </span>
                 </div>
                 <div className="font-serif text-[12px] text-[#F0F0F8] mb-3 whitespace-nowrap">今日のあなたへの星メモ</div>
-                <div className="rounded-xl px-2.5 py-3 flex items-start gap-2 flex-1"
-                  style={{ background: "rgba(6,9,22,0.55)", border: "1px solid rgba(201,165,84,0.12)" }}>
+                <div className="rounded-xl px-2.5 py-2.5 flex items-start gap-2 flex-1"
+                  style={{ background: "rgba(8,12,30,0.32)", border: "1px solid rgba(201,165,84,0.06)" }}>
                   <img src="/asteria/assets/home-card-personal-moon.png" alt="" aria-hidden
                     className="h-12 w-12 shrink-0 object-contain"
                     style={{ filter: "drop-shadow(0 0 12px rgba(201,165,84,0.22))" }} />
@@ -213,8 +213,8 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
                   </span>
                 </div>
                 <div className="font-serif text-[12px] text-[#F0F0F8] mb-3 whitespace-nowrap">今日の星空ニュース</div>
-                <div className="rounded-xl px-2.5 py-3 flex items-start gap-2 flex-1"
-                  style={{ background: "rgba(6,9,22,0.55)", border: "1px solid rgba(112,180,255,0.10)" }}>
+                <div className="rounded-xl px-2.5 py-2.5 flex items-start gap-2 flex-1"
+                  style={{ background: "rgba(8,12,30,0.32)", border: "1px solid rgba(201,165,84,0.06)" }}>
                   <img src="/asteria/assets/home-card-universal-saturn.png" alt="" aria-hidden
                     className="h-12 w-12 shrink-0 object-contain"
                     style={{ filter: "drop-shadow(0 0 12px rgba(201,165,84,0.22))" }} />
@@ -254,7 +254,7 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
                 />
               </div>
               {daily.keywords?.length > 0 && (
-                <div className="flex flex-wrap justify-center gap-1.5 mt-5">
+                <div className="flex flex-wrap justify-center gap-1.5 mt-4">
                   {daily.keywords.map((k, i) => (
                     <span key={i} className="px-2.5 py-0.5 rounded-full text-[10px] text-gold"
                       style={{ background: "rgba(201,165,84,.10)", border: "1px solid rgba(201,165,84,.25)" }}>
