@@ -40,7 +40,7 @@ export default function GuestResultPage() {
           <div className="card mt-3 p-4 relative overflow-hidden" style={{ borderLeft:"3px solid rgba(201,165,84,.6)" }}>
             <div className="flex items-center gap-1.5 mb-3">
               <span className="text-gold text-sm">✦</span>
-              <span className="font-sans text-[13px] font-bold text-[#F0F0F8]">{themeLabel}</span>
+              <span className="font-serif text-[14px] text-[#F0F0F8]">{themeLabel}</span>
             </div>
             <GuestOverallText text={outputs.overall} />
           </div>

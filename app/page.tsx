@@ -75,7 +75,7 @@ export default function HomePage() {
           <span className="text-gold/70 text-sm">✦</span>
           <div className="flex-1 h-px bg-gradient-to-l from-transparent to-gold/50" />
         </div>
-        <p className="text-[13px] text-white/55 leading-7 mb-8 opacity-0 animate-fade-up"
+        <p className="font-serif text-[13px] text-white/55 leading-7 mb-8 opacity-0 animate-fade-up"
           style={{ animationDelay:"0.2s" }}>
           出生情報と現在・未来の天体配置から、<br />今のテーマを読み解きます
         </p>
@@ -169,7 +169,7 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
 
         <div className="text-center mb-6 mt-2">
           <h1 className="font-serif text-[28px] tracking-wide text-white mb-2">おかえりなさい</h1>
-          <p className="text-[13px] text-white/55 leading-relaxed">今日の星から、あなたへのメッセージを読み解きます</p>
+          <p className="font-serif text-[13px] text-white/55 leading-relaxed">今日の星から、あなたへのメッセージを読み解きます</p>
         </div>
 
 <div className="space-y-3">

@@ -117,7 +117,7 @@ export default function GuidePage() {
                       <span key={i} className="px-2.5 py-0.5 rounded-md text-[10px] border border-[#C9A554]/30 bg-[#C9A554]/10 text-[#C9A554]">{k}</span>
                     ))}
                   </div>
-                  <p className="font-sans text-[12px] text-white/55 leading-relaxed font-light">{p.desc}</p>
+                  <p className="font-serif text-[13px] text-white/75 leading-[1.85] font-light">{p.desc}</p>
                 </div>
               </div>
             ))}
@@ -138,7 +138,7 @@ export default function GuidePage() {
                     <span>✦</span><span>{a.rel}</span><span>✦</span>
                   </div>
                   <div className="font-serif text-4xl leading-none mb-3" style={{ color:a.c }}>{a.deg}</div>
-                  <p className="font-sans text-[12px] text-white/55 leading-relaxed">{a.desc}</p>
+                  <p className="font-serif text-[13px] text-white/75 leading-[1.85] font-light">{a.desc}</p>
                 </div>
               </div>
             ))}

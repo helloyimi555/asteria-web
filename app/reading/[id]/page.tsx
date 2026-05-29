@@ -254,7 +254,7 @@ export default function ReadingResultPage() {
                     </>
                   )
                 ) : (
-                  <p className="font-sans text-[14px] leading-[1.85] text-[#C0C0D8] font-light whitespace-pre-line">{content}</p>
+                  <p className="font-serif text-[14px] leading-[1.85] text-[#C0C0D8] font-light whitespace-pre-line">{content}</p>
                 )}
               </div>
             </div>
