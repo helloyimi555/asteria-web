@@ -343,7 +343,7 @@ export default function CompatResultPage() {
                     {item.tag}
                   </span>
                 </div>
-                <p className="font-sans text-[12px] leading-[1.85] text-[#C0C0D8] font-light">
+                <p className="font-serif text-[13px] leading-[1.85] text-[#C0C0D8] font-light">
                   {item.text}
                 </p>
               </div>

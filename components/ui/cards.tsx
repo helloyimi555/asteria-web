@@ -25,7 +25,7 @@ export function InfoCard({
         </div>
       )}
       {children && (
-        <div className="font-sans text-[12px] leading-relaxed text-white/60">{children}</div>
+        <div className="font-serif text-[13px] leading-[1.85] text-white/75 font-light">{children}</div>
       )}
       {footerLabel && (
         <div className="mt-3 pt-3 border-t border-white/[0.08]">
@@ -60,7 +60,7 @@ export function AlertCard({
         <span className="font-serif text-[15px]" style={{ color: "#F5C77E" }}>{title}</span>
       </div>
       {children && (
-        <div className="font-sans text-[12px] leading-relaxed text-[#E8D8C8]">{children}</div>
+        <div className="font-serif text-[13px] leading-[1.85] text-[#E8D8C8] font-light">{children}</div>
       )}
       {keyword && (
         <div className="mt-3 pt-3 border-t border-white/[0.08] text-[11px] text-[#F5A623]/80">
@@ -87,7 +87,7 @@ export function LuckyCard({
         <span className="font-serif text-[15px]" style={{ color: "#A8E08F" }}>{title}</span>
       </div>
       {children && (
-        <div className="font-sans text-[12px] leading-relaxed text-[#D8E8D0]">{children}</div>
+        <div className="font-serif text-[13px] leading-[1.85] text-[#D8E8D0] font-light">{children}</div>
       )}
       {item && (
         <div className="mt-3 pt-3 border-t border-white/[0.08] text-[11px] text-[#8BC34A]/85">
