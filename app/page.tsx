@@ -267,10 +267,23 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
           {/* 星のムード（「今日の星空」セクションの一部） */}
           {daily && (
             <div className="card p-4">
-              <div className="flex items-center gap-1.5 mb-4">
+              <div className="flex items-center gap-1.5 mb-3">
                 <span className="text-gold text-xs">✦</span>
                 <span className="font-serif text-[14px] md:text-[15px] text-[#F0F0F8]">星のムード</span>
               </div>
+              {daily.keywords?.length > 0 && (
+                <>
+                  <div className="flex flex-wrap justify-center gap-1.5 mb-3">
+                    {daily.keywords.map((k, i) => (
+                      <span key={i} className="px-2.5 py-0.5 rounded-full text-[10px] text-gold"
+                        style={{ background: "rgba(201,165,84,.10)", border: "1px solid rgba(201,165,84,.25)" }}>
+                        #{k}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="h-px mb-4" style={{ background: "linear-gradient(to right, transparent, rgba(201,165,84,0.20), transparent)" }} />
+                </>
+              )}
               <div className="grid grid-cols-3 gap-2">
                 <MoodCell
                   iconSrc="/asteria/assets/mood-icon-phase-moon.png"
@@ -288,16 +301,6 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
                   value={daily.main_theme}
                 />
               </div>
-              {daily.keywords?.length > 0 && (
-                <div className="flex flex-wrap justify-center gap-1.5 mt-4">
-                  {daily.keywords.map((k, i) => (
-                    <span key={i} className="px-2.5 py-0.5 rounded-full text-[10px] text-gold"
-                      style={{ background: "rgba(201,165,84,.10)", border: "1px solid rgba(201,165,84,.25)" }}>
-                      #{k}
-                    </span>
-                  ))}
-                </div>
-              )}
             </div>
           )}
 
