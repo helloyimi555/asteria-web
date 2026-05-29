@@ -181,7 +181,7 @@ export default function CompatResultPage() {
 
             {/* 6 項目バー（参考画像どおり、ドット区切りなしで詰めて並べる） */}
             <div
-              className="mt-4 flex flex-col gap-3 rounded-2xl border border-[#C9A554]/25 px-4 py-4"
+              className="mt-4 flex flex-col gap-1 rounded-2xl border border-[#C9A554]/25 px-4 py-3"
               style={{ background: "rgba(8,12,30,0.45)", boxShadow: "inset 0 0 24px rgba(201,165,84,0.05)" }}
             >
               {COMPAT_SCORE_FIELDS.map(field => (
