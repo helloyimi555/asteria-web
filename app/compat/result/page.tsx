@@ -161,8 +161,11 @@ export default function CompatResultPage() {
             {/* ラベル枠（後で compat-label-frame.png に差し替え予定） */}
             {overallLabel && <RelationshipLabel label={overallLabel} />}
 
-            {/* 6 項目バー（各バーの間にドット区切り） */}
-            <div className="mt-4">
+            {/* 6 項目バー（角丸の枠で囲み、各バーの間にドット区切り） */}
+            <div
+              className="mt-4 rounded-2xl border border-[#C9A554]/25 px-4 py-4"
+              style={{ background: "rgba(8,12,30,0.45)", boxShadow: "inset 0 0 24px rgba(201,165,84,0.05)" }}
+            >
               {COMPAT_SCORE_FIELDS.map((field, i) => (
                 <div key={field.key}>
                   {i > 0 && (
