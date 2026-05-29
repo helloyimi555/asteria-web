@@ -184,13 +184,13 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
             <div className="grid grid-cols-2 gap-3">
               {/* Personal card */}
               <div className="card flex flex-col p-3.5">
-                <div className="mb-2 flex justify-end">
-                  <span className="text-[9px] px-2 py-0.5 rounded-full text-gold whitespace-nowrap"
+                <div className="mb-3 flex items-center justify-between gap-2">
+                  <span className="font-serif text-[12px] text-white/92 truncate">今日のあなたへの星メモ</span>
+                  <span className="text-[9px] px-2 py-0.5 rounded-full text-gold whitespace-nowrap shrink-0"
                     style={{ background: "rgba(201,165,84,.12)", border: "1px solid rgba(201,165,84,.32)" }}>
                     あなた向け
                   </span>
                 </div>
-                <div className="font-serif text-[12px] text-[#F0F0F8] mb-3 whitespace-nowrap">今日のあなたへの星メモ</div>
                 <div className="rounded-xl px-2.5 py-2.5 flex items-start gap-2 flex-1"
                   style={{ background: "rgba(8,12,30,0.32)", border: "1px solid rgba(201,165,84,0.22)" }}>
                   <img src="/asteria/assets/home-card-personal-moon.png" alt="" aria-hidden
@@ -200,19 +200,16 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
                     {daily.observation_point || daily.flow}
                   </p>
                 </div>
-                <div className="mt-3 flex items-center justify-center opacity-55">
-                  <img src="/asteria/assets/divider-star.png" alt="" aria-hidden className="h-2.5" />
-                </div>
               </div>
               {/* Universal card */}
               <div className="card flex flex-col p-3.5">
-                <div className="mb-2 flex justify-end">
-                  <span className="text-[9px] px-2 py-0.5 rounded-full text-[#A3C7FF] whitespace-nowrap"
+                <div className="mb-3 flex items-center justify-between gap-2">
+                  <span className="font-serif text-[12px] text-white/92 truncate">今日の星空ニュース</span>
+                  <span className="text-[9px] px-2 py-0.5 rounded-full text-[#A3C7FF] whitespace-nowrap shrink-0"
                     style={{ background: "rgba(112,180,255,.10)", border: "1px solid rgba(112,180,255,.32)" }}>
                     全ユーザー共通
                   </span>
                 </div>
-                <div className="font-serif text-[12px] text-[#F0F0F8] mb-3 whitespace-nowrap">今日の星空ニュース</div>
                 <div className="rounded-xl px-2.5 py-2.5 flex items-start gap-2 flex-1"
                   style={{ background: "rgba(8,12,30,0.32)", border: "1px solid rgba(201,165,84,0.22)" }}>
                   <img src="/asteria/assets/home-card-universal-saturn.png" alt="" aria-hidden
@@ -221,9 +218,6 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
                   <p className="font-serif text-[11px] leading-[1.85] text-white/82 font-light line-clamp-3">
                     {daily.flow}
                   </p>
-                </div>
-                <div className="mt-3 flex items-center justify-center opacity-55">
-                  <img src="/asteria/assets/divider-star.png" alt="" aria-hidden className="h-2.5" />
                 </div>
               </div>
             </div>
