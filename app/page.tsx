@@ -180,18 +180,32 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
           </Link>
 
           {/* Secondary CTA：相性診断 / 相手の性格を分析する */}
+          <div className="flex items-center gap-2 pt-1">
+            <span className="text-gold text-xs">✦</span>
+            <span className="font-serif text-[13px] text-white/85 tracking-[0.08em]">ふたりを読む</span>
+            <span className="flex-1 h-px ml-1" style={{ background: "linear-gradient(to right, rgba(201,165,84,0.28), rgba(201,165,84,0))" }} />
+          </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <Link href="/compat"
-              className="card relative flex items-center gap-2.5 overflow-hidden px-3 py-4 min-h-[124px]"
-              style={{ borderColor: "rgba(201,165,84,0.3)" }}>
+              className="relative flex items-stretch gap-3 overflow-hidden px-3.5 py-4 min-h-[124px] rounded-2xl transition-all hover:brightness-110"
+              style={{
+                background: "linear-gradient(135deg, rgba(34,42,96,0.78), rgba(20,25,60,0.78))",
+                border: "1px solid rgba(201,165,84,0.42)",
+                boxShadow: "0 0 22px rgba(201,165,84,0.08), inset 0 0 18px rgba(201,165,84,0.06)",
+              }}>
               <img src="/asteria/assets/home-feature-compat.png" alt="" aria-hidden
-                className="h-[92px] w-[92px] shrink-0 object-contain pointer-events-none"
-                style={{ filter: "drop-shadow(0 0 10px rgba(201,165,84,0.22))" }} />
-              <div className="flex-1 min-w-0">
-                <div className="font-serif text-[14px] text-white/92 mb-1">相性診断</div>
-                <div className="text-[10px] text-white/52 leading-[1.7]">ふたりの星が響き合うかを読み解きます</div>
+                className="h-[92px] w-[92px] shrink-0 self-center object-contain pointer-events-none"
+                style={{ filter: "drop-shadow(0 0 12px rgba(201,165,84,0.28))" }} />
+              <div className="flex-1 min-w-0 flex flex-col justify-center">
+                <div className="flex items-center justify-between gap-2 mb-1.5">
+                  <div className="font-serif text-[14.5px] text-white/95 truncate">相性診断</div>
+                  <span className="shrink-0 text-[10px] px-2.5 py-0.5 rounded-full text-gold whitespace-nowrap flex items-center gap-0.5"
+                    style={{ background: "rgba(201,165,84,0.12)", border: "1px solid rgba(201,165,84,0.45)" }}>
+                    診断する <span className="text-[11px] leading-none">›</span>
+                  </span>
+                </div>
+                <div className="text-[10.5px] text-white/60 leading-[1.7]">ふたりの星が響き合うかを読み解きます</div>
               </div>
-              <span className="absolute right-2.5 bottom-2.5 text-gold text-xl leading-none">›</span>
             </Link>
             <PartnerPersonalityCard onLoadingChange={setPartnerLoading} />
           </div>
@@ -326,7 +340,7 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
               <div className="font-serif text-[14px] text-white/88 mb-1">星読みガイド</div>
               <div className="text-[10px] text-white/48 leading-[1.7]">星の知識を深めて、日々のヒントに</div>
             </div>
-            <span className="absolute right-2.5 bottom-2.5 text-gold/70 text-lg leading-none">›</span>
+            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gold/70 text-xl leading-none">›</span>
           </Link>
 
           <Link href="/reading/results"
@@ -337,7 +351,7 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
               <path d="M8.5 8h7M8.5 12h7M8.5 16h4.5" />
             </svg>
             <div className="flex-1 font-serif text-[14px] text-[#F0F0F8]">鑑定履歴を見る</div>
-            <span className="text-white/30">›</span>
+            <span className="text-gold/70 text-xl leading-none">›</span>
           </Link>
 
           <Link href="/mypage"
@@ -348,7 +362,7 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
               <path d="M4.5 20.5c0-3.6 3.4-6.5 7.5-6.5s7.5 2.9 7.5 6.5" />
             </svg>
             <div className="flex-1 font-serif text-[14px] text-[#F0F0F8]">マイページ</div>
-            <span className="text-white/30">›</span>
+            <span className="text-gold/70 text-xl leading-none">›</span>
           </Link>
         </div>
       </div>
@@ -413,19 +427,29 @@ function PartnerPersonalityCard({ onLoadingChange }: { onLoadingChange?: (loadin
   }
 
   return (
-    <div className="card overflow-hidden" style={{ borderColor: "rgba(201,165,84,0.3)" }}>
+    <div className="overflow-hidden rounded-2xl transition-all hover:brightness-110"
+      style={{
+        background: "linear-gradient(135deg, rgba(34,42,96,0.78), rgba(20,25,60,0.78))",
+        border: "1px solid rgba(201,165,84,0.42)",
+        boxShadow: "0 0 22px rgba(201,165,84,0.08), inset 0 0 18px rgba(201,165,84,0.06)",
+      }}>
       <button
         type="button"
         onClick={() => setOpen(v => !v)}
-        className="w-full relative flex items-center gap-2.5 overflow-hidden px-3 py-4 min-h-[124px] text-left">
+        className="w-full relative flex items-stretch gap-3 overflow-hidden px-3.5 py-4 min-h-[124px] text-left">
         <img src="/asteria/assets/mood-icon-theme-star.png" alt="" aria-hidden
-          className="h-[86px] w-[86px] shrink-0 object-contain pointer-events-none"
-          style={{ filter: "drop-shadow(0 0 10px rgba(201,165,84,0.22))" }} />
-        <div className="flex-1 min-w-0">
-          <div className="font-serif text-[14px] text-white/92 mb-1">相手の性格を分析する</div>
-          <div className="text-[10px] text-white/52 leading-[1.7]">生年月日から本質と傾向を読み解く</div>
+          className="h-[86px] w-[86px] shrink-0 self-center object-contain pointer-events-none"
+          style={{ filter: "drop-shadow(0 0 12px rgba(201,165,84,0.28))" }} />
+        <div className="flex-1 min-w-0 flex flex-col justify-center">
+          <div className="flex items-center justify-between gap-2 mb-1.5">
+            <div className="font-serif text-[14.5px] text-white/95 truncate">相手を知る</div>
+            <span className={`shrink-0 text-[10px] px-2.5 py-0.5 rounded-full text-gold whitespace-nowrap flex items-center gap-0.5 transition-transform ${open ? "rotate-0" : ""}`}
+              style={{ background: "rgba(201,165,84,0.12)", border: "1px solid rgba(201,165,84,0.45)" }}>
+              読み解く <span className="text-[11px] leading-none">›</span>
+            </span>
+          </div>
+          <div className="text-[10.5px] text-white/60 leading-[1.7]">生年月日から本質と傾向を読み解く</div>
         </div>
-        <span className={`absolute right-2.5 bottom-2.5 text-gold text-xl leading-none transition-transform ${open ? "rotate-90" : ""}`}>›</span>
       </button>
 
       {open && (
