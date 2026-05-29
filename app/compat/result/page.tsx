@@ -146,11 +146,11 @@ export default function CompatResultPage() {
               </div>
               <h2
                 className="mt-3 font-serif text-[24px] leading-tight text-[#F6F1E4]"
-                style={{ textShadow: "0 0 18px rgba(201,165,84,.35)" }}
+                style={{ textShadow: "0 0 18px rgba(232,184,110,.35)" }}
               >
                 ふたりのシンクロスコア
               </h2>
-              <p className="mt-1 text-[12px] tracking-wider text-white/55">星が導いた、ふたりの相性</p>
+              <p className="mt-1 font-serif text-[12px] tracking-[0.12em] text-[#D9B776]/85">星が導いた、ふたりの相性</p>
             </div>
 
             {/* リング */}

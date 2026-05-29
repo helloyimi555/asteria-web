@@ -84,20 +84,24 @@ export function ScoreRing({ score, size = 260 }: { score: number; size?: number 
       <svg viewBox={`0 0 ${size} ${size}`} className="block h-full w-full">
         <defs>
           <linearGradient id="compatRingGold" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#FFE3A8" />
-            <stop offset="35%" stopColor="#F8B85A" />
-            <stop offset="65%" stopColor="#E08A2A" />
-            <stop offset="100%" stopColor="#6E3D10" />
+            <stop offset="0%" stopColor="#FFE6B0" />
+            <stop offset="35%" stopColor="#F0C16A" />
+            <stop offset="65%" stopColor="#C99848" />
+            <stop offset="100%" stopColor="#6E4D18" />
           </linearGradient>
           <filter id="compatRingGlow" x="-30%" y="-30%" width="160%" height="160%">
             <feGaussianBlur stdDeviation="5" />
           </filter>
         </defs>
-        {/* 装飾：背面の細い同心円 */}
-        <circle cx={center} cy={center} r={radius + 12} fill="none" stroke="rgba(232,155,62,0.12)" strokeWidth="0.7" />
-        <circle cx={center} cy={center} r={radius - 12} fill="none" stroke="rgba(232,155,62,0.08)" strokeWidth="0.5" />
+        {/* 装飾：背面・前面の同心円（多層） */}
+        <circle cx={center} cy={center} r={radius + 24} fill="none" stroke="rgba(232,184,110,0.06)" strokeWidth="0.5" />
+        <circle cx={center} cy={center} r={radius + 16} fill="none" stroke="rgba(232,184,110,0.14)" strokeWidth="0.7" />
+        <circle cx={center} cy={center} r={radius + 9}  fill="none" stroke="rgba(232,184,110,0.10)" strokeWidth="0.5" />
+        <circle cx={center} cy={center} r={radius - 9}  fill="none" stroke="rgba(232,184,110,0.10)" strokeWidth="0.5" />
+        <circle cx={center} cy={center} r={radius - 16} fill="none" stroke="rgba(232,184,110,0.14)" strokeWidth="0.7" />
+        <circle cx={center} cy={center} r={radius - 24} fill="none" stroke="rgba(232,184,110,0.06)" strokeWidth="0.5" />
         {/* トラック */}
-        <circle cx={center} cy={center} r={radius} fill="none" stroke="rgba(232,155,62,0.22)" strokeWidth="12" />
+        <circle cx={center} cy={center} r={radius} fill="none" stroke="rgba(232,184,110,0.20)" strokeWidth="12" />
         {/* グロー（下層） */}
         <g transform={`rotate(-90 ${center} ${center})`}>
           <circle
@@ -127,20 +131,20 @@ export function ScoreRing({ score, size = 260 }: { score: number; size?: number 
           />
         </g>
         {/* リング上端に飾り星 */}
-        <text x={center} y={center - radius + 5} textAnchor="middle" fontSize="14" fill="#FFC066">✦</text>
+        <text x={center} y={center - radius + 5} textAnchor="middle" fontSize="14" fill="#F0C870">✦</text>
       </svg>
       {/* 中央の数字 */}
       <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
         <div
-          className="font-serif font-bold leading-none text-[#FFC36B]"
+          className="font-serif font-bold leading-none text-[#F0C870]"
           style={{
             fontSize: Math.round(size * 0.36),
-            textShadow: "0 0 14px rgba(232,155,62,.45), 0 0 4px rgba(255,200,110,.4)",
+            textShadow: "0 0 14px rgba(232,184,110,.4), 0 0 3px rgba(240,200,112,.35)",
           }}
         >
           {s}
         </div>
-        <div className="mt-1 font-serif text-[13px] tracking-wider text-[#E89B3E]/80">/100</div>
+        <div className="mt-1 font-serif text-[13px] tracking-wider text-[#D9B776]/85">/100</div>
       </div>
     </div>
   )
@@ -153,21 +157,23 @@ export function ScoreRing({ score, size = 260 }: { score: number; size?: number 
  * ======================================================= */
 export function RelationshipLabel({ label }: { label: string }): ReactElement {
   return (
-    <div className="my-6 flex w-full items-center justify-center gap-3 text-[#E89B3E]/95">
-      <span className="h-px max-w-[80px] flex-1 bg-gradient-to-r from-transparent via-[#E89B3E]/45 to-[#F8B85A]/85" />
-      <span className="text-[10px]">✦</span>
-      <div className="relative px-6 py-2">
-        <span className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#F8B85A]/75 to-transparent" />
-        <span className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[#F8B85A]/75 to-transparent" />
+    <div className="my-6 flex w-full justify-center">
+      <div className="relative flex w-full max-w-[420px] items-center justify-center aspect-[1700/280]">
+        {/* 装飾フレーム画像（compat-label-frame.png） */}
+        <img
+          src="/asteria/assets/compat-label-frame.png"
+          alt=""
+          aria-hidden
+          className="pointer-events-none absolute inset-0 h-full w-full object-contain"
+        />
+        {/* 中央テキスト */}
         <span
-          className="font-serif text-[15px] tracking-[0.08em] text-[#FFB85A]"
-          style={{ textShadow: "0 0 18px rgba(248,184,90,.55), 0 0 6px rgba(248,184,90,.4)" }}
+          className="relative font-serif text-[15px] tracking-[0.10em] text-[#F0C870]"
+          style={{ textShadow: "0 0 14px rgba(232,184,110,.45), 0 0 4px rgba(240,200,112,.35)" }}
         >
           {label}
         </span>
       </div>
-      <span className="text-[10px]">✦</span>
-      <span className="h-px max-w-[80px] flex-1 bg-gradient-to-l from-transparent via-[#E89B3E]/45 to-[#F8B85A]/85" />
     </div>
   )
 }
@@ -183,10 +189,10 @@ export function MetricBar({
   return (
     <div className="flex items-center gap-3">
       <span
-        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[#FFB85A]"
-        style={{ background: "rgba(232,155,62,0.12)", border: "1px solid rgba(232,155,62,0.55)" }}
+        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-[#F0C870]"
+        style={{ background: "rgba(232,184,110,0.10)", border: "1px solid rgba(232,184,110,0.50)" }}
       >
-        <Icon type={icon} className="h-4 w-4" />
+        <Icon type={icon} className="h-6 w-6" />
       </span>
       <span className="w-14 shrink-0 font-serif text-[13px] text-[#F0F0F8]/90">{label}</span>
       <div className="relative h-2 flex-1 overflow-hidden rounded-full" style={{ background: "rgba(255,255,255,0.06)" }}>
@@ -194,13 +200,15 @@ export function MetricBar({
           className="absolute inset-y-0 left-0 rounded-full"
           style={{
             width: `${displayValue}%`,
-            background: "linear-gradient(90deg, #FFE3A8 0%, #F8B85A 45%, #E08A2A 80%, #A0561E 100%)",
-            boxShadow: "0 0 12px rgba(248,184,90,0.7)",
+            background: "linear-gradient(90deg, #FFE6B0 0%, #F0C16A 45%, #C99848 80%, #8A6B28 100%)",
+            boxShadow: "0 0 12px rgba(232,184,110,0.65)",
           }}
         />
       </div>
-      <span className="w-9 shrink-0 text-right font-serif text-[15px] font-bold text-[#FFB85A]"
-        style={{ textShadow: "0 0 8px rgba(248,184,90,0.45)" }}>
+      <span
+        className="w-9 shrink-0 text-right font-serif text-[15px] font-bold text-[#F0C870]"
+        style={{ textShadow: "0 0 8px rgba(232,184,110,0.4)" }}
+      >
         {displayValue}
       </span>
     </div>
