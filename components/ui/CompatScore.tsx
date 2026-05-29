@@ -97,7 +97,7 @@ export function ScoreRing({ score, size = 260 }: { score: number; size?: number 
         <circle cx={center} cy={center} r={radius + 12} fill="none" stroke="rgba(232,155,62,0.12)" strokeWidth="0.7" />
         <circle cx={center} cy={center} r={radius - 12} fill="none" stroke="rgba(232,155,62,0.08)" strokeWidth="0.5" />
         {/* トラック */}
-        <circle cx={center} cy={center} r={radius} fill="none" stroke="rgba(232,155,62,0.20)" strokeWidth="6" />
+        <circle cx={center} cy={center} r={radius} fill="none" stroke="rgba(232,155,62,0.22)" strokeWidth="12" />
         {/* グロー（下層） */}
         <g transform={`rotate(-90 ${center} ${center})`}>
           <circle
@@ -106,12 +106,12 @@ export function ScoreRing({ score, size = 260 }: { score: number; size?: number 
             r={radius}
             fill="none"
             stroke="url(#compatRingGold)"
-            strokeWidth="13"
+            strokeWidth="20"
             strokeLinecap="round"
             strokeDasharray={circumference}
             strokeDashoffset={dashOffset}
             filter="url(#compatRingGlow)"
-            opacity="0.75"
+            opacity="0.6"
           />
           {/* 本体のアーク */}
           <circle
@@ -120,7 +120,7 @@ export function ScoreRing({ score, size = 260 }: { score: number; size?: number 
             r={radius}
             fill="none"
             stroke="url(#compatRingGold)"
-            strokeWidth="6"
+            strokeWidth="12"
             strokeLinecap="round"
             strokeDasharray={circumference}
             strokeDashoffset={dashOffset}
@@ -132,11 +132,10 @@ export function ScoreRing({ score, size = 260 }: { score: number; size?: number 
       {/* 中央の数字 */}
       <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
         <div
-          className="font-serif font-bold leading-none text-[#FFB85A]"
+          className="font-serif font-bold leading-none text-[#FFC36B]"
           style={{
-            fontSize: Math.round(size * 0.34),
-            textShadow:
-              "0 0 38px rgba(248,184,90,.85), 0 0 18px rgba(232,155,62,.7), 0 0 6px rgba(248,184,90,.6)",
+            fontSize: Math.round(size * 0.36),
+            textShadow: "0 0 14px rgba(232,155,62,.45), 0 0 4px rgba(255,200,110,.4)",
           }}
         >
           {s}
