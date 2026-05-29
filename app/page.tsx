@@ -10,6 +10,22 @@ import { isLoggedIn, clearTokens, guestPersonalityApi, homeApi, readingApi, type
 import type { Reading } from "@/types"
 import { formatReadingTitle, formatReadingDate, inferPeriodId } from "@/utils/dateUtils"
 import { getThemeConfig } from "@/utils/themeConfig"
+import { ZODIAC } from "@/lib/zodiac"
+
+const zodiacFileBase = (jp?: string) =>
+  jp ? (ZODIAC.find(z => z.sign === jp)?.en?.toLowerCase() ?? "") : ""
+
+function MoodCell({ iconSrc, label, value }: { iconSrc: string; label: string; value?: string }) {
+  return (
+    <div className="flex items-center gap-2 min-w-0">
+      <img src={iconSrc} alt="" aria-hidden className="h-11 w-11 shrink-0 object-contain" />
+      <div className="min-w-0">
+        <div className="text-[10px] text-white/45 tracking-[0.12em] mb-0.5">{label}</div>
+        <div className="font-serif text-[12.5px] text-[#F0F0F8] truncate">{value || "—"}</div>
+      </div>
+    </div>
+  )
+}
 
 const FEATURES = [
   { icon:"🔭", title:"天体計算",  desc:"Swiss Ephemerisによる正確な計算" },
@@ -143,82 +159,104 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
       )}
       <Stars />
       <div className="relative z-10 max-w-app md:max-w-2xl mx-auto px-5">
-        <div className="pt-9 pb-5 flex justify-between items-center">
-          <span className="font-serif text-[15px] tracking-widest shimmer-gold">✦ ASTERIA</span>
+        <div className="pt-7 pb-5 flex justify-between items-center">
+          <div className="flex items-center gap-2">
+            <img src="/asteria/assets/header-logo-mark.png" alt="" aria-hidden className="h-9 w-9" />
+            <span className="font-serif text-[18px] tracking-[0.22em] shimmer-gold">ASTERIA</span>
+          </div>
           <button onClick={onLogout} className="text-[12px] text-white/40 hover:text-white/70 transition-colors">
             ログアウト
           </button>
         </div>
 
-        <div className="text-center mb-6 mt-4">
-          <h1 className="font-serif text-2xl tracking-wide text-white mb-2">おかえりなさい</h1>
-          <p className="text-[13px] text-white/50">星の暦から、今日を静かに読み解く</p>
+        <div className="text-center mb-6 mt-2">
+          <h1 className="font-serif text-[28px] tracking-wide text-white mb-2">おかえりなさい</h1>
+          <p className="text-[13px] text-white/55 leading-relaxed">今日の星から、あなたへのメッセージを読み解きます</p>
         </div>
 
 <div className="space-y-3">
           <Link href="/reading"
-            className="btn-gold flex items-center justify-center gap-2 py-4 text-[15px]">
-            ✦ 新しい鑑定を始める
+            className="btn-gold flex items-center justify-center gap-2 py-4 text-[15px] !rounded-full">
+            <span className="text-[#FFE6B0]">✦</span> 今日の鑑定を始める
           </Link>
 
-          {/* 本日の星模様 */}
+          {/* 今日のあなたへの星メモ / 今日の星空ニュース */}
           {daily && (
-            <div>
-              <div
-                style={{
-                  background: "radial-gradient(circle at top, rgba(201,165,84,0.16), rgba(255,255,255,0.045) 42%, rgba(255,255,255,0.025))",
-                  border: "1px solid rgba(201,165,84,0.35)",
-                  boxShadow: "0 0 42px rgba(201,165,84,0.14)",
-                }}
-                className="relative overflow-hidden rounded-2xl p-5 backdrop-blur-sm"
-              >
-                <div className="flex items-center gap-1.5 mb-2">
-                  <span className="text-gold text-xs">✦</span>
-                  <span className="font-serif text-[14px] text-[#F0F0F8]">本日の星模様</span>
+            <div className="grid grid-cols-2 gap-3">
+              {/* Personal card */}
+              <div className="card flex flex-col p-3.5">
+                <div className="flex items-start justify-between gap-2 mb-3">
+                  <span className="font-serif text-[12.5px] leading-snug text-[#F0F0F8]">今日のあなたへの<br />星メモ</span>
+                  <span className="text-[9px] px-1.5 py-0.5 rounded-full text-gold whitespace-nowrap"
+                    style={{ background: "rgba(201,165,84,.12)", border: "1px solid rgba(201,165,84,.32)" }}>
+                    あなた向け
+                  </span>
                 </div>
-                <p className="font-serif text-[13px] leading-7 text-[#C0C0D8] font-light">
-                  {daily.flow}
-                </p>
+                <div className="flex items-start gap-2.5 flex-1">
+                  <img src="/asteria/assets/home-card-personal-moon.png" alt="" aria-hidden
+                    className="h-14 w-14 shrink-0 rounded-full"
+                    style={{ filter: "drop-shadow(0 0 14px rgba(201,165,84,0.18))" }} />
+                  <p className="font-serif text-[11px] leading-[1.8] text-[#C0C0D8] font-light line-clamp-5">
+                    {daily.observation_point || daily.flow}
+                  </p>
+                </div>
+                <div className="mt-3 flex items-center justify-center opacity-55">
+                  <img src="/asteria/assets/divider-star.png" alt="" aria-hidden className="h-2.5" />
+                </div>
               </div>
-              <p className="text-center text-[10px] text-white/30 mt-1.5 tracking-[0.12em]">
-                全ユーザー共通の星空情報
-              </p>
+              {/* Universal card */}
+              <div className="card flex flex-col p-3.5">
+                <div className="flex items-start justify-between gap-2 mb-3">
+                  <span className="font-serif text-[12.5px] leading-snug text-[#F0F0F8]">今日の星空<br />ニュース</span>
+                  <span className="text-[9px] px-1.5 py-0.5 rounded-full text-[#A3C7FF] whitespace-nowrap"
+                    style={{ background: "rgba(112,180,255,.10)", border: "1px solid rgba(112,180,255,.32)" }}>
+                    全ユーザー共通
+                  </span>
+                </div>
+                <div className="flex items-start gap-2.5 flex-1">
+                  <img src="/asteria/assets/home-card-universal-saturn.png" alt="" aria-hidden
+                    className="h-14 w-14 shrink-0 rounded-full"
+                    style={{ filter: "drop-shadow(0 0 14px rgba(201,165,84,0.18))" }} />
+                  <p className="font-serif text-[11px] leading-[1.8] text-[#C0C0D8] font-light line-clamp-5">
+                    {daily.flow}
+                  </p>
+                </div>
+                <div className="mt-3 flex items-center justify-center opacity-55">
+                  <img src="/asteria/assets/divider-star.png" alt="" aria-hidden className="h-2.5" />
+                </div>
+              </div>
             </div>
           )}
 
-          {/* 本日の天体観測 */}
+          {/* 今日の星のムード */}
           {daily && (
             <div className="card p-4">
-              <div className="flex items-center gap-1.5 mb-3">
+              <div className="flex items-center gap-1.5 mb-4">
                 <span className="text-gold text-xs">✦</span>
-                <span className="font-serif text-[14px] text-[#F0F0F8]">本日の天体観測</span>
+                <span className="font-serif text-[14px] text-[#F0F0F8]">今日の星のムード</span>
               </div>
-              <div className="grid grid-cols-2 gap-2 text-[11px]">
-                {[
-                  { label: "月相",       value: daily.moon_phase, color: "#F0F0F8" },
-                  { label: "主なテーマ",  value: daily.main_theme, color: "#F0F0F8" },
-                  { label: "空のムード",  value: daily.mood,        color: "#F0F0F8" },
-                  { label: "月のサイン",  value: daily.moon_sign,   color: "#F0F0F8" },
-                ].map(({ label, value, color }) => (
-                  <div key={label} className="px-2.5 py-2 rounded-md"
-                    style={{ background: "rgba(255,255,255,.03)", border: "1px solid rgba(255,255,255,.06)" }}>
-                    <div className="text-white/45 mb-0.5 tracking-[0.12em]">{label}</div>
-                    <div className="text-[12px]" style={{ color }}>{value}</div>
-                  </div>
-                ))}
+              <div className="grid grid-cols-3 gap-2">
+                <MoodCell
+                  iconSrc="/asteria/assets/mood-icon-phase-moon.png"
+                  label="月相"
+                  value={daily.moon_phase}
+                />
+                <MoodCell
+                  iconSrc={zodiacFileBase(daily.moon_sign) ? `/asteria/assets/${zodiacFileBase(daily.moon_sign)}.png` : "/asteria/assets/mood-icon-phase-moon.png"}
+                  label="月のサイン"
+                  value={daily.moon_sign}
+                />
+                <MoodCell
+                  iconSrc="/asteria/assets/mood-icon-theme-star.png"
+                  label="テーマ"
+                  value={daily.main_theme}
+                />
               </div>
-              {daily.observation_point && (
-                <div className="mt-2 px-2.5 py-2 rounded-md"
-                  style={{ background: "rgba(255,255,255,.03)", border: "1px solid rgba(255,255,255,.06)" }}>
-                  <div className="text-[11px] text-white/45 mb-0.5 tracking-[0.12em]">観測ポイント</div>
-                  <div className="text-[12px] text-[#F0F0F8] leading-relaxed">{daily.observation_point}</div>
-                </div>
-              )}
               {daily.keywords?.length > 0 && (
-                <div className="flex flex-wrap gap-1.5 mt-3">
+                <div className="flex flex-wrap gap-1.5 mt-4">
                   {daily.keywords.map((k, i) => (
-                    <span key={i} className="px-2.5 py-0.5 rounded-full text-[10px]"
-                      style={{ background: "rgba(201,165,84,.10)", color: "#C9A554", border: "1px solid rgba(201,165,84,.25)" }}>
+                    <span key={i} className="px-2.5 py-0.5 rounded-full text-[10px] text-gold"
+                      style={{ background: "rgba(201,165,84,.10)", border: "1px solid rgba(201,165,84,.25)" }}>
                       #{k}
                     </span>
                   ))}
@@ -227,12 +265,17 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
             </div>
           )}
 
-          {/* 最近の鑑定 */}
+          {/* 最近読んだ鑑定 */}
           {readings.length > 0 ? (
             <div className="card overflow-hidden">
-              <div className="px-4 pt-3.5 pb-2 flex items-center gap-1.5">
-                <span className="text-gold text-xs">✦</span>
-                <span className="font-serif text-[14px] text-[#F0F0F8]">最近の鑑定</span>
+              <div className="px-4 pt-3.5 pb-2 flex items-center justify-between">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-gold text-xs">✦</span>
+                  <span className="font-serif text-[14px] text-[#F0F0F8]">最近読んだ鑑定</span>
+                </div>
+                <Link href="/reading/results" className="text-[11px] text-gold/65 hover:text-gold transition-colors flex items-center gap-0.5">
+                  すべて見る <span>›</span>
+                </Link>
               </div>
               {readings.slice(0, 3).map((r, i) => {
                 const cfg = getThemeConfig(r.theme)
@@ -263,36 +306,50 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
 
           <div className="grid grid-cols-2 gap-3">
             <Link href="/compat"
-              className="card flex flex-col items-center justify-center px-4 py-5 text-center">
-              <span className="text-2xl mb-2">♡</span>
-              <div className="font-serif text-[14px] text-[#F0F0F8] mb-0.5">相性診断</div>
-              <div className="text-[10px] text-white/40 leading-relaxed">ふたりの星が響き合う場所を読む</div>
+              className="card relative flex items-center gap-2.5 overflow-hidden px-3 py-4 min-h-[120px]">
+              <img src="/asteria/assets/home-feature-compat.png" alt="" aria-hidden
+                className="h-[96px] w-[96px] shrink-0 object-contain pointer-events-none"
+                style={{ filter: "drop-shadow(0 0 10px rgba(201,165,84,0.18))" }} />
+              <div className="flex-1 min-w-0">
+                <div className="font-serif text-[14px] text-[#F0F0F8] mb-1">相性診断</div>
+                <div className="text-[10px] text-white/55 leading-[1.7]">ふたりの星が響き合うかを読み解きます</div>
+              </div>
+              <span className="absolute right-2.5 bottom-2.5 text-white/25 text-sm">›</span>
             </Link>
             <Link href="/guide"
-              className="card flex flex-col items-center justify-center px-4 py-5 text-center">
-              <span className="text-2xl mb-2">✦</span>
-              <div className="font-serif text-[14px] text-[#F0F0F8] mb-0.5">星ガイド</div>
-              <div className="text-[10px] text-white/40 leading-relaxed">天体・星座・ハウスの意味を学ぶ</div>
+              className="card relative flex items-center gap-2.5 overflow-hidden px-3 py-4 min-h-[120px]">
+              <img src="/asteria/assets/home-feature-guide.png" alt="" aria-hidden
+                className="h-[96px] w-[96px] shrink-0 object-contain pointer-events-none"
+                style={{ filter: "drop-shadow(0 0 10px rgba(201,165,84,0.18))" }} />
+              <div className="flex-1 min-w-0">
+                <div className="font-serif text-[14px] text-[#F0F0F8] mb-1">星読みガイド</div>
+                <div className="text-[10px] text-white/55 leading-[1.7]">星の知識を深めて、日々のヒントに</div>
+              </div>
+              <span className="absolute right-2.5 bottom-2.5 text-white/25 text-sm">›</span>
             </Link>
           </div>
 
           <PartnerPersonalityCard onLoadingChange={setPartnerLoading} />
 
           <Link href="/reading/results"
-            className="card flex items-center justify-between px-5 py-4">
-            <div>
-              <div className="font-serif text-[14px] text-[#F0F0F8] mb-0.5">過去の鑑定を見る</div>
-              <div className="text-[11px] text-white/40">これまでの鑑定履歴</div>
-            </div>
+            className="card flex items-center gap-3 px-5 py-3.5">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"
+              className="h-5 w-5 text-gold/70 shrink-0" aria-hidden>
+              <rect x="5" y="3.5" width="14" height="17" rx="1.5" />
+              <path d="M8.5 8h7M8.5 12h7M8.5 16h4.5" />
+            </svg>
+            <div className="flex-1 font-serif text-[14px] text-[#F0F0F8]">鑑定履歴を見る</div>
             <span className="text-white/30">›</span>
           </Link>
 
           <Link href="/mypage"
-            className="card flex items-center justify-between px-5 py-4">
-            <div>
-              <div className="font-serif text-[14px] text-[#F0F0F8] mb-0.5">マイページ</div>
-              <div className="text-[11px] text-white/40">プロフィール・設定</div>
-            </div>
+            className="card flex items-center gap-3 px-5 py-3.5">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"
+              className="h-5 w-5 text-gold/70 shrink-0" aria-hidden>
+              <circle cx="12" cy="8" r="3.5" />
+              <path d="M4.5 20.5c0-3.6 3.4-6.5 7.5-6.5s7.5 2.9 7.5 6.5" />
+            </svg>
+            <div className="flex-1 font-serif text-[14px] text-[#F0F0F8]">マイページ</div>
             <span className="text-white/30">›</span>
           </Link>
         </div>
