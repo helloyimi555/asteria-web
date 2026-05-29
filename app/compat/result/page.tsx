@@ -136,7 +136,7 @@ export default function CompatResultPage() {
 
         {/* 【1】 ふたりのシンクロスコア（円形リング + ラベル + アイコン付きバー） */}
         {outputs?.scores && (
-          <div className="relative overflow-hidden rounded-2xl p-6 mt-3 backdrop-blur-sm" style={GOLD_CARD_STYLE}>
+          <div className="relative overflow-hidden rounded-2xl p-6 pt-10 mt-3 backdrop-blur-sm" style={GOLD_CARD_STYLE}>
             {/* 上部コーナーの星座装飾（右上 as-is、左上 反転） */}
             <img
               src="/asteria/assets/compat-corner-constellation.png"
@@ -325,25 +325,25 @@ export default function CompatResultPage() {
           </div>
         )}
 
-        {/* テーマ別（注意以外をグリッド表示） */}
-        <div className="grid grid-cols-2 gap-2.5 mt-6">
+        {/* テーマ別（注意以外を縦に並べる） */}
+        <div className="flex flex-col gap-2.5 mt-6">
           {THEME_CARDS.filter(t => t.key !== "caution").map(({ key, label, icon, c }) => {
             const item = outputs?.[key]
             if (!item) return null
             const ev = EVAL[item.tag] ?? EVAL["○"]
             return (
-              <div key={key} className="card p-3.5">
-                <div className="flex items-center justify-between mb-2">
-                  <div className="flex items-center gap-1.5">
-                    <span style={{ color:c }} className="text-sm">{icon}</span>
-                    <span className="text-[11px] font-bold leading-tight" style={{ color:c }}>{label}</span>
+              <div key={key} className="card p-4">
+                <div className="flex items-center justify-between gap-2 mb-2">
+                  <div className="flex items-center gap-2">
+                    <span style={{ color:c }} className="text-base shrink-0">{icon}</span>
+                    <span className="text-[12.5px] font-bold leading-tight" style={{ color:c }}>{label}</span>
                   </div>
-                  <span className="text-[11px] px-2 py-0.5 rounded-full font-bold"
+                  <span className="text-[11px] px-2 py-0.5 rounded-full font-bold shrink-0"
                     style={{ background:ev.bg, border:`1px solid ${ev.bc}`, color:ev.c }}>
                     {item.tag}
                   </span>
                 </div>
-                <p className="font-sans text-[11px] leading-[1.75] text-[#A0A0C0] font-light">
+                <p className="font-sans text-[12px] leading-[1.85] text-[#C0C0D8] font-light">
                   {item.text}
                 </p>
               </div>
