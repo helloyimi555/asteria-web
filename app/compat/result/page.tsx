@@ -155,7 +155,7 @@ export default function CompatResultPage() {
             <div className="relative z-[1] text-center">
               <div className="flex items-center justify-center gap-2 text-gold/85">
                 <span className="text-[10px]">✦</span>
-                <span className="font-serif text-[11px] tracking-[0.34em]">ASTERIA READING</span>
+                <span className="text-[11px] tracking-[0.34em]">ASTERIA READING</span>
                 <span className="text-[10px]">✦</span>
               </div>
               <h2
@@ -164,7 +164,7 @@ export default function CompatResultPage() {
               >
                 ふたりのシンクロスコア
               </h2>
-              <p className="mt-1 font-serif text-[12px] tracking-[0.12em] text-[#D9B776]/85">星が導いた、ふたりの相性</p>
+              <p className="mt-1 font-serif text-[12px] tracking-[0.12em] text-gold/80">星が導いた、ふたりの相性</p>
             </div>
 
             {/* リング */}
@@ -207,7 +207,7 @@ export default function CompatResultPage() {
                 >
                   ✦
                 </span>
-                <p className="font-serif text-[12.5px] leading-[1.85] text-[#F0F0F8]/85">
+                <p className="font-serif text-[13px] leading-8 text-[#F0F0F8]/85 font-light">
                   {scoreComment}
                 </p>
               </div>
@@ -273,7 +273,7 @@ export default function CompatResultPage() {
                     <div className="flex-1 h-[3px] rounded-full bg-white/[.06]">
                       <div className="h-full rounded-full" style={{ width:`${s.importance}%`, background:TONE_COLOR[s.tone] }} />
                     </div>
-                    <span className="text-[10px] text-white/50 whitespace-nowrap">
+                    <span className="text-[10px] text-white/50 whitespace-nowrap tabular-nums">
                       {IMPORTANCE_LABEL_BY_ASPECT[s.aspect] ?? "相性度"} {s.importance}
                     </span>
                   </div>
@@ -316,7 +316,7 @@ export default function CompatResultPage() {
                       <div className="flex-1 h-[3px] rounded-full bg-white/[.06]">
                         <div className="h-full rounded-full" style={{ width:`${s.importance}%`, background:TONE_COLOR[s.tone] }} />
                       </div>
-                      <span className="text-[10px] text-white/50 whitespace-nowrap">{s.importance} / 100</span>
+                      <span className="text-[10px] text-white/50 whitespace-nowrap tabular-nums">{s.importance} / 100</span>
                     </div>
                   </div>
                 ))}
@@ -489,7 +489,7 @@ export default function CompatResultPage() {
           <div className="relative overflow-hidden rounded-2xl p-8 mt-3 text-center backdrop-blur-sm" style={GOLD_CARD_STYLE}>
             <div className="flex items-center justify-center gap-2">
               <span className="text-gold text-sm">✦</span>
-              <span className="text-[14px] font-bold tracking-[0.18em] text-gold"
+              <span className="text-[14px] font-bold tracking-[0.12em] text-gold"
                 style={{ textShadow:"0 0 14px rgba(201,165,84,.4)" }}>
                 ふたりの合言葉
               </span>
@@ -510,7 +510,7 @@ export default function CompatResultPage() {
         </div>
 
         <button onClick={() => router.push("/compat")}
-          className="btn-gold-outline w-full py-3.5 mt-3 rounded-full flex items-center justify-center gap-2">
+          className="w-full py-3 mt-2 flex items-center justify-center gap-2 text-[13px] text-gold/65 hover:text-gold transition-colors">
           <span>←</span><span>別の相性を診断する</span>
         </button>
       </div>

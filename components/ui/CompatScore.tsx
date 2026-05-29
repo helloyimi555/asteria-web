@@ -136,7 +136,7 @@ export function ScoreRing({ score, size = 260 }: { score: number; size?: number 
       {/* 中央の数字 */}
       <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
         <div
-          className="font-serif font-bold leading-none text-[#F0C870]"
+          className="font-serif font-bold leading-none text-[#F0C870] tabular-nums"
           style={{
             fontSize: Math.round(size * 0.36),
             textShadow: "0 0 14px rgba(232,184,110,.4), 0 0 3px rgba(240,200,112,.35)",
@@ -144,7 +144,7 @@ export function ScoreRing({ score, size = 260 }: { score: number; size?: number 
         >
           {s}
         </div>
-        <div className="mt-1 font-serif text-[13px] tracking-wider text-[#D9B776]/85">/100</div>
+        <div className="mt-1 font-serif text-[13px] tracking-wider text-gold/80">/100</div>
       </div>
     </div>
   )
@@ -206,7 +206,7 @@ export function MetricBar({
         />
       </div>
       <span
-        className="w-10 shrink-0 text-right font-serif text-[20px] font-bold leading-none text-[#F0C870]"
+        className="w-10 shrink-0 text-right font-serif text-[20px] font-bold leading-none text-[#F0C870] tabular-nums"
         style={{ textShadow: "0 0 10px rgba(232,184,110,0.45)" }}
       >
         {displayValue}
