@@ -157,7 +157,7 @@ export function ScoreRing({ score, size = 260 }: { score: number; size?: number 
  * ======================================================= */
 export function RelationshipLabel({ label }: { label: string }): ReactElement {
   return (
-    <div className="my-6 flex w-full justify-center">
+    <div className="flex w-full justify-center">
       <div className="relative flex w-full max-w-[420px] items-center justify-center aspect-[1700/280]">
         {/* 装飾フレーム画像（compat-label-frame.png） */}
         <img

@@ -172,8 +172,12 @@ export default function CompatResultPage() {
               <ScoreRing score={outputs.scores.overall ?? 0} />
             </div>
 
-            {/* ラベル枠（後で compat-label-frame.png に差し替え予定） */}
-            {overallLabel && <RelationshipLabel label={overallLabel} />}
+            {/* ラベル枠（円の下端に少しかぶせる） */}
+            {overallLabel && (
+              <div className="relative z-[2] -mt-10">
+                <RelationshipLabel label={overallLabel} />
+              </div>
+            )}
 
             {/* 6 項目バー（角丸の枠で囲み、各バーの間にドット区切り） */}
             <div
