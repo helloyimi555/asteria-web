@@ -210,9 +210,15 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
             <PartnerPersonalityCard onLoadingChange={setPartnerLoading} />
           </div>
 
-          {/* 今日のあなたへの星メモ / 今日の星空ニュース */}
+          {/* 今日の星模様：あなたへの星メモ / 星空ニュース */}
           {daily && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <>
+              <div className="flex items-center gap-2 pt-1">
+                <span className="text-gold text-xs">✦</span>
+                <span className="font-serif text-[13px] text-white/85 tracking-[0.08em]">今日の星模様</span>
+                <span className="flex-1 h-px ml-1" style={{ background: "linear-gradient(to right, rgba(201,165,84,0.28), rgba(201,165,84,0))" }} />
+              </div>
+              <div className="grid grid-cols-1 gap-3">
               {/* Personal card */}
               <div className="card flex flex-col p-3.5">
                 <div className="mb-3 flex items-center justify-between gap-2">
@@ -252,6 +258,7 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
                 </div>
               </div>
             </div>
+            </>
           )}
 
           {/* 今日の星のムード */}
