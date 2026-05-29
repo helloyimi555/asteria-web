@@ -181,7 +181,7 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
 
           {/* 今日のあなたへの星メモ / 今日の星空ニュース */}
           {daily && (
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {/* Personal card */}
               <div className="card flex flex-col p-3.5">
                 <div className="mb-3 flex items-center justify-between gap-2">
