@@ -150,10 +150,9 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
           </button>
         </div>
 
-        <div className="relative flex flex-col items-center justify-center text-center min-h-[260px] mb-2 overflow-hidden">
-          <ZodiacWheelSVG />
-          <h1 className="relative font-serif text-2xl tracking-wide text-white mb-2">おかえりなさい</h1>
-          <p className="relative text-[13px] text-white/50">星の暦から、今日を静かに読み解く</p>
+        <div className="text-center mb-6 mt-4">
+          <h1 className="font-serif text-2xl tracking-wide text-white mb-2">おかえりなさい</h1>
+          <p className="text-[13px] text-white/50">星の暦から、今日を静かに読み解く</p>
         </div>
 
 <div className="space-y-3">
@@ -197,7 +196,7 @@ function LoggedInHome({ onLogout }: { onLogout: () => void }) {
               <div className="grid grid-cols-2 gap-2 text-[11px]">
                 {[
                   { label: "月相",       value: daily.moon_phase, color: "#F0F0F8" },
-                  { label: "主なテーマ",  value: daily.main_theme, color: "#C9A554" },
+                  { label: "主なテーマ",  value: daily.main_theme, color: "#F0F0F8" },
                   { label: "空のムード",  value: daily.mood,        color: "#F0F0F8" },
                   { label: "月のサイン",  value: daily.moon_sign,   color: "#F0F0F8" },
                 ].map(({ label, value, color }) => (
