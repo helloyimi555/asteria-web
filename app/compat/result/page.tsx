@@ -10,6 +10,7 @@ import { XShareButton } from "@/components/ui/XShareButton"
 import { ChapterHeading } from "@/components/ui/ChapterHeading"
 import { AlertCard } from "@/components/ui/cards"
 import { OrnamentalDivider } from "@/components/asteria-ui"
+import { ScoreRing, RelationshipLabel, MetricBar, SCORE_FIELDS as COMPAT_SCORE_FIELDS } from "@/components/ui/CompatScore"
 import {
   calcElementBalance, elementPercents, getDominantElement, getElementCompatibility,
   getElementTitle, ELEMENTS, ELEMENT_INFO,
@@ -45,15 +46,6 @@ const IMPORTANCE_LABEL_BY_ASPECT: Record<string, string> = {
   quincunx: "影響度",
 }
 
-const SCORE_FIELDS = [
-  { key: "love", label: "恋愛・ときめき", color: "#F07098" },
-  { key: "trust", label: "安心感・信頼", color: "#70DDA8" },
-  { key: "communication", label: "会話のしやすさ", color: "#70B4FF" },
-  { key: "values", label: "価値観の一致", color: "#D4AF37" },
-  { key: "growth", label: "成長し合う力", color: "#A37DFF" },
-  { key: "caution", label: "すれ違い注意度", color: "#FFA94D" },
-]
-
 export default function CompatResultPage() {
   const router = useRouter()
   const [result, setResult] = useState<any>(null)
@@ -87,11 +79,12 @@ export default function CompatResultPage() {
   const { outputs, my_sign, their_sign, synastry } = result
   const overallScore = outputs?.scores?.overall ?? null
   const overallLabel = overallScore !== null
-    ? overallScore >= 85 ? "◎ 深く惹かれ合う関係"
-    : overallScore >= 70 ? "○ 理解し合えるほど育つ関係"
-    : overallScore >= 50 ? "△ 対話で相性を高める関係"
+    ? overallScore >= 85 ? "深く繋がれる関係"
+    : overallScore >= 70 ? "理解し合えるほど育つ関係"
+    : overallScore >= 50 ? "対話で相性を高める関係"
     : "努力でより良くなる関係"
     : ""
+  const scoreComment = outputs?.summary || outputs?.advice || ""
 
   const adviceText = outputs?.advice?.replace(
     "あなたの強い言葉が時に相手を傷つける可能性があることを意識しましょう",
@@ -141,45 +134,60 @@ export default function CompatResultPage() {
           </p>
         )}
 
-        {/* 【1】 星のシンクロスコア（ゴールドグラデ・大きな数字） */}
+        {/* 【1】 ふたりのシンクロスコア（円形リング + ラベル + アイコン付きバー） */}
         {outputs?.scores && (
-          <div className="relative overflow-hidden rounded-2xl p-5 mt-3 backdrop-blur-sm" style={GOLD_CARD_STYLE}>
-            <div className="flex items-center justify-center gap-1.5 mb-3">
-              <span className="text-gold text-sm">✦</span>
-              <span className="font-sans text-[13px] font-bold text-[#F0F0F8]">星のシンクロスコア</span>
-              <span className="text-gold text-sm">✦</span>
-            </div>
+          <div className="relative overflow-hidden rounded-2xl p-6 mt-3 backdrop-blur-sm" style={GOLD_CARD_STYLE}>
+            {/* ヘッダー */}
             <div className="text-center">
-              <span
-                className="font-serif font-bold leading-none text-7xl"
-                style={{ color:"#C9A554", textShadow:"0 0 30px rgba(201,165,84,.6), 0 0 12px rgba(201,165,84,.45)" }}>
-                {outputs.scores.overall ?? 0}
-              </span>
-              <span className="font-serif text-2xl ml-1" style={{ color:"rgba(201,165,84,.7)" }}>/ 100</span>
+              <div className="flex items-center justify-center gap-2 text-gold/85">
+                <span className="text-[10px]">✦</span>
+                <span className="font-serif text-[11px] tracking-[0.34em]">ASTERIA READING</span>
+                <span className="text-[10px]">✦</span>
+              </div>
+              <h2
+                className="mt-3 font-serif text-[24px] leading-tight text-[#F6F1E4]"
+                style={{ textShadow: "0 0 18px rgba(201,165,84,.35)" }}
+              >
+                ふたりのシンクロスコア
+              </h2>
+              <p className="mt-1 text-[12px] tracking-wider text-white/55">星が導いた、ふたりの相性</p>
             </div>
-            {overallLabel && (
-              <p className="text-center text-[14px] font-bold text-gold mt-2.5"
-                style={{ textShadow:"0 0 16px rgba(201,165,84,.35)" }}>
-                {overallLabel}
-              </p>
+
+            {/* リング */}
+            <div className="mt-4 flex justify-center">
+              <ScoreRing score={outputs.scores.overall ?? 0} />
+            </div>
+
+            {/* ラベル枠（後で compat-label-frame.png に差し替え予定） */}
+            {overallLabel && <RelationshipLabel label={overallLabel} />}
+
+            {/* 6 項目バー */}
+            <div className="mt-4 space-y-3.5">
+              {COMPAT_SCORE_FIELDS.map((field) => (
+                <MetricBar
+                  key={field.key}
+                  icon={field.icon}
+                  label={field.label}
+                  value={outputs.scores?.[field.key] ?? 0}
+                  invert={field.invert}
+                />
+              ))}
+            </div>
+
+            {/* コメント枠 */}
+            {scoreComment && (
+              <div
+                className="mt-6 flex gap-3 rounded-xl border border-gold/30 p-4"
+                style={{ background: "rgba(8,12,30,0.55)" }}
+              >
+                <span className="mt-0.5 shrink-0 text-[14px] text-gold">✦</span>
+                <p className="font-serif text-[12.5px] leading-relaxed text-white/85">
+                  {scoreComment}
+                </p>
+              </div>
             )}
-            <div className="grid gap-3 mt-5">
-              {SCORE_FIELDS.map(({ key, label, color }) => {
-                const score = outputs.scores?.[key] ?? 0
-                return (
-                  <div key={key}>
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-[12px] text-[#E8E8FF]">{label}</span>
-                      <span className="text-[12px] text-white/60">{score} / 100</span>
-                    </div>
-                    <div className="h-1 rounded-full bg-white/[.08] overflow-hidden">
-                      <div className="h-full rounded-full transition-all" style={{ width:`${Math.max(0, Math.min(100, score))}%`, background: color }} />
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
-            <p className="text-[11px] text-white/40 leading-5 pt-3 mt-3 border-t border-white/10">
+
+            <p className="mt-4 border-t border-white/10 pt-3 text-[11px] leading-5 text-white/40">
               スコアは良い・悪いの判定ではなく、ふたりの関係に表れやすいテーマの強さを示しています
             </p>
           </div>
